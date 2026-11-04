@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!!assets"]
+    "includes": ["**", "!!assets", "!!docs"]
   },
   "formatter": {
     "enabled": true,
@@ -46,6 +46,21 @@
     }
   },
   "overrides": [
+    {
+      "includes": ["src/app/**"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noReactNativeRawText": {
+              "level": "error",
+              "options": {
+                "skip": ["NativeTabs.Trigger.Label", "Stack.Title"]
+              }
+            }
+          }
+        }
+      }
+    },
     {
       "includes": ["scripts/**"],
       "linter": {
