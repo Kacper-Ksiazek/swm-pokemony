@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!!assets", "!!docs"]
+    "includes": ["**", "!!assets", "!!docs", "!!src/data/db/migrations"]
   },
   "formatter": {
     "enabled": true,

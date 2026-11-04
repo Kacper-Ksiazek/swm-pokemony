@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { fetchPokemonListPage } from "../../../api/fetch-pokemon-list";
-import type { PokemonListItem } from "../../../api/types";
+import { fetchPokemonListPage, type PokemonListItem } from "@/data/pokemon-api";
 
 type PokemonListState = {
   items: PokemonListItem[];
