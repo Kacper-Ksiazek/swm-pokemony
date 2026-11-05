@@ -1,13 +1,38 @@
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import { reloadAppAsync } from "expo";
 import { NativeTabs } from "expo-router/native-tabs";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
+import { db } from "@/data/db";
+import migrations from "@/data/db/migrations/migrations";
+import { ErrorStatusScreen } from "@/shared/components/status-screen";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const { success, error } = useMigrations(db, migrations);
+
   useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
+    if (success || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [success, error]);
+
+  if (error) {
+    return (
+      <ErrorStatusScreen
+        title="Could not open the database"
+        message={error.message}
+        onRetry={() => reloadAppAsync()}
+        retryLabel="Restart app"
+      />
+    );
+  }
+
+  if (!success) {
+    return null;
+  }
 
   return (
     <NativeTabs>
