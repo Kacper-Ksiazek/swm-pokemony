@@ -9,7 +9,7 @@ import { pokemonSpriteUrl } from "@/data/pokemon-api";
 import { EmptyState } from "@/shared/components/empty-state";
 import { COLORS } from "@/shared/styles/colors";
 
-import { useFavoritePokemon } from "./hooks/use-favorite-pokemon";
+import { useFavoritePokemon } from "./hooks";
 
 export function PokemonFavoriteScreen() {
   const { favorite, loading, removeFavorite } = useFavoritePokemon();

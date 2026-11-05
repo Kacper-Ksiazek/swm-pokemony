@@ -1,7 +1,5 @@
-import { useCallback } from "react";
-
 import { clearFavoritePokemon, setFavoritePokemon } from "@/data/db";
-import { useLiveFavoritePokemon } from "@/shared/hooks/use-live-favorite-pokemon";
+import { useLiveFavoritePokemon } from "@/shared/hooks";
 
 type FavoriteTarget = {
   id: number;
@@ -12,16 +10,13 @@ export function useFavoritePokemon() {
   const { favorite } = useLiveFavoritePokemon();
   const favoriteId = favorite?.id ?? null;
 
-  const toggleFavorite = useCallback(
-    (pokemon: FavoriteTarget) => {
-      if (favoriteId === pokemon.id) {
-        clearFavoritePokemon();
-        return;
-      }
-      setFavoritePokemon({ id: pokemon.id, name: pokemon.name });
-    },
-    [favoriteId],
-  );
+  function toggleFavorite(pokemon: FavoriteTarget) {
+    if (favoriteId === pokemon.id) {
+      clearFavoritePokemon();
+      return;
+    }
+    setFavoritePokemon({ id: pokemon.id, name: pokemon.name });
+  }
 
   return { favoriteId, toggleFavorite };
 }

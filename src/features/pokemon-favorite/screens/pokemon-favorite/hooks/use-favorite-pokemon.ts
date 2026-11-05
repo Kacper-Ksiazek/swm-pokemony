@@ -1,5 +1,5 @@
 import { clearFavoritePokemon } from "@/data/db";
-import { useLiveFavoritePokemon } from "@/shared/hooks/use-live-favorite-pokemon";
+import { useLiveFavoritePokemon } from "@/shared/hooks";
 
 export function useFavoritePokemon() {
   const { favorite, loaded } = useLiveFavoritePokemon();

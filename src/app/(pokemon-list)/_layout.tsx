@@ -1,17 +1,13 @@
-import { capitalize } from "es-toolkit/string";
 import { Stack } from "expo-router";
+
+import {
+  pokemonDetailScreenTitle,
+  stackRouteParamName,
+} from "@/shared/navigation/pokemon-detail-screen-title";
 
 export const unstable_settings = {
   anchor: "index",
 };
-
-function detailTitle(name: unknown): string {
-  if (typeof name !== "string" || name.length === 0) {
-    return "Pokémon";
-  }
-
-  return capitalize(name);
-}
 
 export default function PokemonListLayout() {
   return (
@@ -20,9 +16,7 @@ export default function PokemonListLayout() {
       <Stack.Screen
         name="pokemon/[id]"
         options={({ route }) => ({
-          title: detailTitle(
-            route.params !== undefined && "name" in route.params ? route.params.name : undefined,
-          ),
+          title: pokemonDetailScreenTitle(stackRouteParamName(route.params)),
           headerBackButtonDisplayMode: "minimal",
         })}
       />

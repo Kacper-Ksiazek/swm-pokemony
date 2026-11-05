@@ -1,8 +1,8 @@
 import { Image, type ImageContentFit } from "expo-image";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { View } from "react-native";
 
-import { createSkeletonImageStyles } from "./skeleton-image.styles";
+import { skeletonImageStyles as styles } from "./skeleton-image.styles";
 
 type SkeletonImageProps = {
   uri: string;
@@ -23,20 +23,18 @@ export function SkeletonImage({
 }: SkeletonImageProps) {
   const [loadedKey, setLoadedKey] = useState<string | number | null>(null);
   const isLoading = loadedKey !== loadKey;
-
-  const styles = useMemo(
-    () => createSkeletonImageStyles(size, skeletonBorderRadius),
-    [size, skeletonBorderRadius],
-  );
+  const dimensions = { width: size, height: size };
 
   return (
-    <View style={styles.frame}>
-      {isLoading ? <View style={styles.skeleton} /> : null}
+    <View style={[styles.frame, dimensions]}>
+      {isLoading ? (
+        <View style={[styles.skeleton, dimensions, { borderRadius: skeletonBorderRadius }]} />
+      ) : null}
 
       <Image
         source={{ uri }}
         recyclingKey={String(loadKey)}
-        style={styles.image}
+        style={[styles.image, dimensions]}
         contentFit={contentFit}
         transition={transition}
         onLoad={() => {

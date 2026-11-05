@@ -8,24 +8,31 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { pokemonSpriteUrl } from "@/data/pokemon-api";
 import { EmptyState } from "@/shared/components/empty-state";
 import { PokemonDetails } from "@/shared/components/pokemon-details";
-import { usePokemonDetail } from "@/shared/hooks/use-pokemon-detail";
+import { usePokemonDetail } from "@/shared/hooks";
 import { COLORS } from "@/shared/styles/colors";
 
-import { useFavoritePokemon } from "../../hooks/use-favorite-pokemon";
+import { useFavoritePokemon } from "../../hooks";
 
 export function PokemonListDetailScreen() {
   const { id: idParam, name: nameParam } = useLocalSearchParams<{ id: string; name?: string }>();
   const pokemonId = parsePokemonId(idParam);
-  const name = firstParam(nameParam);
+  const nameFromRoute = firstParam(nameParam);
   const { detail, detailLoading, detailError, retryDetail } = usePokemonDetail(pokemonId);
   const { favoriteId, toggleFavorite } = useFavoritePokemon();
-  const displayName = detail?.name ?? name;
+  const displayName = capitalize(detail?.name ?? nameFromRoute ?? "Pokémon");
+  const favoriteRecordName = detail?.name ?? nameFromRoute;
   const isFavorite = pokemonId !== null && favoriteId === pokemonId;
 
   if (pokemonId === null) {
     return (
       <SafeAreaView style={styles.container} edges={["bottom", "top"]}>
-        <EmptyState message="This Pokémon could not be found." />
+        <EmptyState
+          message={
+            nameFromRoute !== null
+              ? `${displayName} could not be found.`
+              : "This Pokémon could not be found."
+          }
+        />
       </SafeAreaView>
     );
   }
@@ -39,7 +46,7 @@ export function PokemonListDetailScreen() {
           contentFit="contain"
           transition={200}
         />
-        <Text style={styles.name}>{capitalize(displayName ?? "Pokémon")}</Text>
+        <Text style={styles.name}>{displayName}</Text>
         <Text style={styles.id}>#{String(pokemonId).padStart(4, "0")}</Text>
       </View>
 
@@ -55,7 +62,7 @@ export function PokemonListDetailScreen() {
           onRetry={retryDetail}
         />
 
-        {displayName !== null ? (
+        {favoriteRecordName !== null ? (
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={
@@ -63,7 +70,7 @@ export function PokemonListDetailScreen() {
                 ? `Remove ${displayName} from favorites`
                 : `Mark ${displayName} as favorite`
             }
-            onPress={() => toggleFavorite({ id: pokemonId, name: displayName })}
+            onPress={() => toggleFavorite({ id: pokemonId, name: favoriteRecordName })}
           >
             <View style={[styles.favoriteButton, isFavorite && styles.favoriteButtonActive]}>
               <SymbolView

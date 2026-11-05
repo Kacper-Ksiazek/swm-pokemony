@@ -1,9 +1,14 @@
+import { gt } from "drizzle-orm";
+
 import { db } from "../client";
 import { favoritePokemon, type NewFavoritePokemon } from "../schema";
 
-// Pass to drizzle's useLiveQuery. Resolves to an array with at most one row.
+// id 0 is a storage placeholder after clear (not a real Pokémon). Real favorites use id >= 1.
+const CLEARED_PLACEHOLDER: NewFavoritePokemon = { id: 0, name: "" };
+
+// At most one visible favorite. Pass to useLiveQuery in useLiveFavoritePokemon.
 export function favoritePokemonQuery() {
-  return db.select().from(favoritePokemon).limit(1);
+  return db.select().from(favoritePokemon).where(gt(favoritePokemon.id, 0)).limit(1);
 }
 
 // Replaces any existing favorite, so the table never holds more than one row.
@@ -16,6 +21,11 @@ export function setFavoritePokemon(pokemon: NewFavoritePokemon): void {
   });
 }
 
+// delete-only writes trigger one useLiveQuery refresh that can still see the old row.
+// Match setFavoritePokemon: delete then insert, but keep a placeholder row the query ignores.
 export function clearFavoritePokemon(): void {
-  db.delete(favoritePokemon).run();
+  db.transaction((tx) => {
+    tx.delete(favoritePokemon).run();
+    tx.insert(favoritePokemon).values(CLEARED_PLACEHOLDER).run();
+  });
 }

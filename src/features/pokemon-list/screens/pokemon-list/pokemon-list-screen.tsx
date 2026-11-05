@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -11,14 +10,14 @@ import type { PokemonListItem as PokemonListItemType } from "@/data/pokemon-api"
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorStatusScreen, LoadingStatusScreen } from "@/shared/components/status-screen";
 import { COLORS } from "@/shared/styles/colors";
-import { useFavoritePokemon } from "../../hooks/use-favorite-pokemon";
-import { PokemonListItem } from "./components/pokemon-list-item";
+import { useFavoritePokemon } from "../../hooks";
+import { PokemonListItem } from "./components";
 import {
   POKEMON_LIST_ITEM_GAP,
   POKEMON_LIST_ITEM_HEIGHT,
   POKEMON_LIST_PADDING_TOP,
 } from "./constants";
-import { usePokemonList } from "./hooks/use-pokemon-list";
+import { usePokemonList } from "./hooks";
 
 function getItemLayout(_data: ArrayLike<PokemonListItemType> | null | undefined, index: number) {
   return {
@@ -33,16 +32,15 @@ export function PokemonListScreen() {
   const { items, initialLoading, refreshing, loadingMore, error, refresh, loadMore, retry } =
     usePokemonList();
 
-  const renderItem = useCallback(
-    ({ item }: ListRenderItemInfo<PokemonListItemType>) => (
+  function renderItem({ item }: ListRenderItemInfo<PokemonListItemType>) {
+    return (
       <PokemonListItem
         item={item}
         isFavorite={favoriteId === item.id}
         onToggleFavorite={toggleFavorite}
       />
-    ),
-    [favoriteId, toggleFavorite],
-  );
+    );
+  }
 
   if (initialLoading) {
     return <LoadingStatusScreen message="Loading Pokémon…" />;
