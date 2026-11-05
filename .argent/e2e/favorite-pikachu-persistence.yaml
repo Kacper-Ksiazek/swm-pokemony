@@ -1,0 +1,45 @@
+steps:
+  - echo: Mark Pikachu as favorite, verify persistence after relaunch, then remove the favorite
+  - launch: com.anonymous.kksiazek-pokemony
+  - await: { visible: { text: Mark bulbasaur as favorite }, timeout: 15000 }
+  - await: { idle: true }
+
+  - echo: Normalize baseline if a favorite was left from a previous run
+  - tap: { text: Favorite }
+  - await: { idle: true }
+  - when: { visible: { text: Remove pikachu from favorites } }
+    steps:
+      - tap: { text: Remove pikachu from favorites }
+      - assert: { visible: { text: No favorite yet } }
+      - await: { idle: true }
+
+  - echo: Open Pikachu from the list and mark it as favorite on the detail screen
+  - tap: { text: List }
+  - await: { visible: { text: Mark bulbasaur as favorite } }
+  - await: { idle: true }
+  - scroll-to:
+      target: { text: Open Pikachu }
+      direction: down
+  - tap: { text: Open Pikachu }
+  - await: { visible: { text: Mark Pikachu as favorite } }
+  - await: { idle: true }
+  - scroll-to:
+      target: { text: Mark Pikachu as favorite }
+      direction: down
+  - tap: { text: Mark Pikachu as favorite }
+  - await: { idle: true }
+
+  - echo: Verify Pikachu is shown on the Favorite tab
+  - tap: { text: Favorite }
+  - assert: { visible: { text: Remove pikachu from favorites } }
+  - assert: { visible: { text: "#0025" } }
+
+  - echo: Relaunch the app and confirm the favorite persisted in local storage
+  - launch: com.anonymous.kksiazek-pokemony
+  - tap: { text: Favorite }
+  - assert: { visible: { text: Remove pikachu from favorites } }
+  - assert: { visible: { text: "#0025" } }
+
+  - echo: Remove Pikachu from favorites and verify the empty state
+  - tap: { text: Remove pikachu from favorites }
+  - assert: { visible: { text: No favorite yet } }

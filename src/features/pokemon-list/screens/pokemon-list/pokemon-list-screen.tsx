@@ -9,6 +9,7 @@ import {
 import type { PokemonListItem as PokemonListItemType } from "@/data/pokemon-api";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ErrorStatusScreen, LoadingStatusScreen } from "@/shared/components/status-screen";
+import { usePokemonList } from "@/shared/hooks";
 import { COLORS } from "@/shared/styles/colors";
 import { useFavoritePokemon } from "../../hooks";
 import { PokemonListItem } from "./components";
@@ -17,7 +18,6 @@ import {
   POKEMON_LIST_ITEM_HEIGHT,
   POKEMON_LIST_PADDING_TOP,
 } from "./constants";
-import { usePokemonList } from "./hooks";
 
 function getItemLayout(_data: ArrayLike<PokemonListItemType> | null | undefined, index: number) {
   return {

@@ -8,7 +8,7 @@ The finished app has four tabs:
 
 1. **Favorite Pokémon** — one favorite at a time, stored on device, survives restart.
 2. **Pokémon list** — PokeAPI list with infinite scroll and pull-to-refresh. A second screen shows one Pokémon (image and basic data) and supports back navigation.
-3. **Map** — fullscreen map. A long press drops a pin with a Pokémon. A tap opens a bottom sheet with basic data and remove. Pins survive restart.
+3. **Map** — fullscreen map. A tap on empty map opens a bottom sheet to pick a Pokémon and stores a pin. A tap on a pin opens a sheet with its name, image, coordinates, and remove. Pins survive restart.
 4. **Camera** — `react-native-vision-camera`, face detection places the favorite Pokémon on the forehead. Bonus: capture a photo and save it to the gallery.
 
 UX should be clear and polished. Animations and extra ideas are welcome when they are discussed first.
@@ -33,7 +33,7 @@ Routes stay in `src/app`; screen UI lives in `src/features`. The tab bar has fou
 | `pokemon-map` | Map | `pokemon-map` |
 | `camera` | Camera | `camera` |
 
-Favorite, Map, and Camera are placeholders. The list already loads PokeAPI.
+Camera is still a placeholder. The list and favorites are in place. The map is fullscreen Apple Maps on iOS, and pins are stored on device.
 
 ## Structure
 
