@@ -12,7 +12,8 @@ Output root: `docs/ai-coding-rules/`. One directory per category, one file per r
 - Bun (`bun.lock`). Lint and format: Biome 2. Path alias `@/*` → `src/*`
 - GitHub Actions **CI** on PRs: lint, typecheck, `expo export` for iOS + Android JS bundles — see `docs/ci-required-checks.md`
 - Local DB: expo-sqlite + drizzle-orm in `src/data/db/` (`favorite_pokemon`, `map_pin`)
-- No test runner, no global store, no camera yet. Map pins work on iOS. Android map is not in yet.
+- PokeAPI-backed list and detail (`src/data/pokemon-api/`). Pagination and pull-to-refresh exist on the list screen.
+- No test runner, no global store. The Camera tab on **iOS** uses `react-native-vision-camera` with a face-guided sticker compose flow. Map pins work on iOS. Android map is not in yet.
 - `ios/` and `android/` are not hand-edited (continuous native generation)
 
 ## Categories
@@ -30,7 +31,6 @@ Output root: `docs/ai-coding-rules/`. One directory per category, one file per r
 
 No rule files until the code exists:
 
-- PokeAPI fetching, pagination, pull-to-refresh
 - Android map
-- Camera and face detection
+- Android camera parity / polish (iOS ships first)
 - Tests

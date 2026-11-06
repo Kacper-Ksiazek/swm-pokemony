@@ -44,10 +44,10 @@ export function CameraScreen() {
   const [previewSize, setPreviewSize] = useState({ width: 0, height: 0 });
 
   const { frame, previewWidth, previewHeight, scannerOutput, measurePreview } = useHeadSticker({
-      cameraRef,
-      previewRef,
-      isFocused,
-    });
+    cameraRef,
+    previewRef,
+    isFocused,
+  });
 
   const {
     photoOutput,

@@ -9,10 +9,20 @@ const STAT_LABELS: Record<string, string> = {
   speed: "SPD",
 };
 
-const MULTIPLIER_LABELS: Record<number, string> = {
-  0.25: "×¼",
-  0.5: "×½",
-};
+/** Floats from dual-type math may not === object literal keys; compare with epsilon. */
+const MULTIPLIER_LABEL_EPSILON = 1e-9;
+
+function multiplierSymbolLabel(multiplier: number): string | null {
+  if (Math.abs(multiplier - 0.25) < MULTIPLIER_LABEL_EPSILON) {
+    return "×¼";
+  }
+
+  if (Math.abs(multiplier - 0.5) < MULTIPLIER_LABEL_EPSILON) {
+    return "×½";
+  }
+
+  return null;
+}
 
 export function formatStatLabel(statName: string): string {
   return STAT_LABELS[statName] ?? statName.toUpperCase();
@@ -39,5 +49,5 @@ export function formatGenderRatio(genderRate: number): string {
 }
 
 export function formatMultiplier(multiplier: number): string {
-  return MULTIPLIER_LABELS[multiplier] ?? `×${multiplier}`;
+  return multiplierSymbolLabel(multiplier) ?? `×${multiplier}`;
 }
