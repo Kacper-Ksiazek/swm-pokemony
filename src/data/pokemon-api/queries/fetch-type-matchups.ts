@@ -13,6 +13,29 @@ type TypeResponse = {
   damage_relations: DamageRelations;
 };
 
+type TypeIndexResponse = {
+  results: NamedResource[];
+};
+
+let cachedAllTypeNames: string[] | null = null;
+
+async function fetchAllAttackingTypeNames(): Promise<string[]> {
+  if (cachedAllTypeNames != null) {
+    return cachedAllTypeNames;
+  }
+
+  const response = await fetch(`${POKEAPI_BASE_URL}/type?limit=2000`);
+
+  if (!response.ok) {
+    throw new Error(`PokeAPI responded with ${response.status}`);
+  }
+
+  const data = (await response.json()) as TypeIndexResponse;
+  cachedAllTypeNames = data.results.map((entry) => entry.name);
+
+  return cachedAllTypeNames;
+}
+
 /**
  * Defensive matchups for a Pokémon with the given defending types.
  *
@@ -22,7 +45,7 @@ type TypeResponse = {
  */
 export async function fetchTypeMatchups(typeNames: string[]): Promise<PokemonTypeMatchups> {
   const relationSets = await Promise.all(typeNames.map(fetchDamageRelations));
-  const attackingTypes = collectAttackingTypes(relationSets);
+  const attackingTypes = await fetchAllAttackingTypeNames();
   const multipliers = new Map<string, number>();
 
   for (const attackingName of attackingTypes) {
@@ -66,24 +89,6 @@ function defensiveFactorForAttackingType(
   }
 
   return 1;
-}
-
-function collectAttackingTypes(relationSets: DamageRelations[]): Set<string> {
-  const names = new Set<string>();
-
-  for (const relations of relationSets) {
-    for (const { name } of relations.double_damage_from) {
-      names.add(name);
-    }
-    for (const { name } of relations.half_damage_from) {
-      names.add(name);
-    }
-    for (const { name } of relations.no_damage_from) {
-      names.add(name);
-    }
-  }
-
-  return names;
 }
 
 async function fetchDamageRelations(typeName: string): Promise<DamageRelations> {

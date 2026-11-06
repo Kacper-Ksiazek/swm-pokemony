@@ -1,7 +1,7 @@
 import { capitalize } from "es-toolkit/string";
 import { Image } from "expo-image";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { HeaderHeightContext } from "expo-router/build/react-navigation/elements/Header/HeaderHeightContext";
+import { HeaderHeightContext } from "expo-router/react-navigation";
 import { SymbolView } from "expo-symbols";
 import { useContext } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
@@ -26,7 +26,7 @@ import { useFavoritePokemon } from "../../hooks";
 
 const HERO_HEIGHT = 240;
 
-/** When `HeaderHeightContext` is unset (e.g. web), approximate stack header + status bar. */
+/** When header height is unavailable (e.g. web), approximate stack header + status bar. */
 const STATUS_BAR_FALLBACK = Platform.OS === "ios" ? 59 : 0;
 const HEADER_BAR_FALLBACK = Platform.OS === "ios" ? 54 : 56;
 
