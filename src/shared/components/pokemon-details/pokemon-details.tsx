@@ -213,7 +213,7 @@ function StatBar({ label, value, index }: { label: string; value: number; index:
   }, [fill, index, ratio, reducedMotion]);
 
   const fillStyle = useAnimatedStyle(() => ({
-    transform: [{ scaleX: fill.get() }],
+    width: `${fill.get() * 100}%`,
   }));
 
   return (
@@ -387,10 +387,8 @@ const styles = StyleSheet.create({
   },
   statBarFill: {
     height: "100%",
-    width: "100%",
     borderRadius: 4,
     backgroundColor: COLORS.PRIMARY,
-    transformOrigin: "left",
   },
   statValue: {
     width: 32,

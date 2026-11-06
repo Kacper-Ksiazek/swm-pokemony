@@ -1,7 +1,9 @@
 import { capitalize } from "es-toolkit/string";
 import { Image } from "expo-image";
 import { Stack, useLocalSearchParams } from "expo-router";
+import { HeaderHeightContext } from "expo-router/build/react-navigation/elements/Header/HeaderHeightContext";
 import { SymbolView } from "expo-symbols";
+import { useContext } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import Animated, {
   Extrapolation,
@@ -24,12 +26,9 @@ import { useFavoritePokemon } from "../../hooks";
 
 const HERO_HEIGHT = 240;
 
-/**
- * The stack header is translucent and this screen is laid out underneath it.
- * `insets.top` is the status bar only, and on this route it can be 0, so keep a floor.
- */
+/** When `HeaderHeightContext` is unset (e.g. web), approximate stack header + status bar. */
 const STATUS_BAR_FALLBACK = Platform.OS === "ios" ? 59 : 0;
-const HEADER_BAR_HEIGHT = Platform.OS === "ios" ? 54 : 56;
+const HEADER_BAR_FALLBACK = Platform.OS === "ios" ? 54 : 56;
 
 export function PokemonListDetailScreen() {
   const { id: idParam, name: nameParam } = useLocalSearchParams<{ id: string; name?: string }>();
@@ -42,9 +41,10 @@ export function PokemonListDetailScreen() {
   const isFavorite = pokemonId !== null && favoriteId === pokemonId;
   const scrollY = useSharedValue(0);
   const insets = useSafeAreaInsets();
-  /** Do not add status-bar fallback when `insets.top` is already non-zero — avoids double-counting (~59 + 54). */
-  const topInset = insets.top > 0 ? insets.top : STATUS_BAR_FALLBACK;
-  const headerHeight = topInset + HEADER_BAR_HEIGHT;
+  const headerHeightFromContext = useContext(HeaderHeightContext);
+  const headerHeight =
+    headerHeightFromContext ??
+    (insets.top > 0 ? insets.top : STATUS_BAR_FALLBACK) + HEADER_BAR_FALLBACK;
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {

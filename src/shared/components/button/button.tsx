@@ -1,10 +1,10 @@
 import { SymbolView, type SymbolViewProps } from "expo-symbols";
 import { forwardRef } from "react";
-import { type PressableProps, StyleSheet, Text, type View } from "react-native";
+import { type PressableProps, StyleSheet, Text } from "react-native";
 
 import { COLORS, RADIUS, SPACING, TYPE_SIZE } from "@/shared/styles/colors";
 
-import { PressableScale } from "../pressable-scale";
+import { type AnimatedPressableRef, PressableScale } from "../pressable-scale";
 
 type ButtonProps = Omit<PressableProps, "style" | "children"> & {
   label: string;
@@ -12,7 +12,7 @@ type ButtonProps = Omit<PressableProps, "style" | "children"> & {
   icon?: SymbolViewProps["name"];
 };
 
-export const Button = forwardRef<View, ButtonProps>(function Button(
+export const Button = forwardRef<AnimatedPressableRef, ButtonProps>(function Button(
   { label, variant = "primary", icon, accessibilityLabel, disabled = false, ...rest },
   ref,
 ) {

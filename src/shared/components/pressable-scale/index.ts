@@ -1,1 +1,1 @@
-export { PressableScale } from "./pressable-scale";
+export { type AnimatedPressableRef, PressableScale } from "./pressable-scale";

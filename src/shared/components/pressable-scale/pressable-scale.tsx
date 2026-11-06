@@ -1,11 +1,5 @@
-import { forwardRef } from "react";
-import {
-  Pressable,
-  type PressableProps,
-  type StyleProp,
-  type View,
-  type ViewStyle,
-} from "react-native";
+import { type ComponentRef, forwardRef } from "react";
+import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useReducedMotion,
@@ -15,39 +9,40 @@ import Animated, {
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
+export type AnimatedPressableRef = ComponentRef<typeof AnimatedPressable>;
+
 type PressableScaleProps = Omit<PressableProps, "style"> & {
   pressedScale?: number;
   style?: StyleProp<ViewStyle>;
 };
 
-export const PressableScale = forwardRef<View, PressableScaleProps>(function PressableScale(
-  { pressedScale = 0.97, onPressIn, onPressOut, style, ...rest },
-  ref,
-) {
-  const reducedMotion = useReducedMotion();
-  const scale = useSharedValue(1);
+export const PressableScale = forwardRef<AnimatedPressableRef, PressableScaleProps>(
+  function PressableScale({ pressedScale = 0.97, onPressIn, onPressOut, style, ...rest }, ref) {
+    const reducedMotion = useReducedMotion();
+    const scale = useSharedValue(1);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.get() }],
-  }));
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: scale.get() }],
+    }));
 
-  return (
-    <AnimatedPressable
-      ref={ref as never}
-      onPressIn={(event) => {
-        if (!reducedMotion) {
-          scale.set(withSpring(pressedScale, { damping: 20, stiffness: 420 }));
-        }
-        onPressIn?.(event);
-      }}
-      onPressOut={(event) => {
-        if (!reducedMotion) {
-          scale.set(withSpring(1, { damping: 16, stiffness: 260 }));
-        }
-        onPressOut?.(event);
-      }}
-      style={[style, animatedStyle]}
-      {...rest}
-    />
-  );
-});
+    return (
+      <AnimatedPressable
+        ref={ref}
+        onPressIn={(event) => {
+          if (!reducedMotion) {
+            scale.set(withSpring(pressedScale, { damping: 20, stiffness: 420 }));
+          }
+          onPressIn?.(event);
+        }}
+        onPressOut={(event) => {
+          if (!reducedMotion) {
+            scale.set(withSpring(1, { damping: 16, stiffness: 260 }));
+          }
+          onPressOut?.(event);
+        }}
+        style={[style, animatedStyle]}
+        {...rest}
+      />
+    );
+  },
+);
