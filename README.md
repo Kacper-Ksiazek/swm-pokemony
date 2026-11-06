@@ -38,6 +38,7 @@ This command will move the starter code to the **example** directory and create 
 ### Other setup steps
 
 - This project uses [Biome](https://biomejs.dev/) for linting and formatting. Run `bun run lint` (or `bun run lint:fix`).
+- **CI:** Pull requests run lint, TypeScript (`bun run typecheck`), and a native JS bundle step (`bun run export:native`). To require green CI before merge on GitHub, see [docs/ci-required-checks.md](docs/ci-required-checks.md).
 - If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
 - Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
 

@@ -53,6 +53,8 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "export:native": "expo export -p ios -p android --output-dir dist",
     "db:generate": "drizzle-kit generate"
   },
   "private": true
