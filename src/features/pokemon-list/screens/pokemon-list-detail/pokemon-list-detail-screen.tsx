@@ -42,7 +42,9 @@ export function PokemonListDetailScreen() {
   const isFavorite = pokemonId !== null && favoriteId === pokemonId;
   const scrollY = useSharedValue(0);
   const insets = useSafeAreaInsets();
-  const headerHeight = Math.max(insets.top, STATUS_BAR_FALLBACK) + HEADER_BAR_HEIGHT;
+  /** Do not add status-bar fallback when `insets.top` is already non-zero — avoids double-counting (~59 + 54). */
+  const topInset = insets.top > 0 ? insets.top : STATUS_BAR_FALLBACK;
+  const headerHeight = topInset + HEADER_BAR_HEIGHT;
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {

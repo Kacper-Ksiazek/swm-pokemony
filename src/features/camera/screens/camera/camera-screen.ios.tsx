@@ -49,6 +49,8 @@ export function CameraScreen() {
     isFocused,
   });
 
+  const flashOpacity = useSharedValue(0);
+
   const flashBeforeCapture = () => {
     flashOpacity.set(
       withSequence(withTiming(0.8, { duration: 90 }), withTiming(0, { duration: 90 })),
@@ -75,7 +77,6 @@ export function CameraScreen() {
 
   const spriteUri = favorite == null ? "" : pokemonSpriteUrl(favorite.id);
   const insets = useSafeAreaInsets();
-  const flashOpacity = useSharedValue(0);
   const [hasFace, setHasFace] = useState(false);
   const [showFaceHint, setShowFaceHint] = useState(false);
 
@@ -90,9 +91,7 @@ export function CameraScreen() {
 
   useEffect(() => {
     if (!isFocused || !hasPermission || hasFace) {
-      queueMicrotask(() => {
-        setShowFaceHint(false);
-      });
+      setShowFaceHint(false);
       return;
     }
 
