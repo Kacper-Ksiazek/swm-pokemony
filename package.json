@@ -50,8 +50,5 @@
     "format": "biome format --write .",
     "db:generate": "drizzle-kit generate"
   },
-  "private": true,
-  "patchedDependencies": {
-    "expo-maps@58.0.11": "patches/expo-maps@58.0.11.patch"
-  }
+  "private": true
 }

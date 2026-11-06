@@ -11,8 +11,6 @@ export function MapSheetProvider({ children }: MapSheetProviderProps) {
   const [opened, setOpened] = useState<OpenMapSheetArgs | null>(null);
 
   function open(args: OpenMapSheetArgs) {
-    console.log("open", args);
-
     if (opened !== null) {
       return;
     }
@@ -21,7 +19,6 @@ export function MapSheetProvider({ children }: MapSheetProviderProps) {
   }
 
   function close() {
-    console.log("close");
     setOpened(null);
   }
 
