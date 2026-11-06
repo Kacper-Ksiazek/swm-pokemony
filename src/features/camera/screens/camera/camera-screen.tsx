@@ -1,23 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
+import { EmptyState } from "@/shared/components/empty-state";
 
 export function CameraScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Camera</Text>
-    </View>
-  );
+  return <EmptyState message="Camera is available on iOS." />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "600",
-    color: "#000000",
-  },
-});
