@@ -26,6 +26,7 @@ export function useSaveStickerPhoto({
   previewHeight,
   previewSize,
   facing,
+  flashBeforeCapture,
 }: UseSaveStickerPhotoParams): UseSaveStickerPhotoResult {
   const window = useWindowDimensions();
   const photoOutput = usePhotoOutput({
@@ -73,6 +74,14 @@ export function useSaveStickerPhoto({
 
         return;
       }
+
+      if (frame.get() == null) {
+        setStatus(LOOK_AT_CAMERA);
+
+        return;
+      }
+
+      flashBeforeCapture?.();
 
       const rawPhoto = await captureRawPhotoWithSticker({
         photoOutput,

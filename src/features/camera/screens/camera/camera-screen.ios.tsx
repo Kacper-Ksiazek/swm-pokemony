@@ -49,6 +49,12 @@ export function CameraScreen() {
     isFocused,
   });
 
+  const flashBeforeCapture = () => {
+    flashOpacity.set(
+      withSequence(withTiming(0.8, { duration: 90 }), withTiming(0, { duration: 90 })),
+    );
+  };
+
   const {
     photoOutput,
     shotRef,
@@ -64,6 +70,7 @@ export function CameraScreen() {
     previewHeight,
     previewSize,
     facing,
+    flashBeforeCapture,
   });
 
   const spriteUri = favorite == null ? "" : pokemonSpriteUrl(favorite.id);
@@ -107,15 +114,7 @@ export function CameraScreen() {
       return;
     }
 
-    if (frame.get() == null) {
-      save();
-      return;
-    }
-
-    flashOpacity.set(
-      withSequence(withTiming(0.8, { duration: 90 }), withTiming(0, { duration: 90 })),
-    );
-    save();
+    void save();
   }
 
   function flipCamera() {

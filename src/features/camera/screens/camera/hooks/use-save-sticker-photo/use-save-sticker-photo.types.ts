@@ -31,6 +31,8 @@ export type UseSaveStickerPhotoParams = {
   previewHeight: SharedValue<number>;
   previewSize: PreviewSize;
   facing: CameraFacing;
+  /** Run immediately before `capturePhoto` (after permission + frame checks). Keeps shutter UX in sync with capture. */
+  flashBeforeCapture?: () => void;
 };
 
 export type UseSaveStickerPhotoResult = {

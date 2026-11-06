@@ -26,9 +26,7 @@ export async function fetchPokemonSpecies(speciesUrl: string): Promise<PokemonSp
 
   const data = (await response.json()) as PokemonSpeciesResponse;
   const genus = data.genera.find((entry) => entry.language.name === LANGUAGE)?.genus ?? null;
-  const flavorText = data.flavor_text_entries.findLast(
-    (entry) => entry.language.name === LANGUAGE,
-  )?.flavor_text;
+  const flavorText = lastFlavorTextInLanguage(data.flavor_text_entries, LANGUAGE);
 
   return {
     genus,
@@ -41,6 +39,22 @@ export async function fetchPokemonSpecies(speciesUrl: string): Promise<PokemonSp
     isLegendary: data.is_legendary,
     isMythical: data.is_mythical,
   };
+}
+
+/** Latest English entry; avoid `Array.prototype.findLast` for older runtimes. */
+function lastFlavorTextInLanguage(
+  entries: { flavor_text: string; language: NamedResource }[],
+  language: string,
+): string | undefined {
+  for (let index = entries.length - 1; index >= 0; index -= 1) {
+    const entry = entries[index];
+
+    if (entry.language.name === language) {
+      return entry.flavor_text;
+    }
+  }
+
+  return undefined;
 }
 
 /** Game text carries hard line breaks and form feeds sized for the original screens. */
