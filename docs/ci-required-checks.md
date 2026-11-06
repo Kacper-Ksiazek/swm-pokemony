@@ -2,7 +2,7 @@
 
 ## What runs on every PR
 
-The workflow [.github/workflows/ci.yml](../.github/workflows/ci.yml) runs:
+The workflow [.github/workflows/ci.yml](../.github/workflows/ci.yml) runs on `ubuntu-latest` with a **10-minute** job timeout. **Bun** is pinned to a fixed version in the workflow file (not `latest`) so CI does not pick up breaking Bun releases unexpectedly.
 
 1. **Lint** — `bun run lint` (Biome).
 2. **Typecheck** — `bun run typecheck` (`tsc --noEmit`).
