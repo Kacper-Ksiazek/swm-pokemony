@@ -28,6 +28,12 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-dev-client",
+        {
+          "toolsButton": false
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
@@ -37,7 +43,8 @@
           "imageWidth": 76
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-maps"
     ],
     "experiments": {
       "typedRoutes": true,

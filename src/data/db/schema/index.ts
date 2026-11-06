@@ -4,3 +4,4 @@ export {
   favoritePokemon,
   type NewFavoritePokemon,
 } from "./favorite-pokemon";
+export { type MapPin, mapPin, type NewMapPin } from "./map-pin";

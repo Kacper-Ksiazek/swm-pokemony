@@ -1,0 +1,40 @@
+steps:
+  - echo: Pin Bulbasaur, open its card and remove it, then pin two more Pokémon
+  - script: { path: scripts/clear-map-pins.mjs }
+  - launch: com.anonymous.kksiazek-pokemony
+  - await: { visible: { text: Map }, timeout: 20000 }
+  - tap: { text: Map }
+  - await: { visible: { text: Legal }, timeout: 8000 }
+
+  - echo: Drop Bulbasaur. The map canvas has no control label, so the tap stays a coordinate.
+  - tap: { x: 0.35, y: 0.32 }
+  - await: { visible: { id: pin-bulbasaur }, timeout: 10000 }
+  - tap: { id: pin-bulbasaur }
+  - await: { hidden: { text: Choose a Pokémon }, timeout: 8000 }
+  - await: { visible: { text: Bulbasaur }, timeout: 10000 }
+
+  - echo: Open the Bulbasaur card and remove the pin
+  - tap: { text: Bulbasaur }
+  - await: { visible: { id: remove-map-pin }, timeout: 8000 }
+  - await: { idle: true }
+  - tool: gesture-tap
+    args:
+      x: 0.5
+      y: 0.8
+  - await: { hidden: { id: remove-map-pin }, timeout: 8000 }
+  - assert: { hidden: { text: Bulbasaur } }
+
+  - echo: Pin Charmander and Squirtle at two other places on the starting map
+  - launch: com.anonymous.kksiazek-pokemony
+  - tap: { text: Map }
+  - await: { visible: { text: Legal }, timeout: 8000 }
+  - tap: { x: 0.35, y: 0.32 }
+  - await: { visible: { id: pin-charmander }, timeout: 10000 }
+  - tap: { id: pin-charmander }
+  - await: { hidden: { text: Choose a Pokémon }, timeout: 8000 }
+  - tap: { x: 0.62, y: 0.58 }
+  - await: { visible: { id: pin-squirtle }, timeout: 10000 }
+  - tap: { id: pin-squirtle }
+  - await: { hidden: { text: Choose a Pokémon }, timeout: 8000 }
+  - assert: { visible: { text: Charmander } }
+  - assert: { visible: { text: Squirtle } }
