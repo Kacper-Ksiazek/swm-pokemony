@@ -103,7 +103,11 @@ export function CameraScreen() {
   }));
 
   function handleSave() {
-    if (saving || frame.get() == null) {
+    if (saving) {
+      return;
+    }
+
+    if (frame.get() == null) {
       save();
       return;
     }
