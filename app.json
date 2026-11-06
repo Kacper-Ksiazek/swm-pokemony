@@ -36,6 +36,12 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-dev-client",
+        {
+          "toolsButton": false
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
@@ -46,6 +52,7 @@
         }
       ],
       "expo-sqlite",
+      "expo-maps",
       [
         "expo-media-library",
         {

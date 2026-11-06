@@ -10,8 +10,8 @@ Output root: `docs/ai-coding-rules/`. One directory per category, one file per r
 - Entry: `expo-router/entry`. Routes live in `src/app/`
 - Native tabs (`expo-router/native-tabs`) with a nested `Stack` on Screen B and Screen C
 - Bun (`bun.lock`). Lint and format: Biome 2. Path alias `@/*` → `src/*`
-- Local DB: expo-sqlite + drizzle-orm in `src/data/db/` (`favorite_pokemon` table; one favorite at a time)
-- No test runner, no global store, no map, no camera yet
+- Local DB: expo-sqlite + drizzle-orm in `src/data/db/` (`favorite_pokemon`, `map_pin`)
+- No test runner, no global store, no camera yet. Map pins work on iOS. Android map is not in yet.
 - `ios/` and `android/` are not hand-edited (continuous native generation)
 
 ## Categories
@@ -30,6 +30,6 @@ Output root: `docs/ai-coding-rules/`. One directory per category, one file per r
 No rule files until the code exists:
 
 - PokeAPI fetching, pagination, pull-to-refresh
-- Map pins
+- Android map
 - Camera and face detection
 - Tests

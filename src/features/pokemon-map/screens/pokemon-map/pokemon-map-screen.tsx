@@ -1,23 +1,25 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+
+import { MapPinSheet, PokemonMapView } from "./components";
+import { useMapPins } from "./hooks/use-map-pins";
+import { MapSheetProvider } from "./map-sheet-context";
 
 export function PokemonMapScreen() {
+  const { pins } = useMapPins();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Map</Text>
-    </View>
+    <MapSheetProvider>
+      <View style={styles.container}>
+        <PokemonMapView pins={pins} />
+
+        <MapPinSheet />
+      </View>
+    </MapSheetProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "600",
-    color: "#000000",
   },
 });

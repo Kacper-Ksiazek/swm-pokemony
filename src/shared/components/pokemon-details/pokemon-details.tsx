@@ -1,7 +1,8 @@
 import { capitalize } from "es-toolkit/string";
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import type { PokemonDetail } from "@/data/pokemon-api";
+import { ErrorStatusScreen, LoadingStatusScreen } from "@/shared/components/status-screen";
 import { COLORS } from "@/shared/styles/colors";
 
 import { formatStatLabel, getPokemonTypeColor } from "./pokemon-details.utils";
@@ -15,28 +16,11 @@ type PokemonDetailsProps = {
 
 export function PokemonDetails({ detail, loading, error, onRetry }: PokemonDetailsProps) {
   if (loading) {
-    return (
-      <View style={styles.loadingWrap}>
-        <ActivityIndicator size="small" color={COLORS.PRIMARY} />
-        <Text style={styles.loadingLabel}>Loading details…</Text>
-      </View>
-    );
+    return <LoadingStatusScreen message="Loading details…" />;
   }
 
   if (error !== null) {
-    return (
-      <View style={styles.errorWrap}>
-        <Text style={styles.errorText}>{error}</Text>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Retry loading Pokémon details"
-          onPress={onRetry}
-          style={({ pressed }) => [pressed && styles.retryPressed]}
-        >
-          <Text style={styles.retryLink}>Try again</Text>
-        </Pressable>
-      </View>
-    );
+    return <ErrorStatusScreen title="Could not load details" message={error} onRetry={onRetry} />;
   }
 
   if (detail === null) {
@@ -165,38 +149,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#111111",
     textAlign: "right",
-  },
-
-  loadingWrap: {
-    alignItems: "center",
-    gap: 8,
-    paddingVertical: 24,
-  },
-
-  loadingLabel: {
-    fontSize: 14,
-    color: "#666666",
-  },
-
-  errorWrap: {
-    alignItems: "center",
-    gap: 8,
-    paddingVertical: 16,
-  },
-
-  errorText: {
-    fontSize: 14,
-    color: "#666666",
-    textAlign: "center",
-  },
-
-  retryLink: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: COLORS.PRIMARY,
-  },
-
-  retryPressed: {
-    opacity: 0.6,
   },
 });
