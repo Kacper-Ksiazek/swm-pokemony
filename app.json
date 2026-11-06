@@ -11,7 +11,8 @@
       "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.anonymous.kksiazek-pokemony",
       "infoPlist": {
-        "NSCameraUsageDescription": "$(PRODUCT_NAME) uses the camera to show your favorite Pokémon."
+        "NSCameraUsageDescription": "$(PRODUCT_NAME) uses the camera to show your favorite Pokémon.",
+        "NSPhotoLibraryAddUsageDescription": "$(PRODUCT_NAME) saves a photo of you with your favorite Pokémon."
       }
     },
     "android": {
@@ -21,7 +22,14 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.READ_MEDIA_IMAGES"
+      ],
+      "package": "com.anonymous.kksiazekpokemony"
     },
     "web": {
       "output": "server",
@@ -44,7 +52,15 @@
         }
       ],
       "expo-sqlite",
-      "expo-maps"
+      "expo-maps",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "$(PRODUCT_NAME) saves a photo of you with your favorite Pokémon.",
+          "savePhotosPermission": "$(PRODUCT_NAME) saves a photo of you with your favorite Pokémon.",
+          "granularPermissions": ["photo"]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
