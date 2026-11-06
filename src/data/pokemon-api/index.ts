@@ -6,7 +6,10 @@ export type {
   PokemonListItem,
   PokemonListResponse,
   PokemonListResult,
+  PokemonSpecies,
   PokemonStat,
+  PokemonTypeMatchup,
+  PokemonTypeMatchups,
   PokemonTypeSlot,
 } from "./pokemon-api.types";
 

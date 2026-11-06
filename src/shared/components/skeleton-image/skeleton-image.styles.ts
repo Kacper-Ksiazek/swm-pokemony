@@ -1,5 +1,7 @@
 import { StyleSheet } from "react-native";
 
+import { COLORS } from "@/shared/styles/colors";
+
 export const skeletonImageStyles = StyleSheet.create({
   frame: {
     position: "relative",
@@ -7,7 +9,7 @@ export const skeletonImageStyles = StyleSheet.create({
 
   skeleton: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: "#e8e8e8",
+    backgroundColor: COLORS.BORDER,
   },
 
   image: {},

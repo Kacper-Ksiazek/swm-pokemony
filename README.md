@@ -25,6 +25,12 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## App icon
+
+The iOS and Android home-screen icon is the trainer illustration in `assets/images/icon.png` (1024×1024). `app.json` points the shared `icon` at that file. iOS uses it directly. Android uses the same image as `android.adaptiveIcon.foregroundImage` (`assets/images/android-icon-foreground.png`).
+
+Expo Go does not show this icon. It appears after a development or store build. The web favicon is a separate file and is not this illustration.
+
 ## Get a fresh project
 
 When you're ready, run:

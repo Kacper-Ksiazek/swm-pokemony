@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { db } from "@/data/db";
 import migrations from "@/data/db/migrations/migrations";
 import { ErrorStatusScreen } from "@/shared/components/status-screen";
+import { COLORS } from "@/shared/styles/colors";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,7 +24,8 @@ export default function RootLayout() {
     return (
       <ErrorStatusScreen
         title="Could not open the database"
-        message={error.message}
+        message="The local database could not be opened."
+        detail={__DEV__ ? error.message : undefined}
         onRetry={() => reloadAppAsync()}
         retryLabel="Restart app"
       />
@@ -35,7 +37,7 @@ export default function RootLayout() {
   }
 
   return (
-    <NativeTabs>
+    <NativeTabs tintColor={COLORS.PRIMARY}>
       <NativeTabs.Trigger name="(pokemon-list)">
         <NativeTabs.Trigger.Label>List</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="list.bullet" md="format_list_bulleted" />

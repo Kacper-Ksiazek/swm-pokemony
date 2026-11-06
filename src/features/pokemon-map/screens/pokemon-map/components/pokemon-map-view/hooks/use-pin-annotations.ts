@@ -11,7 +11,10 @@ import { SPRITE_ANCHOR, SPRITE_DECODE_SIZE } from "../pokemon-map-view.constants
 export function usePinAnnotations(pins: MapPin[]): AppleMaps.Annotation[] {
   const [icons, setIcons] = useState<ReadonlyMap<number, ImageRef>>(() => new Map());
   const iconsRef = useRef(icons);
-  iconsRef.current = icons;
+
+  useEffect(() => {
+    iconsRef.current = icons;
+  });
 
   useEffect(() => {
     let cancelled = false;

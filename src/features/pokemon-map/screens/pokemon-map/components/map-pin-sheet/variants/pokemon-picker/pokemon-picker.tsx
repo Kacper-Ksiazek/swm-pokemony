@@ -1,13 +1,13 @@
 import { capitalize } from "es-toolkit/string";
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 import { insertMapPin } from "@/data/db";
 import { type PokemonListItem, pokemonThumbnailUrl } from "@/data/pokemon-api";
 import { EmptyState } from "@/shared/components/empty-state";
+import { PressableScale } from "@/shared/components/pressable-scale";
 import { SkeletonImage } from "@/shared/components/skeleton-image";
 import { ErrorStatusScreen, LoadingStatusScreen } from "@/shared/components/status-screen";
 import { usePokemonList } from "@/shared/hooks";
-import { COLORS } from "@/shared/styles/colors";
+import { COLORS, SPACING } from "@/shared/styles/colors";
 
 import { useMapSheetContext, useMapSheetPayload } from "../../../../map-sheet-context";
 
@@ -40,21 +40,28 @@ export function PokemonPicker() {
   }
 
   if (error !== null && items.length === 0) {
-    return <ErrorStatusScreen title="Could not load the list" message={error} onRetry={retry} />;
+    return (
+      <ErrorStatusScreen
+        title="Could not load the list"
+        message="Check your connection and try again."
+        detail={__DEV__ ? error : undefined}
+        onRetry={retry}
+      />
+    );
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Choose a Pokémon</Text>
       <Text style={styles.coordinate}>
-        {coordinate.latitude.toFixed(5)}, {coordinate.longitude.toFixed(5)}
+        {coordinate.latitude.toFixed(4)}, {coordinate.longitude.toFixed(4)}
       </Text>
 
       <FlatList
         data={items}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
-          <Pressable
+          <PressableScale
             accessibilityRole="button"
             accessibilityLabel={`Pin ${capitalize(item.name)} here`}
             testID={`pin-${item.name}`}
@@ -63,7 +70,7 @@ export function PokemonPicker() {
           >
             <SkeletonImage uri={pokemonThumbnailUrl(item.id)} loadKey={item.id} size={48} />
             <Text style={styles.name}>{capitalize(item.name)}</Text>
-          </Pressable>
+          </PressableScale>
         )}
         onEndReached={loadMore}
         onEndReachedThreshold={0.4}
@@ -87,11 +94,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "600",
-    color: "#111111",
+    color: COLORS.TEXT,
   },
   coordinate: {
     fontSize: 14,
-    color: "#666666",
+    color: COLORS.TEXT_MUTED,
   },
   list: {
     flex: 1,
@@ -99,13 +106,15 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
-    paddingVertical: 8,
+    gap: SPACING.md,
+    paddingVertical: SPACING.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: COLORS.BORDER,
   },
   name: {
     fontSize: 17,
     fontWeight: "600",
-    color: "#111111",
+    color: COLORS.TEXT,
   },
   footer: {
     paddingVertical: 12,

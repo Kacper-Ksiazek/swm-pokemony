@@ -1,23 +1,4 @@
-const POKEMON_TYPE_COLORS: Record<string, string> = {
-  normal: "#A8A878",
-  fire: "#F08030",
-  water: "#6890F0",
-  electric: "#F8D030",
-  grass: "#78C850",
-  ice: "#98D8D8",
-  fighting: "#C03028",
-  poison: "#A040A0",
-  ground: "#E0C068",
-  flying: "#A890F0",
-  psychic: "#F85888",
-  bug: "#A8B820",
-  rock: "#B8A038",
-  ghost: "#705898",
-  dragon: "#7038F8",
-  dark: "#705848",
-  steel: "#B8B8D0",
-  fairy: "#EE99AC",
-};
+import { capitalize } from "es-toolkit/string";
 
 const STAT_LABELS: Record<string, string> = {
   hp: "HP",
@@ -28,10 +9,35 @@ const STAT_LABELS: Record<string, string> = {
   speed: "SPD",
 };
 
-export function getPokemonTypeColor(typeName: string): string {
-  return POKEMON_TYPE_COLORS[typeName] ?? "#888888";
-}
+const MULTIPLIER_LABELS: Record<number, string> = {
+  0.25: "×¼",
+  0.5: "×½",
+};
 
 export function formatStatLabel(statName: string): string {
   return STAT_LABELS[statName] ?? statName.toUpperCase();
+}
+
+/** PokeAPI names are kebab-case slugs, e.g. `water-1` or `rough-skin`. */
+export function formatApiName(name: string): string {
+  return capitalize(name.replaceAll("-", " "));
+}
+
+/** `generation-iv` → `Gen IV` */
+export function formatGeneration(generation: string): string {
+  return `Gen ${generation.replace("generation-", "").toUpperCase()}`;
+}
+
+export function formatGenderRatio(genderRate: number): string {
+  if (genderRate < 0) {
+    return "Genderless";
+  }
+
+  const female = (genderRate / 8) * 100;
+
+  return `${100 - female}% ♂ · ${female}% ♀`;
+}
+
+export function formatMultiplier(multiplier: number): string {
+  return MULTIPLIER_LABELS[multiplier] ?? `×${multiplier}`;
 }

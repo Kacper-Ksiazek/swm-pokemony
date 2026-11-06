@@ -1,8 +1,16 @@
 import { openSettings } from "expo-linking";
 import { useIsFocused } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View, type ViewInstance } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import Animated, {
+  runOnJS,
+  useAnimatedReaction,
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Camera,
   type CameraRef,
@@ -12,11 +20,11 @@ import {
 
 import { pokemonSpriteUrl } from "@/data/pokemon-api";
 import { EmptyState } from "@/shared/components/empty-state";
-import { ErrorStatusScreen } from "@/shared/components/status-screen";
+import { ErrorStatusScreen, LoadingStatusScreen } from "@/shared/components/status-screen";
 import { useLiveFavoritePokemon } from "@/shared/hooks";
+import { COLORS, SPACING } from "@/shared/styles/colors";
 
-import { FlipCameraButton, HeadSticker, SavePhotoButton, StickerPhoto } from "./components";
-import { FaceScanStatus } from "./devtools";
+import { CameraControls, FlipCameraButton, HeadSticker, StickerPhoto } from "./components";
 import { useHeadSticker, useSaveStickerPhoto } from "./hooks";
 
 type CameraFacing = "front" | "back";
@@ -35,8 +43,7 @@ export function CameraScreen() {
   const previewRef = useRef<ViewInstance>(null);
   const [previewSize, setPreviewSize] = useState({ width: 0, height: 0 });
 
-  const { frame, previewWidth, previewHeight, scannerOutput, measurePreview, debug } =
-    useHeadSticker({
+  const { frame, previewWidth, previewHeight, scannerOutput, measurePreview } = useHeadSticker({
       cameraRef,
       previewRef,
       isFocused,
@@ -60,6 +67,52 @@ export function CameraScreen() {
   });
 
   const spriteUri = favorite == null ? "" : pokemonSpriteUrl(favorite.id);
+  const insets = useSafeAreaInsets();
+  const flashOpacity = useSharedValue(0);
+  const [hasFace, setHasFace] = useState(false);
+  const [showFaceHint, setShowFaceHint] = useState(false);
+
+  useAnimatedReaction(
+    () => frame.get() != null,
+    (present, previous) => {
+      if (present !== previous) {
+        runOnJS(setHasFace)(present);
+      }
+    },
+  );
+
+  useEffect(() => {
+    if (!isFocused || !hasPermission || hasFace) {
+      queueMicrotask(() => {
+        setShowFaceHint(false);
+      });
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setShowFaceHint(true);
+    }, 2000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [hasFace, hasPermission, isFocused]);
+
+  const flashStyle = useAnimatedStyle(() => ({
+    opacity: flashOpacity.get(),
+  }));
+
+  function handleSave() {
+    if (saving || frame.get() == null) {
+      save();
+      return;
+    }
+
+    flashOpacity.set(
+      withSequence(withTiming(0.8, { duration: 90 }), withTiming(0, { duration: 90 })),
+    );
+    save();
+  }
 
   function flipCamera() {
     frame.set(null);
@@ -67,13 +120,19 @@ export function CameraScreen() {
   }
 
   if (!loaded) {
-    return <View style={styles.fill} />;
+    return <LoadingStatusScreen message="Loading camera…" />;
   }
 
   if (favorite === null) {
     return (
       <SafeAreaView style={styles.fill} edges={["top", "bottom"]}>
-        <EmptyState message="No favorite yet. Tap the heart on a Pokémon in the list." />
+        <EmptyState
+          icon={{ ios: "heart", android: "favorite_border", web: "favorite_border" }}
+          title="No favorite yet"
+          message="Tap the heart on a Pokémon in the list."
+          href="/"
+          actionLabel="Open the list"
+        />
       </SafeAreaView>
     );
   }
@@ -108,7 +167,9 @@ export function CameraScreen() {
               : "This device has no back camera."
           }
         />
-        <FlipCameraButton facing={facing} onPress={flipCamera} />
+        <View style={[styles.noDeviceFlip, { bottom: insets.bottom + SPACING.xl }]}>
+          <FlipCameraButton facing={facing} onPress={flipCamera} />
+        </View>
       </View>
     );
   }
@@ -138,7 +199,6 @@ export function CameraScreen() {
         previewWidth={previewWidth}
         previewHeight={previewHeight}
       />
-      {__DEV__ ? <FaceScanStatus status={debug} scannerReady /> : null}
 
       {pending != null ? (
         <StickerPhoto
@@ -154,8 +214,15 @@ export function CameraScreen() {
         />
       ) : null}
 
-      <SavePhotoButton saving={saving} status={status} onPress={save} />
-      <FlipCameraButton facing={facing} disabled={saving} onPress={flipCamera} />
+      <Animated.View pointerEvents="none" style={[styles.flash, flashStyle]} />
+      <CameraControls
+        saving={saving}
+        status={status}
+        showFaceHint={showFaceHint}
+        facing={facing}
+        onSave={handleSave}
+        onFlip={flipCamera}
+      />
     </View>
   );
 }
@@ -163,10 +230,18 @@ export function CameraScreen() {
 const styles = StyleSheet.create({
   fill: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: COLORS.BACKGROUND,
   },
   preview: {
     flex: 1,
     backgroundColor: "#000000",
+  },
+  flash: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: COLORS.BACKGROUND,
+  },
+  noDeviceFlip: {
+    position: "absolute",
+    right: 32,
   },
 });

@@ -16,7 +16,10 @@ export function usePokemonList(): UsePokemonListResult {
   const [state, setState] = useState<PokemonListState>(initialState);
   const requestIdRef = useRef(0);
   const stateRef = useRef(state);
-  stateRef.current = state;
+
+  useEffect(() => {
+    stateRef.current = state;
+  });
 
   useEffect(() => {
     loadPage({ offset: 0, mode: "initial", requestIdRef, setState });

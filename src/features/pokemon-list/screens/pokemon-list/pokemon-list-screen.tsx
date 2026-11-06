@@ -8,21 +8,18 @@ import {
 } from "react-native";
 import type { PokemonListItem as PokemonListItemType } from "@/data/pokemon-api";
 import { EmptyState } from "@/shared/components/empty-state";
-import { ErrorStatusScreen, LoadingStatusScreen } from "@/shared/components/status-screen";
+import { ErrorStatusScreen } from "@/shared/components/status-screen";
 import { usePokemonList } from "@/shared/hooks";
 import { COLORS } from "@/shared/styles/colors";
 import { useFavoritePokemon } from "../../hooks";
 import { PokemonListItem } from "./components";
-import {
-  POKEMON_LIST_ITEM_GAP,
-  POKEMON_LIST_ITEM_HEIGHT,
-  POKEMON_LIST_PADDING_TOP,
-} from "./constants";
+import { PokemonListSkeleton } from "./components/pokemon-list-skeleton";
+import { POKEMON_LIST_ITEM_GAP, POKEMON_LIST_ITEM_HEIGHT } from "./constants";
 
 function getItemLayout(_data: ArrayLike<PokemonListItemType> | null | undefined, index: number) {
   return {
     length: POKEMON_LIST_ITEM_HEIGHT,
-    offset: POKEMON_LIST_PADDING_TOP + index * (POKEMON_LIST_ITEM_HEIGHT + POKEMON_LIST_ITEM_GAP),
+    offset: index * (POKEMON_LIST_ITEM_HEIGHT + POKEMON_LIST_ITEM_GAP),
     index,
   };
 }
@@ -43,11 +40,18 @@ export function PokemonListScreen() {
   }
 
   if (initialLoading) {
-    return <LoadingStatusScreen message="Loading Pokémon…" />;
+    return <PokemonListSkeleton />;
   }
 
   if (error !== null && items.length === 0) {
-    return <ErrorStatusScreen title="Could not load the list" message={error} onRetry={retry} />;
+    return (
+      <ErrorStatusScreen
+        title="Could not load the list"
+        message="Check your connection and try again."
+        detail={__DEV__ ? error : undefined}
+        onRetry={retry}
+      />
+    );
   }
 
   return (
@@ -60,6 +64,8 @@ export function PokemonListScreen() {
       windowSize={7}
       initialNumToRender={10}
       maxToRenderPerBatch={8}
+      contentInsetAdjustmentBehavior="automatic"
+      style={styles.list}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={COLORS.PRIMARY} />
       }
@@ -72,24 +78,27 @@ export function PokemonListScreen() {
           </View>
         ) : undefined
       }
-      ListEmptyComponent={<EmptyState message="No Pokémon found." />}
-      contentContainerStyle={items.length === 0 ? styles.emptyList : styles.contentContainer}
+      ListEmptyComponent={
+        <EmptyState
+          icon={{ ios: "tray", android: "inbox", web: "inbox" }}
+          title="Nothing here"
+          message="No Pokémon found."
+        />
+      }
+      contentContainerStyle={items.length === 0 ? styles.emptyList : undefined}
     />
   );
 }
 
 const styles = StyleSheet.create({
+  list: {
+    flex: 1,
+    backgroundColor: COLORS.BACKGROUND,
+  },
   emptyList: {
     flexGrow: 1,
   },
-
   footer: {
     paddingVertical: 16,
-  },
-
-  contentContainer: {
-    gap: POKEMON_LIST_ITEM_GAP,
-    paddingHorizontal: 8,
-    paddingTop: POKEMON_LIST_PADDING_TOP,
   },
 });

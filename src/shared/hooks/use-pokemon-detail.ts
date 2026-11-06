@@ -21,7 +21,6 @@ export function usePokemonDetail(pokemonId: number | null) {
   useEffect(() => {
     if (pokemonId === null) {
       requestIdRef.current += 1;
-      setState(idleState);
       return;
     }
 
@@ -36,10 +35,12 @@ export function usePokemonDetail(pokemonId: number | null) {
     loadPokemonDetail(pokemonId, requestIdRef, setState);
   }
 
+  const effectiveState = pokemonId === null ? idleState : state;
+
   return {
-    detail: state.detail,
-    detailLoading: state.loading,
-    detailError: state.error,
+    detail: effectiveState.detail,
+    detailLoading: effectiveState.loading,
+    detailError: effectiveState.error,
     retryDetail,
   };
 }

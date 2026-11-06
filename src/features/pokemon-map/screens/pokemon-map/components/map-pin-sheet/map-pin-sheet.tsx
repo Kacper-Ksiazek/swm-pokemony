@@ -1,6 +1,8 @@
 import { BottomSheet } from "@expo/ui";
 import { StyleSheet, View } from "react-native";
 
+import { COLORS } from "@/shared/styles/colors";
+
 import { useMapSheetContext } from "../../map-sheet-context";
 import { PinDetail } from "./variants/pin-detail";
 import { PokemonPicker } from "./variants/pokemon-picker";
@@ -16,7 +18,7 @@ export function MapPinSheet() {
       isPresented={currentlyOpened !== null}
       onDismiss={close}
       snapPoints={isPicker ? ["full"] : ["half"]}
-      containerColor="#ffffff"
+      containerColor={COLORS.BACKGROUND}
     >
       <SheetBody>
         <View style={styles.content}>
@@ -45,6 +47,6 @@ function MapPinSheetBody() {
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: COLORS.BACKGROUND,
   },
 });
