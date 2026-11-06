@@ -1,7 +1,7 @@
 import { capitalize } from "es-toolkit/string";
 import { Image, type ImageRef } from "expo-image";
 import type { AppleMaps } from "expo-maps";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import type { MapPin } from "@/data/db";
 import { pokemonThumbnailUrl } from "@/data/pokemon-api";
@@ -11,7 +11,10 @@ import { SPRITE_ANCHOR, SPRITE_DECODE_SIZE } from "../pokemon-map-view.constants
 export function usePinAnnotations(pins: MapPin[]): AppleMaps.Annotation[] {
   const [icons, setIcons] = useState<ReadonlyMap<number, ImageRef>>(() => new Map());
   const iconsRef = useRef(icons);
-  iconsRef.current = icons;
+
+  useLayoutEffect(() => {
+    iconsRef.current = icons;
+  }, [icons]);
 
   useEffect(() => {
     let cancelled = false;

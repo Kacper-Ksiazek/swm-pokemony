@@ -1,29 +1,21 @@
 import { capitalize } from "es-toolkit/string";
 import { Link } from "expo-router";
-import { memo, useEffect } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import Animated, {
-  Easing,
-  interpolate,
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
+import { memo } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 import {
   type PokemonListItem as PokemonListItemType,
   pokemonThumbnailUrl,
 } from "@/data/pokemon-api";
+import { PokemonIdBadge } from "@/shared/components/pokemon-id-badge";
+import { PressableScale } from "@/shared/components/pressable-scale";
 import { SkeletonImage } from "@/shared/components/skeleton-image";
+import { COLORS } from "@/shared/styles/colors";
 
 import { POKEMON_LIST_ITEM_HEIGHT, POKEMON_LIST_SPRITE_SIZE } from "../constants";
 
 import { FavoriteButton } from "./favorite-button";
 import { getFavoriteLabel } from "./pokemon-list-item.utils";
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type PokemonListItemProps = {
   item: PokemonListItemType;
@@ -38,45 +30,8 @@ export const PokemonListItem = memo(function PokemonListItem({
 }: PokemonListItemProps) {
   const favoriteLabel = getFavoriteLabel(item.name, isFavorite);
 
-  const favoriteProgress = useSharedValue(isFavorite ? 1 : 0);
-  const pressProgress = useSharedValue(0);
-
-  useEffect(() => {
-    favoriteProgress.set(
-      withTiming(Number(isFavorite), {
-        duration: 340,
-        easing: Easing.out(Easing.cubic),
-      }),
-    );
-  }, [isFavorite, favoriteProgress]);
-
-  const rowAnimatedStyle = useAnimatedStyle(() => {
-    const press = pressProgress.get();
-
-    return {
-      borderColor: interpolateColor(
-        favoriteProgress.get(),
-        [0, 1],
-        ["#e8e8e8", "rgba(227, 53, 13, 0.26)"],
-      ),
-      backgroundColor: interpolateColor(press, [0, 1], ["#ffffff", "#f3f3f5"]),
-      transform: [
-        { scale: interpolate(press, [0, 1], [1, 0.985]) },
-        { translateY: interpolate(press, [0, 1], [0, 1]) },
-      ],
-    };
-  });
-
-  const handleLinkPressIn = () => {
-    pressProgress.set(withSpring(1, { damping: 20, stiffness: 420 }));
-  };
-
-  const handleLinkPressOut = () => {
-    pressProgress.set(withSpring(0, { damping: 16, stiffness: 260 }));
-  };
-
   return (
-    <Animated.View style={[styles.row, rowAnimatedStyle]}>
+    <View style={styles.row}>
       <Link
         href={{
           pathname: "/pokemon/[id]",
@@ -84,11 +39,10 @@ export const PokemonListItem = memo(function PokemonListItem({
         }}
         asChild
       >
-        <AnimatedPressable
+        <PressableScale
+          pressedScale={0.985}
           accessibilityRole="button"
           accessibilityLabel={`Open ${capitalize(item.name)}`}
-          onPressIn={handleLinkPressIn}
-          onPressOut={handleLinkPressOut}
           style={styles.link}
         >
           <View style={styles.spriteWrap}>
@@ -97,9 +51,9 @@ export const PokemonListItem = memo(function PokemonListItem({
 
           <View style={styles.textBlock}>
             <Text style={styles.name}>{capitalize(item.name)}</Text>
-            <Text style={styles.id}>#{String(item.id).padStart(4, "0")}</Text>
+            <PokemonIdBadge id={item.id} />
           </View>
-        </AnimatedPressable>
+        </PressableScale>
       </Link>
 
       <FavoriteButton
@@ -107,7 +61,7 @@ export const PokemonListItem = memo(function PokemonListItem({
         favoriteLabel={favoriteLabel}
         onToggleFavorite={() => onToggleFavorite(item)}
       />
-    </Animated.View>
+    </View>
   );
 });
 
@@ -116,10 +70,11 @@ const styles = StyleSheet.create({
     height: POKEMON_LIST_ITEM_HEIGHT,
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     gap: 12,
-    borderRadius: 16,
-    borderWidth: 2,
+    backgroundColor: COLORS.BACKGROUND,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: COLORS.BORDER,
   },
 
   link: {
@@ -140,17 +95,13 @@ const styles = StyleSheet.create({
 
   textBlock: {
     flex: 1,
+    alignItems: "flex-start",
     gap: 4,
   },
 
   name: {
     fontSize: 17,
     fontWeight: "600",
-    color: "#111111",
-  },
-
-  id: {
-    fontSize: 14,
-    color: "#666666",
+    color: COLORS.TEXT,
   },
 });

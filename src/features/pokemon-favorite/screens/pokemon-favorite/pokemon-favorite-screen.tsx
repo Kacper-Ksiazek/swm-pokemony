@@ -1,30 +1,42 @@
 import { capitalize } from "es-toolkit/string";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
-import { SymbolView } from "expo-symbols";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { pokemonSpriteUrl } from "@/data/pokemon-api";
+import { Button } from "@/shared/components/button";
 import { EmptyState } from "@/shared/components/empty-state";
-import { COLORS } from "@/shared/styles/colors";
+import { PokemonIdBadge } from "@/shared/components/pokemon-id-badge";
+import { LoadingStatusScreen } from "@/shared/components/status-screen";
+import { COLORS, SPACING, TYPE_SIZE } from "@/shared/styles/colors";
 
 import { useFavoritePokemon } from "./hooks";
+
+const HERO_IMAGE_MAX = 280;
 
 export function PokemonFavoriteScreen() {
   const { favorite, loading, removeFavorite } = useFavoritePokemon();
 
   if (loading) {
-    return <SafeAreaView style={styles.container} edges={["top", "bottom"]} />;
+    return <LoadingStatusScreen message="Loading favorite…" />;
   }
 
   if (favorite === null) {
     return (
       <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
-        <EmptyState message="No favorite yet. Tap the heart on a Pokémon in the list." />
+        <EmptyState
+          icon={{ ios: "heart", android: "favorite_border", web: "favorite_border" }}
+          title="No favorite yet"
+          message="Tap the heart on a Pokémon in the list."
+          href="/"
+          actionLabel="Open the list"
+        />
       </SafeAreaView>
     );
   }
+
+  const displayName = capitalize(favorite.name);
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
@@ -35,8 +47,8 @@ export function PokemonFavoriteScreen() {
           contentFit="contain"
           transition={200}
         />
-        <Text style={styles.name}>{capitalize(favorite.name)}</Text>
-        <Text style={styles.id}>#{String(favorite.id).padStart(4, "0")}</Text>
+        <Text style={styles.name}>{displayName}</Text>
+        <PokemonIdBadge id={favorite.id} />
       </View>
 
       <View style={styles.actions}>
@@ -47,35 +59,21 @@ export function PokemonFavoriteScreen() {
           }}
           asChild
         >
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            variant="primary"
+            label="View details"
             accessibilityLabel={`View details for ${favorite.name}`}
-          >
-            <View style={styles.actionButton}>
-              <SymbolView
-                name={{ ios: "info.circle", android: "info", web: "info" }}
-                size={20}
-                tintColor="#111111"
-              />
-              <Text style={styles.actionLabel}>View details</Text>
-            </View>
-          </Pressable>
+            icon={{ ios: "info.circle", android: "info", web: "info" }}
+          />
         </Link>
 
-        <Pressable
-          onPress={removeFavorite}
-          accessibilityRole="button"
+        <Button
+          variant="secondary"
+          label="Remove favorite"
           accessibilityLabel={`Remove ${favorite.name} from favorites`}
-        >
-          <View style={[styles.actionButton, styles.dangerButton]}>
-            <SymbolView
-              name={{ ios: "trash", android: "delete", web: "delete" }}
-              size={20}
-              tintColor="#ffffff"
-            />
-            <Text style={[styles.actionLabel, styles.dangerLabel]}>Remove favorite</Text>
-          </View>
-        </Pressable>
+          icon={{ ios: "trash", android: "delete", web: "delete" }}
+          onPress={removeFavorite}
+        />
       </View>
     </SafeAreaView>
   );
@@ -84,66 +82,30 @@ export function PokemonFavoriteScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: COLORS.BACKGROUND,
   },
-
   header: {
     alignSelf: "stretch",
     alignItems: "center",
-    paddingTop: 24,
-    gap: 8,
+    paddingTop: SPACING.xl,
+    gap: SPACING.sm,
   },
-
   actions: {
     alignSelf: "stretch",
-    paddingHorizontal: 24,
-    gap: 12,
-    marginTop: 16,
+    marginTop: "auto",
+    paddingHorizontal: SPACING.xl,
+    paddingBottom: SPACING.lg,
+    gap: SPACING.md,
   },
-
   image: {
-    alignSelf: "stretch",
     width: "100%",
+    maxWidth: HERO_IMAGE_MAX,
     aspectRatio: 1,
   },
-
   name: {
-    fontSize: 28,
+    fontSize: TYPE_SIZE.title,
     fontWeight: "700",
-    color: "#111111",
-    paddingHorizontal: 24,
-  },
-
-  id: {
-    fontSize: 16,
-    color: "#666666",
-    paddingHorizontal: 24,
-  },
-
-  actionButton: {
-    alignSelf: "stretch",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    minHeight: 48,
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    borderRadius: 12,
-    backgroundColor: "#f2f2f2",
-  },
-
-  actionLabel: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#111111",
-  },
-
-  dangerButton: {
-    backgroundColor: COLORS.PRIMARY,
-  },
-
-  dangerLabel: {
-    color: "#ffffff",
+    color: COLORS.TEXT,
+    paddingHorizontal: SPACING.xl,
   },
 });

@@ -33,7 +33,7 @@ Routes stay in `src/app`; screen UI lives in `src/features`. The tab bar has fou
 | `pokemon-map` | Map | `pokemon-map` |
 | `camera` | Camera | `camera` |
 
-Camera is still a placeholder. The list and favorites are in place. The map is fullscreen Apple Maps on iOS, and pins are stored on device.
+The **Camera** tab on **iOS** uses Vision Camera with face-guided sticker placement and saving composed shots to the photo library; other targets may differ. The list and favorites are in place. The map is fullscreen Apple Maps on iOS, and pins are stored on device.
 
 ## Structure
 
