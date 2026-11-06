@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.anonymous.kksiazek-pokemony"
+      "bundleIdentifier": "com.anonymous.kksiazek-pokemony",
+      "infoPlist": {
+        "NSCameraUsageDescription": "$(PRODUCT_NAME) uses the camera to show your favorite Pokémon."
+      }
     },
     "android": {
       "adaptiveIcon": {
