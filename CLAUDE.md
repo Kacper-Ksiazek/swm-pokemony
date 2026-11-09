@@ -2,4 +2,4 @@
 
 Repo coding rules live in `docs/ai-coding-rules/`. One directory per category, one file per rule. The project concept is in `docs/ai-coding-rules/concept/`, starting with `project-brief.md`. The category list and what is still deferred are in `docs/ai-coding-rules/ROADMAP.md`.
 
-Before writing code, read the concept and the categories that match the change (`architecture`, `navigation`, `typescript`, `react-native`, `tooling`, `expo`, `git`). Screen UI lives in `src/features`; route files in `src/app` only re-export. The tabs are List (landing), Favorite, Map, and Camera. Do not add map, camera, or persistence behavior until that work starts.
+Before writing code, read the concept and the categories that match the change (`architecture`, `navigation`, `typescript`, `react-native`, `tooling`, `expo`, `git`). Apps live under `apps/` (`01-rn-basics` first). Screen UI lives in `src/features`; route files in `src/app` only re-export. The tabs are List (landing), Favorite, Map, and Camera. Rule paths are relative to the app package unless noted.

@@ -1,6 +1,6 @@
 steps:
   - echo: Pin Bulbasaur, open its card and remove it, then pin two more Pokémon
-  - script: { path: scripts/clear-map-pins.mjs }
+  - script: { path: .argent/e2e/scripts/clear-map-pins.mjs }
   - launch: com.anonymous.kksiazek-pokemony
   - await: { visible: { text: Map }, timeout: 20000 }
   - tap: { text: Map }

@@ -1,64 +1,62 @@
-# Welcome to your Expo app 👋
+# React Native learning apps
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Small Expo apps built step by step to learn React Native. Each project gets a showcase block below: screenshots, a YouTube demo, and the libraries worth studying.
 
-## Get started
+---
 
-1. Install dependencies
+## `01_rn_basics` — Pokédex-style client
 
-   ```bash
-   npm install
-   ```
+A hobby training app that talks to [PokeAPI](https://pokeapi.co) and grows through four native tabs. The list paginates and drills into detail; favorite and map pins persist in SQLite on device. The camera tab uses face detection to stick your favorite Pokémon on screen and save a composed photo.
 
-2. Start the app
+<h2 align="center">
+  <a href="https://www.youtube.com/shorts/C_FTkzZ7Y3o">
+    <img src="https://img.shields.io/badge/YouTube-Watch_the_demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo on YouTube" />
+  </a>
+</h2>
 
-   ```bash
-   npx expo start
-   ```
+<p align="center">
+  <strong><a href="https://www.youtube.com/shorts/C_FTkzZ7Y3o">▶ youtube.com/shorts/C_FTkzZ7Y3o</a></strong>
+</p>
 
-In the output, you'll find options to open the app in a
+<p align="center">
+  <img src="docs/readme-assets/01-rn-basics/screenshots/list.png" width="200" alt="List tab" />
+  <img src="docs/readme-assets/01-rn-basics/screenshots/detail.png" width="200" alt="Detail screen" />
+  <img src="docs/readme-assets/01-rn-basics/screenshots/detail-stats.png" width="200" alt="Detail stats" />
+</p>
+<p align="center">
+  <img src="docs/readme-assets/01-rn-basics/screenshots/favorite.png" width="200" alt="Favorite tab" />
+  <img src="docs/readme-assets/01-rn-basics/screenshots/map.png" width="200" alt="Map tab" />
+  <img src="docs/readme-assets/01-rn-basics/screenshots/camera.jpg" width="200" alt="Camera tab" />
+</p>
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+**Stack highlights**
 
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- [Expo Router](https://docs.expo.dev/router/introduction/) — file routes, [native tabs](https://docs.expo.dev/router/advanced/native-tabs/), nested stacks for list → detail
+- [expo-sqlite](https://docs.expo.dev/versions/latest/sdk/sqlite/) + [Drizzle ORM](https://orm.drizzle.team/) — favorites and map pins with migrations
+- [expo-maps](https://docs.expo.dev/versions/latest/sdk/maps/) — fullscreen map, annotations, bottom sheets for pin UX
+- [react-native-vision-camera](https://react-native-vision-camera.com/) — camera preview, face-guided sticker placement (iOS)
+- [react-native-view-shot](https://github.com/gre/react-native-view-shot) + [expo-media-library](https://docs.expo.dev/versions/latest/sdk/media-library/) — capture composed shots to the gallery
+- [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/) — animations and worklets (React Compiler–friendly patterns)
+- [expo-image](https://docs.expo.dev/versions/latest/sdk/image/) + [react-native-nitro-image](https://github.com/mrousavy/nitro/tree/main/packages/react-native-nitro-image) — fast Pokémon artwork loading
+- [Biome](https://biomejs.dev/) + [Bun](https://bun.sh/) — lint, format, and installs in this repo
 
-## App icon
+<!-- Future apps: copy the block above (heading, 3 sentences, YouTube badge, screenshot row, stack list). -->
 
-The iOS and Android home-screen icon is the trainer illustration in `assets/images/icon.png` (1024×1024). `app.json` points the shared `icon` at that file. iOS uses it directly. Android uses the same image as `android.adaptiveIcon.foregroundImage` (`assets/images/android-icon-foreground.png`).
+---
 
-Expo Go does not show this icon. It appears after a development or store build. The web favicon is a separate file and is not this illustration.
+## Development
 
-## Get a fresh project
-
-When you're ready, run:
+Apps live under **`apps/`**. The first project is [`apps/01-rn-basics/`](apps/01-rn-basics/).
 
 ```bash
-npm run reset-project
+bun install
+bun run start          # Expo dev server (01-rn-basics)
+bun run ios            # development build when native modules are needed
+bun run lint && bun run typecheck
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+You can also `cd apps/01-rn-basics` and run `bun run start` from there.
 
-### Other setup steps
-
-- This project uses [Biome](https://biomejs.dev/) for linting and formatting. Run `bun run lint` (or `bun run lint:fix`).
-- **CI:** Pull requests run lint, TypeScript (`bun run typecheck`), and a native JS bundle step (`bun run export:native`). To require green CI before merge on GitHub, see [docs/ci-required-checks.md](docs/ci-required-checks.md).
-- **Cursor code-review automation** (Glass / PR bot setup notes): [docs/cursor-automation-code-review.md](docs/cursor-automation-code-review.md).
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **CI:** lint, TypeScript, and `expo export` for iOS + Android — [docs/ci-required-checks.md](docs/ci-required-checks.md)
+- **AI / process rules:** [docs/ai-coding-rules/](docs/ai-coding-rules/) and [project brief](docs/ai-coding-rules/concept/project-brief.md)
+- **README screenshots:** add PNGs under [docs/readme-assets/01-rn-basics/screenshots/](docs/readme-assets/01-rn-basics/screenshots/) (see [docs/readme-assets/README.md](docs/readme-assets/README.md))
