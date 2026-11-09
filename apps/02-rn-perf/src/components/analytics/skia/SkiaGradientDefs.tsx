@@ -1,4 +1,4 @@
-import { type DataSeries } from "../chart-utils";
+import type { DataSeries } from "../chart-utils";
 
 /**
  * No-op: Skia doesn't need a separate gradient definitions block.

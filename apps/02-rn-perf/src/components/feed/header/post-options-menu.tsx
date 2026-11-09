@@ -1,11 +1,19 @@
-import { useContext, useState } from "react";
-import { Text, TouchableOpacity, Modal, Pressable, Alert, Share, Dimensions, StyleSheet } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
-
-import { ColorsContext } from "@/context/colors-context";
+import { useContext, useState } from "react";
+import {
+  Alert,
+  Dimensions,
+  Modal,
+  Pressable,
+  Share,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { MenuIcon } from "@/components/feed/icons/menu-icon";
+import { ColorsContext } from "@/context/colors-context";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const POPOVER_WIDTH = 220;
@@ -72,7 +80,9 @@ export const PostOptionsMenu = ({
     if (onHidePost) {
       onHidePost();
     }
-    Alert.alert("Got it", "We will show you fewer posts like this.", [{ text: "OK", onPress: onClose }]);
+    Alert.alert("Got it", "We will show you fewer posts like this.", [
+      { text: "OK", onPress: onClose },
+    ]);
   };
 
   const handleAboutAccount = () => {
@@ -93,11 +103,19 @@ export const PostOptionsMenu = ({
     { icon: "share", label: "Share", onPress: handleShare },
     { icon: "person", label: "About account", onPress: handleAboutAccount },
     { icon: "eye-slash", label: "Not interested", onPress: handleNotInterested },
-    { icon: "flag", label: isReported ? "Reported" : "Report", onPress: handleReport, destructive: true },
+    {
+      icon: "flag",
+      label: isReported ? "Reported" : "Report",
+      onPress: handleReport,
+      destructive: true,
+    },
   ];
 
   const popoverLeft = anchorPosition
-    ? Math.min(Math.max(anchorPosition.x - POPOVER_WIDTH + 20, 16), SCREEN_WIDTH - POPOVER_WIDTH - 16)
+    ? Math.min(
+        Math.max(anchorPosition.x - POPOVER_WIDTH + 20, 16),
+        SCREEN_WIDTH - POPOVER_WIDTH - 16,
+      )
     : SCREEN_WIDTH - POPOVER_WIDTH - 16;
   const popoverTop = anchorPosition ? anchorPosition.y + 10 : 100;
 
@@ -124,8 +142,14 @@ export const PostOptionsMenu = ({
                 },
               ]}
             >
-              <MenuIcon name={option.icon} size={18} color={option.destructive ? "#FF6B6B" : colors.text} />
-              <Text style={[styles.menuLabel, { color: option.destructive ? "#FF6B6B" : colors.text }]}>
+              <MenuIcon
+                name={option.icon}
+                size={18}
+                color={option.destructive ? "#FF6B6B" : colors.text}
+              />
+              <Text
+                style={[styles.menuLabel, { color: option.destructive ? "#FF6B6B" : colors.text }]}
+              >
                 {option.label}
               </Text>
             </TouchableOpacity>

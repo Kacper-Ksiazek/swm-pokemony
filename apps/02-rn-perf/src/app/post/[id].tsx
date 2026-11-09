@@ -1,29 +1,27 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
   FlatList,
-  TextInput,
+  Image,
   KeyboardAvoidingView,
   Platform,
+  Text,
+  type TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
+import { CommentInput } from "@/components/feed/comment-input";
+import { CommentItem } from "@/components/feed/comments/comment-item";
 import { PostDetailHeader } from "@/components/feed/post-detail-header";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
 import { ColorsContext } from "@/context/colors-context";
-import { findPostForDetails, FeedPost, FeedComment } from "@/data/mock-feed";
+import { type FeedComment, type FeedPost, findPostForDetails } from "@/data/mock-feed";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { buildMentionSuggestions } from "@/utils/mention-utils";
-import { detectSpam } from "@/utils/spam-detection";
-
-import { CommentInput } from "@/components/feed/comment-input";
-import { CommentItem } from "@/components/feed/comments/comment-item";
 import { findRelatedPosts } from "@/utils/related-posts";
+import { detectSpam } from "@/utils/spam-detection";
 
 interface ReplyInfo {
   commentId: string;
@@ -70,16 +68,12 @@ const PostDetailScreen = () => {
   const handleAddComment = useCallback(() => {
     if (!newComment.trim() || !post) return;
 
-    const commentText = replyInfo
-      ? newComment.replace(`@${replyInfo.username} `, "")
-      : newComment;
+    const commentText = replyInfo ? newComment.replace(`@${replyInfo.username} `, "") : newComment;
 
     // Run spam detection — blocks the JS thread
     const { isSpam, maxSimilarity } = detectSpam(commentText, comments);
     if (isSpam) {
-      console.warn(
-        `[Spam] Comment blocked (similarity: ${maxSimilarity.toFixed(2)})`,
-      );
+      console.warn(`[Spam] Comment blocked (similarity: ${maxSimilarity.toFixed(2)})`);
       return;
     }
 
@@ -131,9 +125,7 @@ const PostDetailScreen = () => {
   const handleLike = useCallback(() => {
     setIsLiked((prevIsLiked) => {
       const nextIsLiked = !prevIsLiked;
-      setLikesCount(
-        (prevLikesCount) => prevLikesCount + (nextIsLiked ? 1 : -1),
-      );
+      setLikesCount((prevLikesCount) => prevLikesCount + (nextIsLiked ? 1 : -1));
       return nextIsLiked;
     });
   }, []);
@@ -175,10 +167,7 @@ const PostDetailScreen = () => {
             borderBottomColor: colors.border,
           }}
         >
-          <TouchableOpacity
-            onPress={() => router.back()}
-            style={{ padding: 4, marginRight: 16 }}
-          >
+          <TouchableOpacity onPress={() => router.back()} style={{ padding: 4, marginRight: 16 }}>
             <IconSymbol name="chevron.left" size={24} color={colors.text} />
           </TouchableOpacity>
           <Text
@@ -206,9 +195,7 @@ const PostDetailScreen = () => {
               commentsCount={comments.length}
               hasNewComments={hasNewComments}
               onLike={handleLike}
-              onShareComplete={() =>
-                setShareCount((prevShareCount) => prevShareCount + 1)
-              }
+              onShareComplete={() => setShareCount((prevShareCount) => prevShareCount + 1)}
             />
           }
           renderItem={({ item }) => (
@@ -263,9 +250,7 @@ const PostDetailScreen = () => {
                     >
                       <Image
                         source={{
-                          uri:
-                            item.post.images[0]?.thumbnailUri ||
-                            item.post.images[0]?.uri,
+                          uri: item.post.images[0]?.thumbnailUri || item.post.images[0]?.uri,
                         }}
                         style={{ width: 140, height: 140, borderRadius: 8 }}
                       />
@@ -314,9 +299,7 @@ const PostDetailScreen = () => {
           >
             <Text style={{ fontSize: 13, color: colors.icon }}>
               Replying to{" "}
-              <Text style={{ color: colors.text, fontWeight: "600" }}>
-                @{replyInfo.username}
-              </Text>
+              <Text style={{ color: colors.text, fontWeight: "600" }}>@{replyInfo.username}</Text>
             </Text>
             <TouchableOpacity onPress={cancelReply}>
               <IconSymbol name="xmark" size={18} color={colors.icon} />
@@ -330,11 +313,7 @@ const PostDetailScreen = () => {
           value={newComment}
           onChangeText={setNewComment}
           onSubmit={handleAddComment}
-          placeholder={
-            replyInfo
-              ? `Reply to @${replyInfo.username}...`
-              : "Add a comment..."
-          }
+          placeholder={replyInfo ? `Reply to @${replyInfo.username}...` : "Add a comment..."}
           colors={colors}
           comments={comments}
           bottomInset={insets.bottom}

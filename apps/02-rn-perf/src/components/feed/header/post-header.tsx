@@ -1,10 +1,9 @@
-import { useContext, useState } from "react";
-import { View, Text, TouchableOpacity, GestureResponderEvent, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
-
-import { ColorsContext } from "@/context/colors-context";
+import { useContext, useState } from "react";
+import { type GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { VerifiedIcon } from "@/components/feed/icons/verified-icon";
 import { ImageWithShimmer } from "@/components/feed/shimmer/image-with-shimmer";
+import { ColorsContext } from "@/context/colors-context";
 import { PostOptionsMenu } from "./post-options-menu";
 
 export const PostHeader = ({
@@ -51,10 +50,10 @@ export const PostHeader = ({
 
           <View>
             <View style={styles.nameRow}>
-              <Text style={{ fontWeight: "600", fontSize: 14, color: colors.text }}>{username}</Text>
-              {isVerified && (
-                <VerifiedIcon size={14} color="#3d2847" />
-              )}
+              <Text style={{ fontWeight: "600", fontSize: 14, color: colors.text }}>
+                {username}
+              </Text>
+              {isVerified && <VerifiedIcon size={14} color="#3d2847" />}
             </View>
             <TouchableOpacity onPress={openLocation}>
               <View style={styles.locationRow}>

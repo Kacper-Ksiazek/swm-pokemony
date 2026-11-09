@@ -33,7 +33,7 @@ export const Colors = {
     cardBackgroundAlt: bgLightPurple,
     border: "#c5c0cc",
     gradientStart: bgLightBlue,
-    gradientEnd: bgLightPurple
+    gradientEnd: bgLightPurple,
   },
   dark: {
     text: "#ffffff",
@@ -49,8 +49,8 @@ export const Colors = {
     cardBackgroundAlt: "#3d3147",
     border: "#4a3d54",
     gradientStart: "#362a3d",
-    gradientEnd: "#271c2d"
-  }
+    gradientEnd: "#271c2d",
+  },
 };
 
 export const Fonts = Platform.select({
@@ -62,18 +62,18 @@ export const Fonts = Platform.select({
     /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: "ui-rounded",
     /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: "ui-monospace"
+    mono: "ui-monospace",
   },
   default: {
     sans: "normal",
     serif: "serif",
     rounded: "normal",
-    mono: "monospace"
+    mono: "monospace",
   },
   web: {
     sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
     serif: "Georgia, 'Times New Roman', serif",
     rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
-  }
+    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+  },
 });

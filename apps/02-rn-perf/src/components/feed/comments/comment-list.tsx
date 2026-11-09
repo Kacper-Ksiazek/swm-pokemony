@@ -1,16 +1,10 @@
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { FeedComment } from "@/data/mock-feed";
+import type { FeedComment } from "@/data/mock-feed";
 
 import { CommentPreview } from "./comment-preview";
 
-export const CommentList = ({
-  comments,
-  postId,
-}: {
-  comments: FeedComment[];
-  postId: string;
-}) => {
+export const CommentList = ({ comments, postId }: { comments: FeedComment[]; postId: string }) => {
   if (comments.length === 0) return null;
 
   return (

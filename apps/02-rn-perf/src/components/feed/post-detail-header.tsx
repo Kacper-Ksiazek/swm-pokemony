@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
 import { useRouter } from "expo-router";
-import { GestureResponderEvent, Image, Text, TouchableOpacity, View } from "react-native";
+import { useContext, useState } from "react";
+import { type GestureResponderEvent, Image, Text, TouchableOpacity, View } from "react-native";
 
 import { BookmarkButton } from "@/components/feed/actions/bookmark-button";
 import { LikeButton } from "@/components/feed/actions/like-button";
@@ -9,7 +9,7 @@ import { ImageCarousel } from "@/components/feed/content/image-carousel";
 import { PostOptionsMenu } from "@/components/feed/header/post-options-menu";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { ColorsContext } from "@/context/colors-context";
-import { FeedPost } from "@/data/mock-feed";
+import type { FeedPost } from "@/data/mock-feed";
 import { formatRelativeTime } from "@/utils/feed-utils";
 
 interface PostDetailHeaderProps {
@@ -31,7 +31,7 @@ export const PostDetailHeader = ({
   commentsCount,
   hasNewComments,
   onLike,
-  onShareComplete
+  onShareComplete,
 }: PostDetailHeaderProps) => {
   const colors = useContext(ColorsContext);
   const router = useRouter();
@@ -46,7 +46,7 @@ export const PostDetailHeader = ({
           justifyContent: "space-between",
           alignItems: "center",
           paddingHorizontal: 12,
-          paddingVertical: 10
+          paddingVertical: 10,
         }}
       >
         <TouchableOpacity
@@ -60,15 +60,21 @@ export const PostDetailHeader = ({
               height: 36,
               borderRadius: 18,
               borderWidth: 2,
-              borderColor: "#271c2d"
+              borderColor: "#271c2d",
             }}
           />
           <View>
             <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-              <Text style={{ fontWeight: "600", fontSize: 14, color: colors.text }}>{post.user.username}</Text>
-              {post.user.isVerified && <IconSymbol name="checkmark.seal.fill" size={14} color="#3d2847" />}
+              <Text style={{ fontWeight: "600", fontSize: 14, color: colors.text }}>
+                {post.user.username}
+              </Text>
+              {post.user.isVerified && (
+                <IconSymbol name="checkmark.seal.fill" size={14} color="#3d2847" />
+              )}
             </View>
-            <TouchableOpacity onPress={() => router.push(`/location/${encodeURIComponent(post.location.name)}`)}>
+            <TouchableOpacity
+              onPress={() => router.push(`/location/${encodeURIComponent(post.location.name)}`)}
+            >
               <Text style={{ fontSize: 11, color: colors.icon }}>{post.location.name}</Text>
             </TouchableOpacity>
           </View>
@@ -100,7 +106,7 @@ export const PostDetailHeader = ({
           justifyContent: "space-between",
           alignItems: "center",
           paddingHorizontal: 12,
-          paddingVertical: 8
+          paddingVertical: 8,
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
@@ -131,7 +137,10 @@ export const PostDetailHeader = ({
       {post.caption.length > 0 && (
         <View style={{ paddingHorizontal: 12, paddingTop: 4 }}>
           <Text style={{ fontSize: 14, lineHeight: 20, color: colors.text }}>
-            <Text style={{ fontWeight: "600" }} onPress={() => router.push(`/profile/${post.user.username}`)}>
+            <Text
+              style={{ fontWeight: "600" }}
+              onPress={() => router.push(`/profile/${post.user.username}`)}
+            >
               {post.user.username}
             </Text>{" "}
             {post.caption}
@@ -146,7 +155,7 @@ export const PostDetailHeader = ({
           paddingBottom: 16,
           fontSize: 11,
           color: colors.icon,
-          textTransform: "uppercase"
+          textTransform: "uppercase",
         }}
       >
         {formatRelativeTime(post.timestamp)}
@@ -157,7 +166,7 @@ export const PostDetailHeader = ({
           borderTopWidth: 0.5,
           borderTopColor: colors.icon + "30",
           paddingHorizontal: 12,
-          paddingVertical: 12
+          paddingVertical: 12,
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
@@ -170,7 +179,7 @@ export const PostDetailHeader = ({
                 backgroundColor: "#3d2847",
                 borderRadius: 4,
                 paddingHorizontal: 6,
-                paddingVertical: 2
+                paddingVertical: 2,
               }}
             >
               <Text style={{ fontSize: 10, fontWeight: "700", color: "#fff" }}>NEW</Text>

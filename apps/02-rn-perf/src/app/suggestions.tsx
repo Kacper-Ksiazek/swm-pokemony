@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { View, Text, Image, TouchableOpacity, FlatList } from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IconSymbol } from "@/components/ui/icon-symbol";
@@ -21,7 +21,7 @@ interface SuggestedUser {
 function generateSuggestedUsers(): SuggestedUser[] {
   const usersMap = new Map<string, SuggestedUser>();
 
-  MOCK_FEED.forEach(post => {
+  MOCK_FEED.forEach((post) => {
     if (!usersMap.has(post.user.username)) {
       usersMap.set(post.user.username, {
         username: post.user.username,
@@ -29,7 +29,7 @@ function generateSuggestedUsers(): SuggestedUser[] {
         fullName: generateFullName(post.user.username),
         isVerified: post.user.isVerified,
         mutualFollowers: Math.floor(Math.random() * 20) + 1,
-        latestPostImage: post.images[0]?.uri
+        latestPostImage: post.images[0]?.uri,
       });
     }
   });
@@ -44,7 +44,7 @@ function generateSuggestedUsers(): SuggestedUser[] {
         fullName: generateFullName(username),
         isVerified: Math.random() > 0.85,
         mutualFollowers: Math.floor(Math.random() * 15) + 1,
-        latestPostImage: `https://picsum.photos/seed/suggested${i}/400/400`
+        latestPostImage: `https://picsum.photos/seed/suggested${i}/400/400`,
       });
     }
   }
@@ -66,7 +66,7 @@ function generateFullName(username: string): string {
     "Avery",
     "Quinn",
     "Jamie",
-    "Parker"
+    "Parker",
   ];
   const lastNames = [
     "Johnson",
@@ -80,7 +80,7 @@ function generateFullName(username: string): string {
     "Martinez",
     "Brown",
     "Lee",
-    "Anderson"
+    "Anderson",
   ];
   return `${firstNames[hash % firstNames.length]} ${lastNames[(hash * 7) % lastNames.length]}`;
 }
@@ -88,7 +88,7 @@ function generateFullName(username: string): string {
 function SuggestedUserCard({
   user,
   colors,
-  onProfilePress
+  onProfilePress,
 }: {
   user: SuggestedUser;
   colors: typeof Colors.light;
@@ -108,7 +108,7 @@ function SuggestedUserCard({
         borderWidth: 0.5,
         borderColor: colors.border,
         overflow: "hidden",
-        backgroundColor: colors.cardBackground
+        backgroundColor: colors.cardBackground,
       }}
     >
       {/* Dismiss button */}
@@ -121,7 +121,7 @@ function SuggestedUserCard({
           zIndex: 1,
           backgroundColor: "rgba(0,0,0,0.5)",
           borderRadius: 10,
-          padding: 2
+          padding: 2,
         }}
       >
         <IconSymbol name="xmark" size={12} color="#fff" />
@@ -129,7 +129,11 @@ function SuggestedUserCard({
 
       {/* Background Image */}
       {user.latestPostImage && (
-        <Image source={{ uri: user.latestPostImage }} style={{ width: 160, height: 100 }} resizeMode="cover" />
+        <Image
+          source={{ uri: user.latestPostImage }}
+          style={{ width: 160, height: 100 }}
+          resizeMode="cover"
+        />
       )}
 
       <View style={{ padding: 12, alignItems: "center" }}>
@@ -143,7 +147,7 @@ function SuggestedUserCard({
               borderRadius: 30,
               borderWidth: 3,
               borderColor: colors.cardBackground,
-              marginTop: user.latestPostImage ? -40 : 0
+              marginTop: user.latestPostImage ? -40 : 0,
             }}
           />
         </TouchableOpacity>
@@ -174,14 +178,14 @@ function SuggestedUserCard({
             paddingVertical: 8,
             paddingHorizontal: 24,
             borderWidth: isFollowing ? 1 : 0,
-            borderColor: colors.border
+            borderColor: colors.border,
           }}
         >
           <Text
             style={{
               fontSize: 13,
               fontWeight: "600",
-              color: isFollowing ? colors.text : "#fff"
+              color: isFollowing ? colors.text : "#fff",
             }}
           >
             {isFollowing ? "Following" : "Follow"}
@@ -212,20 +216,22 @@ export default function SuggestionsScreen() {
           paddingTop: insets.top,
           backgroundColor: colors.background,
           borderBottomWidth: 0.5,
-          borderBottomColor: colors.border
+          borderBottomColor: colors.border,
         }}
       >
         <TouchableOpacity onPress={() => router.back()} style={{ padding: 4, marginRight: 16 }}>
           <IconSymbol name="chevron.left" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={{ flex: 1, fontSize: 18, fontWeight: "600", color: colors.text }}>Suggested for you</Text>
+        <Text style={{ flex: 1, fontSize: 18, fontWeight: "600", color: colors.text }}>
+          Suggested for you
+        </Text>
       </View>
 
       {/* Users Grid */}
       <FlatList
         data={users}
         numColumns={2}
-        keyExtractor={item => item.username}
+        keyExtractor={(item) => item.username}
         renderItem={({ item }) => (
           <SuggestedUserCard
             user={item}

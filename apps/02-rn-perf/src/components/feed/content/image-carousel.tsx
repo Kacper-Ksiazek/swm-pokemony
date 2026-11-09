@@ -1,8 +1,15 @@
-import { useState, useContext } from "react";
-import { ScrollView, View, Pressable, NativeSyntheticEvent, NativeScrollEvent, StyleSheet } from "react-native";
+import { useContext, useState } from "react";
+import {
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 
 import { ColorsContext } from "@/context/colors-context";
-import { FeedImage } from "@/data/mock-feed";
+import type { FeedImage } from "@/data/mock-feed";
 import { CarouselImage } from "./carousel-image";
 
 const IMAGE_WIDTH = 400;
@@ -34,8 +41,8 @@ export const ImageCarousel = ({
         onScroll={handleScroll}
         scrollEventThrottle={16}
       >
-        {images.map((image, i) => (
-          <Pressable key={`${image.uri}-${i}`} onPress={onImagePress}>
+        {images.map((image) => (
+          <Pressable key={image.uri} onPress={onImagePress}>
             <CarouselImage image={image} />
           </Pressable>
         ))}
@@ -43,12 +50,12 @@ export const ImageCarousel = ({
 
       {images.length > 1 && (
         <View style={styles.dotsContainer}>
-          {images.map((_, i) => (
+          {images.map((image, index) => (
             <View
-              key={`dot-${i}`}
+              key={`dot-${image.uri}`}
               style={[
                 styles.dot,
-                i === activeIndex
+                index === activeIndex
                   ? [styles.dotActive, { backgroundColor: colors.tint }]
                   : { backgroundColor: colors.icon + "40" },
               ]}

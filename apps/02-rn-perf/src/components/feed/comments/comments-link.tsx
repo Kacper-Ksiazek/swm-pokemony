@@ -1,6 +1,6 @@
-import { useContext } from "react";
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import { useContext } from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import { ColorsContext } from "@/context/colors-context";
 

@@ -1,7 +1,6 @@
-import { View, StyleSheet } from "react-native";
-
-import { FeedImage } from "@/data/mock-feed";
+import { StyleSheet, View } from "react-native";
 import { ImageWithShimmer } from "@/components/feed/shimmer/image-with-shimmer";
+import type { FeedImage } from "@/data/mock-feed";
 
 const IMAGE_WIDTH = 400;
 

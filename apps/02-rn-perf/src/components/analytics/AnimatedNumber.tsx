@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { TextInput, type TextStyle, StyleSheet } from "react-native";
-import Animated, { useSharedValue, withTiming, useAnimatedProps } from "react-native-reanimated";
+import { StyleSheet, TextInput, type TextStyle } from "react-native";
+import Animated, { useAnimatedProps, useSharedValue, withTiming } from "react-native-reanimated";
 
 // Hack: RN Text doesn't expose a native "text" prop (content goes through React children),
 // so useAnimatedProps can't animate it on the UI thread. TextInput has a native "text" prop
@@ -20,7 +20,13 @@ const defaultFormat = (n: number) => {
   return Math.round(n).toLocaleString();
 };
 
-export function AnimatedNumber({ value, style, suffix = "", duration = 500, formatFn = defaultFormat }: AnimatedNumberProps) {
+export function AnimatedNumber({
+  value,
+  style,
+  suffix = "",
+  duration = 500,
+  formatFn = defaultFormat,
+}: AnimatedNumberProps) {
   const animated = useSharedValue(value);
 
   useEffect(() => {

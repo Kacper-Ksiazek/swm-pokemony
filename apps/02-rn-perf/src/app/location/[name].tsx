@@ -1,11 +1,20 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, FlatList, Dimensions, Linking, Alert } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  Alert,
+  Dimensions,
+  FlatList,
+  Image,
+  Linking,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
-import { MOCK_FEED, FeedPost, LocationData } from "@/data/mock-feed";
+import { type FeedPost, type LocationData, MOCK_FEED } from "@/data/mock-feed";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 const { width } = Dimensions.get("window");
@@ -37,7 +46,9 @@ export default function LocationScreen() {
   useEffect(() => {
     if (name) {
       // Filter posts from this location
-      const filteredPosts = MOCK_FEED.filter(post => post.location.name.toLowerCase().includes(name.toLowerCase()));
+      const filteredPosts = MOCK_FEED.filter((post) =>
+        post.location.name.toLowerCase().includes(name.toLowerCase()),
+      );
       setPosts(filteredPosts.length > 0 ? filteredPosts : MOCK_FEED.slice(0, 9));
 
       // Get location data from first matching post
@@ -68,13 +79,16 @@ export default function LocationScreen() {
           paddingTop: insets.top,
           backgroundColor: colors.background,
           borderBottomWidth: 0.5,
-          borderBottomColor: colors.border
+          borderBottomColor: colors.border,
         }}
       >
         <TouchableOpacity onPress={() => router.back()} style={{ padding: 4, marginRight: 16 }}>
           <IconSymbol name="chevron.left" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={{ flex: 1, fontSize: 18, fontWeight: "600", color: colors.text }} numberOfLines={1}>
+        <Text
+          style={{ flex: 1, fontSize: 18, fontWeight: "600", color: colors.text }}
+          numberOfLines={1}
+        >
           {name}
         </Text>
       </View>
@@ -84,7 +98,7 @@ export default function LocationScreen() {
         style={{
           padding: 16,
           borderBottomWidth: 0.5,
-          borderBottomColor: colors.border
+          borderBottomColor: colors.border,
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
@@ -95,7 +109,7 @@ export default function LocationScreen() {
               borderRadius: 16,
               backgroundColor: colors.tint + "20",
               justifyContent: "center",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <IconSymbol name="mappin.circle.fill" size={40} color={colors.tint} />
@@ -125,7 +139,7 @@ export default function LocationScreen() {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
-              gap: 6
+              gap: 6,
             }}
           >
             <IconSymbol name="map" size={18} color="#fff" />
@@ -138,7 +152,7 @@ export default function LocationScreen() {
               paddingVertical: 10,
               borderWidth: 1,
               borderColor: colors.border,
-              justifyContent: "center"
+              justifyContent: "center",
             }}
           >
             <IconSymbol name="bookmark" size={20} color={colors.text} />
@@ -150,11 +164,15 @@ export default function LocationScreen() {
       <FlatList
         data={posts}
         numColumns={3}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => <PostGridItem post={item} onPress={() => router.push(`/post/${item.id}`)} />}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <PostGridItem post={item} onPress={() => router.push(`/post/${item.id}`)} />
+        )}
         contentContainerStyle={{ paddingBottom: insets.bottom }}
         ListHeaderComponent={
-          <Text style={{ padding: 16, fontSize: 14, fontWeight: "600", color: colors.text }}>Top posts</Text>
+          <Text style={{ padding: 16, fontSize: 14, fontWeight: "600", color: colors.text }}>
+            Top posts
+          </Text>
         }
       />
     </View>

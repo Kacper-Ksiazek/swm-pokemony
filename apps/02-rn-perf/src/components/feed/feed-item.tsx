@@ -1,9 +1,9 @@
-import { useState, useContext } from "react";
-import { View, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import { useContext, useState } from "react";
+import { StyleSheet, View } from "react-native";
 
 import { ColorsContext } from "@/context/colors-context";
-import { FeedPostSlim } from "@/data/mock-feed";
+import type { FeedPostSlim } from "@/data/mock-feed";
 
 import { ActionButtons } from "./actions/action-buttons";
 import { CommentList } from "./comments/comment-list";
@@ -48,10 +48,7 @@ export const FeedItem = ({
         onHidePost={() => setIsHidden(true)}
       />
 
-      <ImageCarousel
-        images={item.images}
-        onImagePress={() => router.push(`/post/${item.id}`)}
-      />
+      <ImageCarousel images={item.images} onImagePress={() => router.push(`/post/${item.id}`)} />
 
       <ActionButtons
         postId={item.id}

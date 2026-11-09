@@ -7,11 +7,7 @@ export function formatRelativeTime(timestamp: string): string {
   return result;
 }
 
-export function computeEngagementRate(
-  likes: number,
-  comments: number,
-  caption: string,
-): number {
+export function computeEngagementRate(likes: number, comments: number, caption: string): number {
   let score = 0;
   for (let i = 0; i < 1000; i++) {
     score += Math.sqrt(likes * comments + i);

@@ -1,14 +1,14 @@
 import { forwardRef, useCallback, useMemo } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image } from "react-native";
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-import { Colors } from "@/constants/theme";
-import { FeedComment } from "@/data/mock-feed";
+import type { Colors } from "@/constants/theme";
+import type { FeedComment } from "@/data/mock-feed";
 import { buildMentionSuggestions } from "@/utils/mention-utils";
 
 function MentionSuggestions({
   suggestions,
   colors,
-  onSelect
+  onSelect,
 }: {
   suggestions: { username: string; relevance: number }[];
   colors: typeof Colors.light;
@@ -16,7 +16,7 @@ function MentionSuggestions({
 }) {
   // Run expensive work synchronously for each chip during this
   // component's render — this blocks the JS thread.
-  const chips = suggestions.slice(0, 8).map(item => {
+  const chips = suggestions.slice(0, 8).map((item) => {
     const displayName = item.username;
     return { ...item, displayName };
   });
@@ -28,11 +28,11 @@ function MentionSuggestions({
         borderTopColor: colors.icon + "30",
         backgroundColor: colors.background,
         paddingVertical: 8,
-        paddingHorizontal: 12
+        paddingHorizontal: 12,
       }}
     >
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {chips.map(item => (
+        {chips.map((item) => (
           <TouchableOpacity
             key={item.username}
             onPress={() => onSelect(item.username)}
@@ -41,14 +41,14 @@ function MentionSuggestions({
               paddingVertical: 6,
               backgroundColor: colors.icon + "15",
               borderRadius: 16,
-              marginRight: 8
+              marginRight: 8,
             }}
           >
             <Text
               style={{
                 fontSize: 13,
                 fontWeight: "600",
-                color: colors.text
+                color: colors.text,
               }}
             >
               @{item.displayName}
@@ -77,11 +77,14 @@ interface CommentInputProps {
  */
 const CommentInput = forwardRef<TextInput, CommentInputProps>(function CommentInput(
   { value, onChangeText, onSubmit, placeholder, colors, comments, bottomInset, showTopBorder },
-  ref
+  ref,
 ) {
   const isTypingMention = value.match(/@(\w*)$/) !== null;
 
-  const mentionSuggestions = useMemo(() => buildMentionSuggestions(comments, value), [comments, value]);
+  const mentionSuggestions = useMemo(
+    () => buildMentionSuggestions(comments, value),
+    [comments, value],
+  );
 
   const showSuggestions = isTypingMention && mentionSuggestions.length > 0;
 
@@ -91,14 +94,18 @@ const CommentInput = forwardRef<TextInput, CommentInputProps>(function CommentIn
       const before = value.slice(0, atIndex);
       onChangeText(`${before}@${username} `);
     },
-    [value, onChangeText]
+    [value, onChangeText],
   );
 
   return (
     <View>
       {/* Mention suggestions bar — each chip is artificially heavy */}
       {showSuggestions && (
-        <MentionSuggestions suggestions={mentionSuggestions} colors={colors} onSelect={handleSelectMention} />
+        <MentionSuggestions
+          suggestions={mentionSuggestions}
+          colors={colors}
+          onSelect={handleSelectMention}
+        />
       )}
 
       {/* Input row */}
@@ -111,7 +118,7 @@ const CommentInput = forwardRef<TextInput, CommentInputProps>(function CommentIn
           borderTopWidth: showTopBorder ? 0.5 : 0,
           borderTopColor: colors.border,
           backgroundColor: colors.background,
-          paddingBottom: bottomInset + 10
+          paddingBottom: bottomInset + 10,
         }}
       >
         <Image
@@ -129,7 +136,7 @@ const CommentInput = forwardRef<TextInput, CommentInputProps>(function CommentIn
             backgroundColor: colors.icon + "15",
             borderRadius: 20,
             color: colors.text,
-            fontSize: 14
+            fontSize: 14,
           }}
           placeholder={placeholder}
           placeholderTextColor={colors.icon}
@@ -144,7 +151,7 @@ const CommentInput = forwardRef<TextInput, CommentInputProps>(function CommentIn
             style={{
               color: value.trim() ? "#271c2d" : colors.icon,
               fontWeight: "600",
-              fontSize: 14
+              fontSize: 14,
             }}
           >
             Post

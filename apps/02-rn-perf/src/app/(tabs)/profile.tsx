@@ -1,6 +1,6 @@
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
@@ -20,8 +20,8 @@ export default function ProfileScreen() {
           {
             paddingTop: insets.top,
             backgroundColor: colors.background,
-            borderBottomColor: colors.icon + "30"
-          }
+            borderBottomColor: colors.icon + "30",
+          },
         ]}
       >
         <Text style={[styles.headerTitle, { color: colors.text }]}>Attendee</Text>
@@ -54,22 +54,22 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   header: {
     paddingHorizontal: 16,
     paddingBottom: 10,
-    borderBottomWidth: 0.5
+    borderBottomWidth: 0.5,
   },
   headerTitle: {
     fontSize: 24,
-    fontWeight: "700"
+    fontWeight: "700",
   },
   content: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    gap: 12
+    gap: 12,
   },
   avatarContainer: {
     width: 100,
@@ -80,29 +80,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
     borderWidth: 2,
-    borderColor: "#271c2d"
+    borderColor: "#271c2d",
   },
   placeholder: {
     fontSize: 20,
-    fontWeight: "600"
+    fontWeight: "600",
   },
   subtext: {
-    fontSize: 14
+    fontSize: 14,
   },
   badgeContainer: {
     flexDirection: "row",
     gap: 8,
-    marginTop: 16
+    marginTop: 16,
   },
   badge: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 16
+    borderRadius: 16,
   },
   badgeText: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#FFFFFF"
+    color: "#FFFFFF",
   },
   analyticsButton: {
     flexDirection: "row",
@@ -112,10 +112,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 20,
-    borderWidth: 1.5
+    borderWidth: 1.5,
   },
   analyticsButtonText: {
     fontSize: 14,
-    fontWeight: "600"
-  }
+    fontWeight: "600",
+  },
 });

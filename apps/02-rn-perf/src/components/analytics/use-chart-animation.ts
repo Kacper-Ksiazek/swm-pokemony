@@ -1,10 +1,33 @@
 import { useEffect, useRef } from "react";
-import { useSharedValue, withTiming, useDerivedValue, type SharedValue } from "react-native-reanimated";
+import {
+  type SharedValue,
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
-import { FeedPost } from "@/data/mock-feed";
-import { lerpArrays, findPeakIndex, getPointX } from "./chart-utils";
+import type { FeedPost } from "@/data/mock-feed";
+import { findPeakIndex, getPointX, lerpArrays } from "./chart-utils";
 
 const ANIM_DURATION = 500;
+
+function useInterpolatedSeries(
+  progress: SharedValue<number>,
+  prev: SharedValue<number[]>,
+  target: SharedValue<number[]>,
+  prevMax: SharedValue<number>,
+  targetMax: SharedValue<number>,
+): AnimatedSeriesData {
+  const data = useDerivedValue(() => {
+    "worklet";
+    return lerpArrays(prev.value, target.value, progress.value);
+  });
+  const max = useDerivedValue(() => {
+    "worklet";
+    return prevMax.value + (targetMax.value - prevMax.value) * progress.value;
+  });
+  return { data, max };
+}
 
 export interface AnimatedSeriesData {
   data: SharedValue<number[]>;
@@ -90,28 +113,23 @@ export function useChartAnimation(post: FeedPost, days: number): ChartAnimationR
     prevPeakXRef.current = currentPeakX;
   }, [post.id, days]);
 
-  function useInterpolatedSeries(
-    prev: SharedValue<number[]>,
-    target: SharedValue<number[]>,
-    prevMax: SharedValue<number>,
-    targetMax: SharedValue<number>
-  ): AnimatedSeriesData {
-    const data = useDerivedValue(() => {
-      "worklet";
-      return lerpArrays(prev.value, target.value, progress.value);
-    });
-    const max = useDerivedValue(() => {
-      "worklet";
-      return prevMax.value + (targetMax.value - prevMax.value) * progress.value;
-    });
-    return { data, max };
-  }
-
   return {
     progress,
-    likes: useInterpolatedSeries(prevLikes, targetLikes, prevMaxLikes, targetMaxLikes),
-    comments: useInterpolatedSeries(prevComments, targetComments, prevMaxComments, targetMaxComments),
-    shares: useInterpolatedSeries(prevShares, targetShares, prevMaxShares, targetMaxShares),
+    likes: useInterpolatedSeries(progress, prevLikes, targetLikes, prevMaxLikes, targetMaxLikes),
+    comments: useInterpolatedSeries(
+      progress,
+      prevComments,
+      targetComments,
+      prevMaxComments,
+      targetMaxComments,
+    ),
+    shares: useInterpolatedSeries(
+      progress,
+      prevShares,
+      targetShares,
+      prevMaxShares,
+      targetMaxShares,
+    ),
     rawLikes: likesData,
     rawComments: commentsData,
     rawShares: sharesData,

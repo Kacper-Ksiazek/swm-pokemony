@@ -1,4 +1,4 @@
-import { FeedPost, MOCK_FEED } from "@/data/mock-feed";
+import { type FeedPost, MOCK_FEED } from "@/data/mock-feed";
 
 /**
  * Computes the Jaccard similarity between two sets represented as arrays.
@@ -31,7 +31,7 @@ function buildTFVector(words: string[]): { freq: Map<string, number>; magSq: num
  */
 function cosineSimilarityTF(
   a: { freq: Map<string, number>; magSq: number },
-  b: { freq: Map<string, number>; magSq: number }
+  b: { freq: Map<string, number>; magSq: number },
 ): number {
   if (a.magSq === 0 || b.magSq === 0) return 0;
 
@@ -54,18 +54,115 @@ function cosineSimilarityTF(
  * instead of on every tokenize() call.
  */
 const STOP_WORDS = new Set([
-  "the", "a", "an", "is", "are", "was", "were", "be", "been", "being",
-  "have", "has", "had", "do", "does", "did", "will", "would", "could",
-  "should", "may", "might", "shall", "can", "to", "of", "in", "for",
-  "on", "with", "at", "by", "from", "as", "into", "through", "during",
-  "before", "after", "above", "below", "between", "out", "off", "over",
-  "under", "again", "further", "then", "once", "and", "but", "or", "nor",
-  "not", "so", "yet", "both", "either", "neither", "each", "every", "all",
-  "any", "few", "more", "most", "other", "some", "such", "no", "only",
-  "own", "same", "than", "too", "very", "just", "because", "if", "when",
-  "where", "how", "what", "which", "who", "whom", "this", "that", "these",
-  "those", "i", "me", "my", "we", "our", "you", "your", "he", "him",
-  "his", "she", "her", "it", "its", "they", "them", "their", "about",
+  "the",
+  "a",
+  "an",
+  "is",
+  "are",
+  "was",
+  "were",
+  "be",
+  "been",
+  "being",
+  "have",
+  "has",
+  "had",
+  "do",
+  "does",
+  "did",
+  "will",
+  "would",
+  "could",
+  "should",
+  "may",
+  "might",
+  "shall",
+  "can",
+  "to",
+  "of",
+  "in",
+  "for",
+  "on",
+  "with",
+  "at",
+  "by",
+  "from",
+  "as",
+  "into",
+  "through",
+  "during",
+  "before",
+  "after",
+  "above",
+  "below",
+  "between",
+  "out",
+  "off",
+  "over",
+  "under",
+  "again",
+  "further",
+  "then",
+  "once",
+  "and",
+  "but",
+  "or",
+  "nor",
+  "not",
+  "so",
+  "yet",
+  "both",
+  "either",
+  "neither",
+  "each",
+  "every",
+  "all",
+  "any",
+  "few",
+  "more",
+  "most",
+  "other",
+  "some",
+  "such",
+  "no",
+  "only",
+  "own",
+  "same",
+  "than",
+  "too",
+  "very",
+  "just",
+  "because",
+  "if",
+  "when",
+  "where",
+  "how",
+  "what",
+  "which",
+  "who",
+  "whom",
+  "this",
+  "that",
+  "these",
+  "those",
+  "i",
+  "me",
+  "my",
+  "we",
+  "our",
+  "you",
+  "your",
+  "he",
+  "him",
+  "his",
+  "she",
+  "her",
+  "it",
+  "its",
+  "they",
+  "them",
+  "their",
+  "about",
 ]);
 
 /**
@@ -77,7 +174,7 @@ function tokenize(text: string): string[] {
     .toLowerCase()
     .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
-    .filter(w => w.length > 2 && !STOP_WORDS.has(w));
+    .filter((w) => w.length > 2 && !STOP_WORDS.has(w));
 }
 
 /**
@@ -100,18 +197,16 @@ function collectCommentWords(post: FeedPost): string[] {
 /**
  * Computes the Haversine distance in km between two lat/lng coordinates.
  */
-function haversineDistance(
-  lat1: number, lng1: number,
-  lat2: number, lng2: number
-): number {
+function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLng = ((lng2 - lng1) * Math.PI) / 180;
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos((lat1 * Math.PI) / 180) *
-    Math.cos((lat2 * Math.PI) / 180) *
-    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
@@ -136,7 +231,7 @@ function getCandidateCache(): Map<string, CandidateCache> {
   if (candidateCache) return candidateCache;
   candidateCache = new Map();
   for (const post of MOCK_FEED) {
-    const tags = post.tags.map(t => t.toLowerCase());
+    const tags = post.tags.map((t) => t.toLowerCase());
     candidateCache.set(post.id, {
       tags,
       tagSet: new Set(tags),
@@ -162,13 +257,10 @@ function getCandidateCache(): Map<string, CandidateCache> {
  * stop words to module scope, and iterates only the smaller vector
  * in cosine similarity.
  */
-export function findRelatedPosts(
-  currentPost: FeedPost,
-  limit: number = 6
-): RelatedPostResult[] {
+export function findRelatedPosts(currentPost: FeedPost, limit: number = 6): RelatedPostResult[] {
   const cache = getCandidateCache();
 
-  const currentTags = currentPost.tags.map(t => t.toLowerCase());
+  const currentTags = currentPost.tags.map((t) => t.toLowerCase());
   const currentCaptionTF = buildTFVector(tokenize(currentPost.caption));
   const currentCommentTF = buildTFVector(collectCommentWords(currentPost));
 
@@ -213,7 +305,7 @@ export function findRelatedPosts(
         currentPost.location.coordinates.latitude,
         currentPost.location.coordinates.longitude,
         candidate.location.coordinates.latitude,
-        candidate.location.coordinates.longitude
+        candidate.location.coordinates.longitude,
       );
       const proxScore = Math.max(0, 1 - dist / 500); // decay over 500km
       if (proxScore > 0.1) {
@@ -223,7 +315,8 @@ export function findRelatedPosts(
     }
 
     // 5. Engagement similarity (weight: 5)
-    const engagementDiff = Math.abs(currentPost.likes - candidate.likes) /
+    const engagementDiff =
+      Math.abs(currentPost.likes - candidate.likes) /
       Math.max(currentPost.likes, candidate.likes, 1);
     score += (1 - engagementDiff) * 5;
 

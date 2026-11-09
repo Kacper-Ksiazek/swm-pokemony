@@ -1,16 +1,16 @@
 import { useRef, useState } from "react";
 import {
   FlatList,
-  LayoutChangeEvent,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
+  type LayoutChangeEvent,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   StyleSheet,
   View,
 } from "react-native";
 
 import { FeedItem } from "@/components/feed/feed-item";
 import { SuggestedPostsSection } from "@/components/feed/suggestions/suggested-posts-section";
-import { FeedListItem } from "@/data/mock-feed";
+import type { FeedListItem } from "@/data/mock-feed";
 
 export const FeedList = ({
   data,
@@ -45,13 +45,13 @@ export const FeedList = ({
       </View>
       <FlatList
         data={data}
-        renderItem={({ item }) => (
+        renderItem={({ item }) =>
           item.type === "suggestions" ? (
             <SuggestedPostsSection posts={item.posts} />
           ) : (
             <FeedItem item={item} onLike={onLike} />
           )
-        )}
+        }
         keyExtractor={(_item, index) => String(index)}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}

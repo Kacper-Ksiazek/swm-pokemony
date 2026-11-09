@@ -1,11 +1,14 @@
 // Fallback for using MaterialIcons on Android and web.
 
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { SymbolWeight, SymbolViewProps } from 'expo-symbols';
-import { ComponentProps } from 'react';
-import { OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native';
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import type { SymbolViewProps, SymbolWeight } from "expo-symbols";
+import type { ComponentProps } from "react";
+import type { OpaqueColorValue, StyleProp, TextStyle } from "react-native";
 
-type IconMapping = Record<Extract<SymbolViewProps['name'], string>, ComponentProps<typeof MaterialIcons>['name']>;
+type IconMapping = Record<
+  Extract<SymbolViewProps["name"], string>,
+  ComponentProps<typeof MaterialIcons>["name"]
+>;
 type IconSymbolName = keyof typeof MAPPING;
 
 /**
@@ -14,18 +17,18 @@ type IconSymbolName = keyof typeof MAPPING;
  * - see SF Symbols in the [SF Symbols](https://developer.apple.com/sf-symbols/) app.
  */
 const MAPPING = {
-  'house.fill': 'home',
-  'paperplane.fill': 'send',
-  'chevron.left.forwardslash.chevron.right': 'code',
-  'chevron.right': 'chevron-right',
-  'message.fill': 'chat-bubble',
-  'person.fill': 'person',
-  'heart': 'favorite-border',
-  'heart.fill': 'favorite',
-  'bubble.right': 'chat-bubble-outline',
-  'paperplane': 'send',
-  'bookmark': 'bookmark-border',
-  'bookmark.fill': 'bookmark',
+  "house.fill": "home",
+  "paperplane.fill": "send",
+  "chevron.left.forwardslash.chevron.right": "code",
+  "chevron.right": "chevron-right",
+  "message.fill": "chat-bubble",
+  "person.fill": "person",
+  heart: "favorite-border",
+  "heart.fill": "favorite",
+  "bubble.right": "chat-bubble-outline",
+  paperplane: "send",
+  bookmark: "bookmark-border",
+  "bookmark.fill": "bookmark",
 } as IconMapping;
 
 /**

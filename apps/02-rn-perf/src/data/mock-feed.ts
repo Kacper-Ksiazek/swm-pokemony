@@ -23,15 +23,7 @@ export interface UserStats {
 }
 
 export interface Reaction {
-  type:
-    | "like"
-    | "love"
-    | "laugh"
-    | "wow"
-    | "sad"
-    | "angry"
-    | "celebrate"
-    | "insightful";
+  type: "like" | "love" | "laugh" | "wow" | "sad" | "angry" | "celebrate" | "insightful";
   count: number;
   users: { username: string; avatar: string; timestamp: string }[];
 }
@@ -444,26 +436,8 @@ const commentTexts = [
 ];
 
 const tagSets = [
-  [
-    "AppJS",
-    "AppJSConf",
-    "AppJS2026",
-    "ReactNative",
-    "Expo",
-    "Conference",
-    "Kraków",
-    "MobileDev",
-  ],
-  [
-    "ReactNative",
-    "Expo",
-    "JavaScript",
-    "TypeScript",
-    "MobileApp",
-    "CrossPlatform",
-    "Dev",
-    "Code",
-  ],
+  ["AppJS", "AppJSConf", "AppJS2026", "ReactNative", "Expo", "Conference", "Kraków", "MobileDev"],
+  ["ReactNative", "Expo", "JavaScript", "TypeScript", "MobileApp", "CrossPlatform", "Dev", "Code"],
   [
     "Workshop",
     "Learning",
@@ -474,36 +448,9 @@ const tagSets = [
     "Tutorial",
     "HandsOn",
   ],
-  [
-    "Networking",
-    "Community",
-    "DevLife",
-    "TechConf",
-    "Speakers",
-    "Talks",
-    "Inspiration",
-    "Connect",
-  ],
-  [
-    "Poland",
-    "Kraków",
-    "Europe",
-    "TechHub",
-    "Travel",
-    "Conference",
-    "Venue",
-    "StaraZajezdnia",
-  ],
-  [
-    "Expo",
-    "ExpoModules",
-    "NativeCode",
-    "iOS",
-    "Android",
-    "Build",
-    "Deploy",
-    "EAS",
-  ],
+  ["Networking", "Community", "DevLife", "TechConf", "Speakers", "Talks", "Inspiration", "Connect"],
+  ["Poland", "Kraków", "Europe", "TechHub", "Travel", "Conference", "Venue", "StaraZajezdnia"],
+  ["Expo", "ExpoModules", "NativeCode", "iOS", "Android", "Build", "Deploy", "EAS"],
   [
     "Performance",
     "Optimization",
@@ -514,26 +461,8 @@ const tagSets = [
     "Debug",
     "Tools",
   ],
-  [
-    "Animations",
-    "GestureHandler",
-    "Reanimated",
-    "UX",
-    "UI",
-    "Interactions",
-    "WebGPU",
-    "ThreeJS",
-  ],
-  [
-    "OpenSource",
-    "GitHub",
-    "Contribute",
-    "Community",
-    "Library",
-    "Package",
-    "npm",
-    "Maintainers",
-  ],
+  ["Animations", "GestureHandler", "Reanimated", "UX", "UI", "Interactions", "WebGPU", "ThreeJS"],
+  ["OpenSource", "GitHub", "Contribute", "Community", "Library", "Package", "npm", "Maintainers"],
   [
     "SoftwareMansion",
     "Organizers",
@@ -576,37 +505,18 @@ function generateReplies(
   parentUsername: string,
 ): FeedComment[] {
   const replies: FeedComment[] = [];
-  const sentiments: ("positive" | "neutral" | "negative")[] = [
-    "positive",
-    "neutral",
-    "negative",
-  ];
-  const languages = [
-    "en",
-    "pl",
-    "de",
-    "fr",
-    "es",
-    "pt",
-    "it",
-    "ja",
-    "ko",
-    "zh",
-  ];
+  const sentiments: ("positive" | "neutral" | "negative")[] = ["positive", "neutral", "negative"];
+  const languages = ["en", "pl", "de", "fr", "es", "pt", "it", "ja", "ko", "zh"];
 
   for (let i = 0; i < count; i++) {
-    const userIdx =
-      (postIndex * 5 + commentIndex * 3 + i * 11) % usernames.length;
-    const hasNestedReplies =
-      count > 2 && i < 2 && (postIndex + commentIndex + i) % 4 === 0;
+    const userIdx = (postIndex * 5 + commentIndex * 3 + i * 11) % usernames.length;
+    const hasNestedReplies = count > 2 && i < 2 && (postIndex + commentIndex + i) % 4 === 0;
 
     replies.push({
       id: `reply-${postIndex}-${commentIndex}-${i}`,
       username: usernames[userIdx],
       avatar: `https://i.pravatar.cc/150?img=${(userIdx % 70) + 1}`,
-      text: commentTexts[
-        (postIndex + commentIndex + i * 2) % commentTexts.length
-      ],
+      text: commentTexts[(postIndex + commentIndex + i * 2) % commentTexts.length],
       likes: Math.floor(Math.random() * 50),
       timestamp: timestamps[(postIndex + commentIndex + i) % timestamps.length],
       replyingTo: parentUsername,
@@ -620,26 +530,15 @@ function generateReplies(
               },
             ]
           : undefined,
-      reactions:
-        i % 5 === 0
-          ? generateCommentReactions(postIndex, commentIndex, i)
-          : undefined,
+      reactions: i % 5 === 0 ? generateCommentReactions(postIndex, commentIndex, i) : undefined,
       isEdited: i % 7 === 0,
-      editedAt:
-        i % 7 === 0
-          ? timestamps[(postIndex + i) % timestamps.length]
-          : undefined,
+      editedAt: i % 7 === 0 ? timestamps[(postIndex + i) % timestamps.length] : undefined,
       isPinned: false,
       isCreatorReply: i % 10 === 0,
       sentiment: sentiments[(postIndex + i) % 3],
       language: languages[userIdx % languages.length],
       replies: hasNestedReplies
-        ? generateReplies(
-            postIndex,
-            commentIndex * 10 + i,
-            1 + (i % 2),
-            usernames[userIdx],
-          )
+        ? generateReplies(postIndex, commentIndex * 10 + i, 1 + (i % 2), usernames[userIdx])
         : [],
     });
   }
@@ -660,16 +559,7 @@ function generateCommentReactions(
     | "angry"
     | "celebrate"
     | "insightful"
-  )[] = [
-    "like",
-    "love",
-    "laugh",
-    "wow",
-    "sad",
-    "angry",
-    "celebrate",
-    "insightful",
-  ];
+  )[] = ["like", "love", "laugh", "wow", "sad", "angry", "celebrate", "insightful"];
   const reactions: Reaction[] = [];
   const numReactions = 1 + ((postIndex + commentIndex + replyIndex) % 4);
 
@@ -678,8 +568,7 @@ function generateCommentReactions(
     const users: { username: string; avatar: string; timestamp: string }[] = [];
     for (let u = 0; u < Math.min(count, 5); u++) {
       const userIdx =
-        (postIndex * 3 + commentIndex * 5 + replyIndex * 7 + r * 11 + u) %
-        usernames.length;
+        (postIndex * 3 + commentIndex * 5 + replyIndex * 7 + r * 11 + u) % usernames.length;
       users.push({
         username: usernames[userIdx],
         avatar: `https://i.pravatar.cc/150?img=${(userIdx % 70) + 1}`,
@@ -687,9 +576,7 @@ function generateCommentReactions(
       });
     }
     reactions.push({
-      type: reactionTypes[
-        (postIndex + commentIndex + r) % reactionTypes.length
-      ],
+      type: reactionTypes[(postIndex + commentIndex + r) % reactionTypes.length],
       count,
       users,
     });
@@ -699,23 +586,8 @@ function generateCommentReactions(
 
 function generateComments(postIndex: number, count: number): FeedComment[] {
   const comments: FeedComment[] = [];
-  const sentiments: ("positive" | "neutral" | "negative")[] = [
-    "positive",
-    "neutral",
-    "negative",
-  ];
-  const languages = [
-    "en",
-    "pl",
-    "de",
-    "fr",
-    "es",
-    "pt",
-    "it",
-    "ja",
-    "ko",
-    "zh",
-  ];
+  const sentiments: ("positive" | "neutral" | "negative")[] = ["positive", "neutral", "negative"];
+  const languages = ["en", "pl", "de", "fr", "es", "pt", "it", "ja", "ko", "zh"];
 
   for (let i = 0; i < count; i++) {
     const userIdx = (postIndex * 3 + i * 7) % usernames.length;
@@ -737,10 +609,7 @@ function generateComments(postIndex: number, count: number): FeedComment[] {
       text: commentTexts[(postIndex + i * 3) % commentTexts.length],
       likes: Math.floor(Math.random() * 200),
       timestamp: timestamps[(postIndex + i) % timestamps.length],
-      replies:
-        replyCount > 0
-          ? generateReplies(postIndex, i, replyCount, username)
-          : [],
+      replies: replyCount > 0 ? generateReplies(postIndex, i, replyCount, username) : [],
       mentions:
         i % 4 === 0
           ? [
@@ -751,13 +620,9 @@ function generateComments(postIndex: number, count: number): FeedComment[] {
               },
             ]
           : undefined,
-      reactions:
-        i % 3 === 0 ? generateCommentReactions(postIndex, i, 0) : undefined,
+      reactions: i % 3 === 0 ? generateCommentReactions(postIndex, i, 0) : undefined,
       isEdited: i % 8 === 0,
-      editedAt:
-        i % 8 === 0
-          ? timestamps[(postIndex + i + 1) % timestamps.length]
-          : undefined,
+      editedAt: i % 8 === 0 ? timestamps[(postIndex + i + 1) % timestamps.length] : undefined,
       isPinned: i === 0 && postIndex % 10 === 0,
       isCreatorReply: false,
       sentiment: sentiments[(postIndex + i) % 3],
@@ -787,8 +652,7 @@ function generateSuggestedPosts(postIndex: number): SuggestedPost[] {
       username: usernames[userIdx],
       avatar: `https://i.pravatar.cc/150?img=${(userIdx % 70) + 1}`,
       image: `https://picsum.photos/id/${picsumId}/1080/1080`,
-      caption:
-        captions[(postIndex + i * 2) % captions.length].slice(0, 60) + "...",
+      caption: captions[(postIndex + i * 2) % captions.length].slice(0, 60) + "...",
       likes: Math.floor(Math.random() * 5000),
       comments: Math.floor(Math.random() * 200),
       relevanceScore: 0.5 + Math.random() * 0.5,
@@ -879,14 +743,11 @@ function generateUserStats(userIndex: number): UserStats {
     totalViews: baseFollowers * multiplier * 10,
     joinedDate: `${2018 + (userIndex % 8)}-${String((userIndex % 12) + 1).padStart(2, "0")}-01`,
     lastActive: timestamps[userIndex % timestamps.length],
-    verificationDate:
-      userIndex % 3 === 0 ? `${2022 + (userIndex % 4)}-01-15` : undefined,
+    verificationDate: userIndex % 3 === 0 ? `${2022 + (userIndex % 4)}-01-15` : undefined,
   };
 }
 
-function generateMutualFollowers(
-  userIndex: number,
-): { username: string; avatar: string }[] {
+function generateMutualFollowers(userIndex: number): { username: string; avatar: string }[] {
   const mutuals: { username: string; avatar: string }[] = [];
   const count = userIndex % 5;
   for (let i = 0; i < count; i++) {
@@ -935,12 +796,7 @@ function generateReactions(postIndex: number): Reaction[] {
 
 function generateShares(postIndex: number): Share[] {
   const shares: Share[] = [];
-  const platforms: ("feed" | "story" | "dm" | "external")[] = [
-    "feed",
-    "story",
-    "dm",
-    "external",
-  ];
+  const platforms: ("feed" | "story" | "dm" | "external")[] = ["feed", "story", "dm", "external"];
   const numShares = postIndex % 20;
 
   for (let i = 0; i < numShares; i++) {
@@ -1058,13 +914,7 @@ function generateImageMetadata(
     "Pixel 8 Pro",
     "Samsung S24 Ultra",
   ];
-  const lenses = [
-    "24-70mm f/2.8",
-    "35mm f/1.4",
-    "50mm f/1.8",
-    "85mm f/1.2",
-    "16-35mm f/4",
-  ];
+  const lenses = ["24-70mm f/2.8", "35mm f/1.4", "50mm f/1.8", "85mm f/1.2", "16-35mm f/4"];
   const colors = [
     "#1a1a2e",
     "#16213e",
@@ -1210,11 +1060,7 @@ function trendShape(seed: number, t: number): number {
   }
 }
 
-function generateChartSeries(
-  seed: number,
-  likes: number,
-  shares: number,
-): FeedPost["chartData"] {
+function generateChartSeries(seed: number, likes: number, shares: number): FeedPost["chartData"] {
   const result: FeedPost["chartData"] = { likes: {}, comments: {}, shares: {} };
 
   for (const days of CHART_DAYS) {
@@ -1238,9 +1084,7 @@ function generateChartSeries(
       // Comments
       const commentsTrend = trendShape(seed + 2, t) * baseComments;
       const commentsNoise = (rand() - 0.5) * baseComments * 0.4;
-      commentsPoints.push(
-        Math.max(0, Math.round(commentsTrend + commentsNoise)),
-      );
+      commentsPoints.push(Math.max(0, Math.round(commentsTrend + commentsNoise)));
 
       // Shares
       const sharesTrend = trendShape(seed + 4, t) * baseShares;
@@ -1268,8 +1112,13 @@ function picsumUrl(id: number, aspectRatio: number, thumbnail = false): string {
 function generateMockFeed(count: number): FeedPost[] {
   const posts: FeedPost[] = [];
   const languages = ["en", "pl", "de", "fr", "es"];
-  const visibilities: ("public" | "followers" | "close_friends" | "private")[] =
-    ["public", "public", "public", "followers", "close_friends"];
+  const visibilities: ("public" | "followers" | "close_friends" | "private")[] = [
+    "public",
+    "public",
+    "public",
+    "followers",
+    "close_friends",
+  ];
 
   for (let i = 0; i < count; i++) {
     const userIndex = i % usernames.length;
@@ -1295,12 +1144,7 @@ function generateMockFeed(count: number): FeedPost[] {
         uri: picsumUrl(picsumId, postAspectRatio),
         aspectRatio: postAspectRatio,
         thumbnailUri: picsumUrl(picsumId, postAspectRatio, true),
-        metadata: generateImageMetadata(
-          1080,
-          Math.round(1080 / postAspectRatio),
-          i,
-          j,
-        ),
+        metadata: generateImageMetadata(1080, Math.round(1080 / postAspectRatio), i, j),
       });
     }
 
@@ -1318,10 +1162,8 @@ function generateMockFeed(count: number): FeedPost[] {
       commentCount = 1 + (i % 5);
     }
 
-    const likes =
-      Math.floor(Math.random() * 10000) + (commentCount > 50 ? 5000 : 0);
-    const totalComments =
-      commentCount === 0 ? 0 : Math.floor(Math.random() * 500) + commentCount;
+    const likes = Math.floor(Math.random() * 10000) + (commentCount > 50 ? 5000 : 0);
+    const totalComments = commentCount === 0 ? 0 : Math.floor(Math.random() * 500) + commentCount;
 
     // Vary tags
     const hasTags = i % 10 < 7;
@@ -1348,10 +1190,7 @@ function generateMockFeed(count: number): FeedPost[] {
         badges: generateBadges(userIndex),
         stats: generateUserStats(userIndex),
         bio: bios[userIndex % bios.length],
-        website:
-          userIndex % 2 === 0
-            ? `https://${usernames[userIndex]}.dev`
-            : undefined,
+        website: userIndex % 2 === 0 ? `https://${usernames[userIndex]}.dev` : undefined,
         isFollowing: i % 4 !== 0,
         isFollower: i % 3 === 0,
         mutualFollowers: generateMutualFollowers(userIndex),
@@ -1388,8 +1227,7 @@ function generateMockFeed(count: number): FeedPost[] {
         ? {
             url: `https://appjs.co/2026/talk-${i}`,
             title: `App.js Conf 2026 - Talk ${i}`,
-            description:
-              "Join us for the biggest React Native & Expo conference in Europe!",
+            description: "Join us for the biggest React Native & Expo conference in Europe!",
             image: `https://picsum.photos/id/${(i * 3) % 1000}/400/210`,
             siteName: "App.js Conf",
             favicon: "https://appjs.co/favicon.ico",
@@ -1442,18 +1280,8 @@ function generateMockFeed(count: number): FeedPost[] {
       isSponsored,
       sponsorInfo: isSponsored
         ? {
-            advertiser: [
-              "Expo",
-              "Software Mansion",
-              "Meta",
-              "Shopify",
-              "Microsoft",
-            ][i % 5],
-            targetAudience: [
-              "React Native developers",
-              "Mobile developers",
-              "Frontend engineers",
-            ],
+            advertiser: ["Expo", "Software Mansion", "Meta", "Shopify", "Microsoft"][i % 5],
+            targetAudience: ["React Native developers", "Mobile developers", "Frontend engineers"],
             budget: 1000 + (i % 10) * 500,
             impressionsGoal: 10000 + (i % 10) * 5000,
           }
@@ -1485,20 +1313,10 @@ function generateMockFeed(count: number): FeedPost[] {
         i % 8 === 0
           ? {
               id: `track-${i}`,
-              title: [
-                "Coding Vibes",
-                "Dev Flow",
-                "Binary Beat",
-                "React Rhythm",
-                "Async Dreams",
-              ][i % 5],
-              artist: [
-                "CodeWave",
-                "DevTunes",
-                "ByteBeats",
-                "SyntaxSound",
-                "LoopLogic",
-              ][i % 5],
+              title: ["Coding Vibes", "Dev Flow", "Binary Beat", "React Rhythm", "Async Dreams"][
+                i % 5
+              ],
+              artist: ["CodeWave", "DevTunes", "ByteBeats", "SyntaxSound", "LoopLogic"][i % 5],
               duration: 180 + (i % 120),
               coverArt: `https://picsum.photos/id/${(i * 7) % 1000}/300/300`,
             }

@@ -15,8 +15,8 @@ const AppJSDarkTheme = {
     card: "#362a3d",
     text: "#ffffff",
     border: "#4a3d54",
-    notification: "#dfe7ff"
-  }
+    notification: "#dfe7ff",
+  },
 };
 
 const AppJSLightTheme = {
@@ -28,12 +28,12 @@ const AppJSLightTheme = {
     card: "#fdfcfc",
     text: "#271c2d",
     border: "#c5c0cc",
-    notification: "#271c2d"
-  }
+    notification: "#271c2d",
+  },
 };
 
 export const unstable_settings = {
-  anchor: "(tabs)"
+  anchor: "(tabs)",
 };
 
 export default function RootLayout() {
@@ -44,7 +44,10 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="post/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="post/comments/[id]" options={{ headerShown: false, presentation: "modal" }} />
+        <Stack.Screen
+          name="post/comments/[id]"
+          options={{ headerShown: false, presentation: "modal" }}
+        />
         <Stack.Screen name="profile/[username]" options={{ headerShown: false }} />
         <Stack.Screen name="hashtag/[tag]" options={{ headerShown: false }} />
         <Stack.Screen name="location/[name]" options={{ headerShown: false }} />

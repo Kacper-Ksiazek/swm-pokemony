@@ -1,15 +1,22 @@
-import { Path as SkiaPath, LinearGradient, vec } from "@shopify/react-native-skia";
-import { useDerivedValue, type SharedValue } from "react-native-reanimated";
+import { LinearGradient, Path as SkiaPath, vec } from "@shopify/react-native-skia";
+import { type SharedValue, useDerivedValue } from "react-native-reanimated";
 
-import { PADDING, PLOT_H, type SeriesConfig, buildLinePath, buildAreaPath, buildStarsPath } from "../chart-utils";
+import {
+  buildAreaPath,
+  buildLinePath,
+  buildStarsPath,
+  PADDING,
+  PLOT_H,
+  type SeriesConfig,
+} from "../chart-utils";
 import type { AnimatedSeriesData } from "../use-chart-animation";
 
 interface SkiaSeriesLineProps {
   series: AnimatedSeriesData;
   config: SeriesConfig;
   bgColor: string;
-  gradientId?: string;   // ignored — Skia uses inline gradients
-  dataLength?: number;   // ignored — Skia reads from series.data
+  gradientId?: string; // ignored — Skia uses inline gradients
+  dataLength?: number; // ignored — Skia reads from series.data
 }
 
 /**
@@ -36,15 +43,34 @@ export function SkiaSeriesLine({ series, config, bgColor }: SkiaSeriesLineProps)
   });
 
   const [opTop, opBottom] = config.gradientOpacity;
-  const colorTop = config.color + Math.round(opTop * 255).toString(16).padStart(2, "0");
-  const colorBottom = config.color + Math.round(opBottom * 255).toString(16).padStart(2, "0");
+  const colorTop =
+    config.color +
+    Math.round(opTop * 255)
+      .toString(16)
+      .padStart(2, "0");
+  const colorBottom =
+    config.color +
+    Math.round(opBottom * 255)
+      .toString(16)
+      .padStart(2, "0");
 
   return (
     <>
       <SkiaPath path={areaPath}>
-        <LinearGradient start={vec(0, PADDING.top)} end={vec(0, PADDING.top + PLOT_H)} colors={[colorTop, colorBottom]} />
+        <LinearGradient
+          start={vec(0, PADDING.top)}
+          end={vec(0, PADDING.top + PLOT_H)}
+          colors={[colorTop, colorBottom]}
+        />
       </SkiaPath>
-      <SkiaPath path={linePath} color={config.color} style="stroke" strokeWidth={config.lineWidth} strokeJoin="round" strokeCap="round" />
+      <SkiaPath
+        path={linePath}
+        color={config.color}
+        style="stroke"
+        strokeWidth={config.lineWidth}
+        strokeJoin="round"
+        strokeCap="round"
+      />
       <SkiaPath path={starsPath} color={config.color} />
       <SkiaPath path={starsPath} color={bgColor} style="stroke" strokeWidth={0.5} />
     </>

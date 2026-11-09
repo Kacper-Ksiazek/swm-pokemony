@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Image, ImageProps, View } from "react-native";
+import { Image, type ImageProps, View } from "react-native";
 
 import { ImageShimmer } from "./image-shimmer";
 

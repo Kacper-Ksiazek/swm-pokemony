@@ -1,10 +1,9 @@
-import { useState, useContext } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
-
-import { ColorsContext } from "@/context/colors-context";
+import { useContext, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ImageWithShimmer } from "@/components/feed/shimmer/image-with-shimmer";
-import { SuggestedPost } from "@/data/mock-feed";
+import { ColorsContext } from "@/context/colors-context";
+import type { SuggestedPost } from "@/data/mock-feed";
 
 export const SuggestedPostCard = ({ post }: { post: SuggestedPost }) => {
   const colors = useContext(ColorsContext);
@@ -20,7 +19,9 @@ export const SuggestedPostCard = ({ post }: { post: SuggestedPost }) => {
   };
 
   return (
-    <View style={[styles.card, { borderColor: colors.border, backgroundColor: colors.cardBackground }]}>
+    <View
+      style={[styles.card, { borderColor: colors.border, backgroundColor: colors.cardBackground }]}
+    >
       <TouchableOpacity onPress={openPost}>
         <ImageWithShimmer source={{ uri: post.image }} style={styles.image} resizeMode="cover" />
       </TouchableOpacity>

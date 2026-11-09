@@ -1,11 +1,21 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions, Linking, Alert, Share } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  Alert,
+  Dimensions,
+  Image,
+  Linking,
+  ScrollView,
+  Share,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
-import { MOCK_FEED, FeedPost } from "@/data/mock-feed";
+import { type FeedPost, MOCK_FEED } from "@/data/mock-feed";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 const { width } = Dimensions.get("window");
@@ -27,7 +37,7 @@ interface UserProfile {
 
 function generateUserProfile(username: string): UserProfile {
   // Find all posts by this user
-  const userPosts = MOCK_FEED.filter(post => post.user.username === username);
+  const userPosts = MOCK_FEED.filter((post) => post.user.username === username);
   const firstPost = userPosts[0];
 
   // Generate consistent profile data based on username
@@ -41,7 +51,7 @@ function generateUserProfile(username: string): UserProfile {
     "🎵 Animations Expert | 🎸 Reanimated | 🎤 Workshop Instructor",
     "🍕 Food & Code | 🍳 Side Projects | 🌮 App.js Attendee",
     "⚛️ Expo Team | 🐱 Cat Parent | 🦋 Building the Future",
-    "💻 Tech Lead | 🚀 Startups | 💡 Innovation & Mobile"
+    "💻 Tech Lead | 🚀 Startups | 💡 Innovation & Mobile",
   ];
 
   const fullNames = [
@@ -56,7 +66,7 @@ function generateUserProfile(username: string): UserProfile {
     "Avery Martinez",
     "Quinn Brown",
     "Jamie Lee",
-    "Parker Anderson"
+    "Parker Anderson",
   ];
 
   return {
@@ -70,7 +80,7 @@ function generateUserProfile(username: string): UserProfile {
     followersCount: Math.floor((hash * 137) % 100000) + 1000,
     followingCount: Math.floor((hash * 43) % 1000) + 100,
     posts: userPosts,
-    isFollowing: hash % 2 === 0
+    isFollowing: hash % 2 === 0,
   };
 }
 
@@ -123,7 +133,7 @@ export default function UserProfileScreen() {
           flex: 1,
           backgroundColor: colors.cardBackground,
           justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         <Text style={{ color: colors.text }}>Loading...</Text>
@@ -143,7 +153,7 @@ export default function UserProfileScreen() {
           paddingTop: insets.top,
           backgroundColor: colors.background,
           borderBottomWidth: 0.5,
-          borderBottomColor: colors.border
+          borderBottomColor: colors.border,
         }}
       >
         <TouchableOpacity onPress={() => router.back()} style={{ padding: 4, marginRight: 16 }}>
@@ -154,12 +164,14 @@ export default function UserProfileScreen() {
             style={{
               fontSize: 18,
               fontWeight: "600",
-              color: colors.text
+              color: colors.text,
             }}
           >
             {profile.username}
           </Text>
-          {profile.isVerified && <IconSymbol name="checkmark.seal.fill" size={16} color="#3d2847" />}
+          {profile.isVerified && (
+            <IconSymbol name="checkmark.seal.fill" size={16} color="#3d2847" />
+          )}
         </View>
         <TouchableOpacity
           style={{ padding: 4 }}
@@ -170,21 +182,28 @@ export default function UserProfileScreen() {
                 onPress: () =>
                   Share.share({
                     message: `Check out @${profile.username}'s profile: https://example.com/profile/${profile.username}`,
-                    url: `https://example.com/profile/${profile.username}`
-                  })
+                    url: `https://example.com/profile/${profile.username}`,
+                  }),
               },
-              { text: "Copy Profile URL", onPress: () => Alert.alert("Copied", "Profile URL copied to clipboard") },
+              {
+                text: "Copy Profile URL",
+                onPress: () => Alert.alert("Copied", "Profile URL copied to clipboard"),
+              },
               {
                 text: "Block",
                 style: "destructive",
-                onPress: () => Alert.alert("Blocked", `You have blocked @${profile.username}`)
+                onPress: () => Alert.alert("Blocked", `You have blocked @${profile.username}`),
               },
               {
                 text: "Report",
                 style: "destructive",
-                onPress: () => Alert.alert("Reported", "Thank you for your report. We will review this account.")
+                onPress: () =>
+                  Alert.alert(
+                    "Reported",
+                    "Thank you for your report. We will review this account.",
+                  ),
               },
-              { text: "Cancel", style: "cancel" }
+              { text: "Cancel", style: "cancel" },
             ]);
           }}
         >
@@ -200,7 +219,7 @@ export default function UserProfileScreen() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              marginBottom: 16
+              marginBottom: 16,
             }}
           >
             <Image
@@ -210,7 +229,7 @@ export default function UserProfileScreen() {
                 height: 86,
                 borderRadius: 43,
                 borderWidth: 3,
-                borderColor: "#271c2d"
+                borderColor: "#271c2d",
               }}
             />
             <View
@@ -218,11 +237,13 @@ export default function UserProfileScreen() {
                 flex: 1,
                 flexDirection: "row",
                 justifyContent: "space-around",
-                marginLeft: 20
+                marginLeft: 20,
               }}
             >
               <View style={{ alignItems: "center" }}>
-                <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text }}>{profile.postsCount}</Text>
+                <Text style={{ fontSize: 18, fontWeight: "700", color: colors.text }}>
+                  {profile.postsCount}
+                </Text>
                 <Text style={{ fontSize: 13, color: colors.icon }}>Posts</Text>
               </View>
               <TouchableOpacity
@@ -252,7 +273,7 @@ export default function UserProfileScreen() {
               fontSize: 14,
               fontWeight: "600",
               color: colors.text,
-              marginBottom: 2
+              marginBottom: 2,
             }}
           >
             {profile.fullName}
@@ -262,7 +283,7 @@ export default function UserProfileScreen() {
               fontSize: 14,
               color: colors.text,
               lineHeight: 20,
-              marginBottom: 4
+              marginBottom: 4,
             }}
           >
             {profile.bio}
@@ -279,7 +300,7 @@ export default function UserProfileScreen() {
             style={{
               flexDirection: "row",
               marginTop: 16,
-              gap: 8
+              gap: 8,
             }}
           >
             <TouchableOpacity
@@ -289,13 +310,13 @@ export default function UserProfileScreen() {
                 backgroundColor: isFollowing ? colors.icon + "20" : "#271c2d",
                 paddingVertical: 8,
                 borderRadius: 8,
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <Text
                 style={{
                   fontWeight: "600",
-                  color: isFollowing ? colors.text : "#FFFFFF"
+                  color: isFollowing ? colors.text : "#FFFFFF",
                 }}
               >
                 {isFollowing ? "Following" : "Follow"}
@@ -308,7 +329,7 @@ export default function UserProfileScreen() {
                 backgroundColor: colors.icon + "20",
                 paddingVertical: 8,
                 borderRadius: 8,
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <Text style={{ fontWeight: "600", color: colors.text }}>Message</Text>
@@ -321,7 +342,7 @@ export default function UserProfileScreen() {
           style={{
             flexDirection: "row",
             borderTopWidth: 0.5,
-            borderTopColor: colors.icon + "30"
+            borderTopColor: colors.icon + "30",
           }}
         >
           <TouchableOpacity
@@ -331,10 +352,14 @@ export default function UserProfileScreen() {
               alignItems: "center",
               paddingVertical: 12,
               borderBottomWidth: activeTab === "grid" ? 1 : 0,
-              borderBottomColor: colors.text
+              borderBottomColor: colors.text,
             }}
           >
-            <IconSymbol name="square.grid.3x3" size={24} color={activeTab === "grid" ? colors.text : colors.icon} />
+            <IconSymbol
+              name="square.grid.3x3"
+              size={24}
+              color={activeTab === "grid" ? colors.text : colors.icon}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setActiveTab("tagged")}
@@ -343,7 +368,7 @@ export default function UserProfileScreen() {
               alignItems: "center",
               paddingVertical: 12,
               borderBottomWidth: activeTab === "tagged" ? 1 : 0,
-              borderBottomColor: colors.text
+              borderBottomColor: colors.text,
             }}
           >
             <IconSymbol
@@ -358,15 +383,19 @@ export default function UserProfileScreen() {
         {activeTab === "grid" && (
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
             {profile.posts.length > 0 ? (
-              profile.posts.map(post => (
-                <PostGridItem key={post.id} post={post} onPress={() => router.push(`/post/${post.id}`)} />
+              profile.posts.map((post) => (
+                <PostGridItem
+                  key={post.id}
+                  post={post}
+                  onPress={() => router.push(`/post/${post.id}`)}
+                />
               ))
             ) : (
               <View
                 style={{
                   width: "100%",
                   paddingVertical: 60,
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <IconSymbol name="camera" size={48} color={colors.icon} />
@@ -375,7 +404,7 @@ export default function UserProfileScreen() {
                     marginTop: 16,
                     fontSize: 22,
                     fontWeight: "700",
-                    color: colors.text
+                    color: colors.text,
                   }}
                 >
                   No Posts Yet
@@ -389,7 +418,7 @@ export default function UserProfileScreen() {
           <View
             style={{
               paddingVertical: 60,
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <IconSymbol name="person.crop.square" size={48} color={colors.icon} />
@@ -398,7 +427,7 @@ export default function UserProfileScreen() {
                 marginTop: 16,
                 fontSize: 22,
                 fontWeight: "700",
-                color: colors.text
+                color: colors.text,
               }}
             >
               Photos of {profile.username}
@@ -409,7 +438,7 @@ export default function UserProfileScreen() {
                 fontSize: 14,
                 color: colors.icon,
                 textAlign: "center",
-                paddingHorizontal: 40
+                paddingHorizontal: 40,
               }}
             >
               When people tag {profile.username} in photos, they will appear here.

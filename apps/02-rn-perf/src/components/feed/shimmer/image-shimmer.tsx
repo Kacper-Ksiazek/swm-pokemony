@@ -2,9 +2,7 @@ import { StyleSheet } from "react-native";
 
 import { ShimmerView } from "./shimmer-view";
 
-export const ImageShimmer = () => (
-  <ShimmerView style={styles.shimmer} />
-);
+export const ImageShimmer = () => <ShimmerView style={styles.shimmer} />;
 
 const styles = StyleSheet.create({
   shimmer: {

@@ -1,11 +1,11 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, FlatList, Dimensions } from "react-native";
+import { useEffect, useState } from "react";
+import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
-import { MOCK_FEED, FeedPost } from "@/data/mock-feed";
+import { type FeedPost, MOCK_FEED } from "@/data/mock-feed";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 const { width } = Dimensions.get("window");
@@ -38,9 +38,9 @@ export default function HashtagScreen() {
       // Filter posts that contain this hashtag
       const hashtagLower = tag.toLowerCase().replace("#", "");
       const filteredPosts = MOCK_FEED.filter(
-        post =>
-          post.tags.some(t => t.toLowerCase().includes(hashtagLower)) ||
-          post.caption.toLowerCase().includes(`#${hashtagLower}`)
+        (post) =>
+          post.tags.some((t) => t.toLowerCase().includes(hashtagLower)) ||
+          post.caption.toLowerCase().includes(`#${hashtagLower}`),
       );
       setPosts(filteredPosts.length > 0 ? filteredPosts : MOCK_FEED.slice(0, 12));
     }
@@ -60,13 +60,15 @@ export default function HashtagScreen() {
           paddingTop: insets.top,
           backgroundColor: colors.background,
           borderBottomWidth: 0.5,
-          borderBottomColor: colors.border
+          borderBottomColor: colors.border,
         }}
       >
         <TouchableOpacity onPress={() => router.back()} style={{ padding: 4, marginRight: 16 }}>
           <IconSymbol name="chevron.left" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={{ flex: 1, fontSize: 18, fontWeight: "600", color: colors.text }}>{displayTag}</Text>
+        <Text style={{ flex: 1, fontSize: 18, fontWeight: "600", color: colors.text }}>
+          {displayTag}
+        </Text>
       </View>
 
       {/* Stats Header */}
@@ -74,7 +76,7 @@ export default function HashtagScreen() {
         style={{
           padding: 16,
           borderBottomWidth: 0.5,
-          borderBottomColor: colors.border
+          borderBottomColor: colors.border,
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 16 }}>
@@ -85,13 +87,15 @@ export default function HashtagScreen() {
               borderRadius: 16,
               backgroundColor: colors.tint + "20",
               justifyContent: "center",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <IconSymbol name="number" size={40} color={colors.tint} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 20, fontWeight: "700", color: colors.text }}>{displayTag}</Text>
+            <Text style={{ fontSize: 20, fontWeight: "700", color: colors.text }}>
+              {displayTag}
+            </Text>
             <Text style={{ fontSize: 14, color: colors.icon, marginTop: 4 }}>
               {posts.length.toLocaleString()} posts
             </Text>
@@ -103,7 +107,7 @@ export default function HashtagScreen() {
             backgroundColor: colors.tint,
             borderRadius: 8,
             paddingVertical: 10,
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <Text style={{ fontSize: 15, fontWeight: "600", color: "#fff" }}>Follow</Text>
@@ -114,8 +118,10 @@ export default function HashtagScreen() {
       <FlatList
         data={posts}
         numColumns={3}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => <PostGridItem post={item} onPress={() => router.push(`/post/${item.id}`)} />}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <PostGridItem post={item} onPress={() => router.push(`/post/${item.id}`)} />
+        )}
         contentContainerStyle={{ paddingBottom: insets.bottom }}
       />
     </View>

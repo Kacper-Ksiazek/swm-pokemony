@@ -1,7 +1,20 @@
-import { Path as SkiaPath, Circle as SkiaCircle, Text as SkiaText, DashPathEffect } from "@shopify/react-native-skia";
-import { useDerivedValue, type SharedValue } from "react-native-reanimated";
+import {
+  DashPathEffect,
+  Circle as SkiaCircle,
+  Path as SkiaPath,
+  Text as SkiaText,
+} from "@shopify/react-native-skia";
+import { type SharedValue, useDerivedValue } from "react-native-reanimated";
 
-import { PADDING, PLOT_H, formatLabel, findPeakValue, peakLabelFont, measureText, sampleDataAtX } from "../chart-utils";
+import {
+  findPeakValue,
+  formatLabel,
+  measureText,
+  PADDING,
+  PLOT_H,
+  peakLabelFont,
+  sampleDataAtX,
+} from "../chart-utils";
 import type { AnimatedSeriesData } from "../use-chart-animation";
 
 interface SkiaPeakMarkerProps {
@@ -16,7 +29,13 @@ interface SkiaPeakMarkerProps {
  * Skia peak marker: slides along X from old peak to new peak,
  * Y follows the likes curve at the current X position.
  */
-export function SkiaPeakMarker({ series, color, prevPeakX, targetPeakX, progress }: SkiaPeakMarkerProps) {
+export function SkiaPeakMarker({
+  series,
+  color,
+  prevPeakX,
+  targetPeakX,
+  progress,
+}: SkiaPeakMarkerProps) {
   // X interpolates linearly between old and new peak
   const markerX = useDerivedValue(() => {
     "worklet";

@@ -1,22 +1,14 @@
 import { useContext } from "react";
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import { ColorsContext } from "@/context/colors-context";
 
-export const LikesCount = ({
-  likesText,
-  onPress,
-}: {
-  likesText: string;
-  onPress: () => void;
-}) => {
+export const LikesCount = ({ likesText, onPress }: { likesText: string; onPress: () => void }) => {
   const colors = useContext(ColorsContext);
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <Text style={[styles.text, { color: colors.text }]}>
-        {likesText}
-      </Text>
+      <Text style={[styles.text, { color: colors.text }]}>{likesText}</Text>
     </TouchableOpacity>
   );
 };

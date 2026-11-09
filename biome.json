@@ -54,7 +54,7 @@
             "noReactNativeRawText": {
               "level": "error",
               "options": {
-                "skip": ["NativeTabs.Trigger.Label", "Stack.Title"]
+                "skip": ["NativeTabs.Trigger.Label", "Stack.Title", "ThemedText"]
               }
             }
           }

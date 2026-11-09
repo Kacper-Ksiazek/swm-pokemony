@@ -1,11 +1,10 @@
-import { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import { IconSymbol } from "@/components/ui/icon-symbol";
 import { PostAnalyticsChart } from "@/components/analytics/PostAnalyticsChart";
 import { SkiaRenderer } from "@/components/analytics/renderers";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
 import { MOCK_FEED } from "@/data/mock-feed";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -13,7 +12,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 // Unique users from the feed
 const USERS = (() => {
   const seen = new Set<string>();
-  return MOCK_FEED.filter(p => {
+  return MOCK_FEED.filter((p) => {
     if (seen.has(p.user.username)) return false;
     seen.add(p.user.username);
     return true;
@@ -36,14 +35,14 @@ export default function AnalyticsScreen() {
 
   const [selectedUserIndex, setSelectedUserIndex] = useState(0);
   const [enabledSeries, setEnabledSeries] = useState<Set<DataSeries>>(
-    new Set<DataSeries>(["likes", "comments", "shares"])
+    new Set<DataSeries>(["likes", "comments", "shares"]),
   );
   const [dataPoints, setDataPoints] = useState(365);
 
   const selectedPost = USERS[selectedUserIndex];
 
   const toggleSeries = (series: DataSeries) => {
-    setEnabledSeries(prev => {
+    setEnabledSeries((prev) => {
       const next = new Set(prev);
       if (next.has(series)) {
         if (next.size > 1) next.delete(series);
@@ -66,7 +65,7 @@ export default function AnalyticsScreen() {
           paddingTop: insets.top,
           backgroundColor: colors.background,
           borderBottomWidth: 0.5,
-          borderBottomColor: colors.border
+          borderBottomColor: colors.border,
         }}
       >
         <TouchableOpacity onPress={() => router.back()} style={{ padding: 4, marginRight: 16 }}>
@@ -89,7 +88,7 @@ export default function AnalyticsScreen() {
             color: colors.icon,
             marginHorizontal: 16,
             marginTop: 16,
-            marginBottom: 8
+            marginBottom: 8,
           }}
         >
           User
@@ -109,7 +108,7 @@ export default function AnalyticsScreen() {
                   alignItems: "center",
                   width: 52,
                   gap: 4,
-                  opacity: active ? 1 : 0.5
+                  opacity: active ? 1 : 0.5,
                 }}
               >
                 <Image
@@ -119,7 +118,7 @@ export default function AnalyticsScreen() {
                     height: 44,
                     borderRadius: 22,
                     borderWidth: 2,
-                    borderColor: active ? colors.tint : "transparent"
+                    borderColor: active ? colors.tint : "transparent",
                   }}
                 />
                 <Text
@@ -127,7 +126,7 @@ export default function AnalyticsScreen() {
                     fontSize: 10,
                     color: colors.text,
                     fontWeight: active ? "700" : "400",
-                    maxWidth: 60
+                    maxWidth: 60,
                   }}
                   numberOfLines={1}
                 >
@@ -146,7 +145,7 @@ export default function AnalyticsScreen() {
             color: colors.icon,
             marginHorizontal: 16,
             marginTop: 16,
-            marginBottom: 8
+            marginBottom: 8,
           }}
         >
           Data
@@ -155,10 +154,10 @@ export default function AnalyticsScreen() {
           style={{
             flexDirection: "row",
             marginHorizontal: 16,
-            gap: 8
+            gap: 8,
           }}
         >
-          {DATA_SERIES_OPTIONS.map(option => {
+          {DATA_SERIES_OPTIONS.map((option) => {
             const active = enabledSeries.has(option.key);
             return (
               <TouchableOpacity
@@ -173,7 +172,7 @@ export default function AnalyticsScreen() {
                   borderRadius: 8,
                   backgroundColor: active ? option.color + "20" : colors.background,
                   borderWidth: 1,
-                  borderColor: active ? option.color : colors.border
+                  borderColor: active ? option.color : colors.border,
                 }}
               >
                 <View
@@ -181,14 +180,14 @@ export default function AnalyticsScreen() {
                     width: 10,
                     height: 10,
                     borderRadius: 5,
-                    backgroundColor: active ? option.color : colors.border
+                    backgroundColor: active ? option.color : colors.border,
                   }}
                 />
                 <Text
                   style={{
                     fontSize: 12,
                     fontWeight: active ? "600" : "400",
-                    color: active ? colors.text : colors.icon
+                    color: active ? colors.text : colors.icon,
                   }}
                 >
                   {option.label}
@@ -204,10 +203,10 @@ export default function AnalyticsScreen() {
             flexDirection: "row",
             marginHorizontal: 16,
             marginTop: 16,
-            gap: 8
+            gap: 8,
           }}
         >
-          {[30, 90, 180, 365].map(n => {
+          {[30, 90, 180, 365].map((n) => {
             const active = dataPoints === n;
             return (
               <TouchableOpacity
@@ -219,14 +218,14 @@ export default function AnalyticsScreen() {
                   borderRadius: 8,
                   backgroundColor: active ? colors.tint : colors.background,
                   borderWidth: 1,
-                  borderColor: active ? colors.tint : colors.border
+                  borderColor: active ? colors.tint : colors.border,
                 }}
               >
                 <Text
                   style={{
                     fontSize: 13,
                     fontWeight: active ? "700" : "500",
-                    color: active ? "#fff" : colors.text
+                    color: active ? "#fff" : colors.text,
                   }}
                 >
                   {n <= 90 ? `${n}d` : n === 180 ? "6mo" : "1y"}

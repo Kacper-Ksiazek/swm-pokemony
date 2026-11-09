@@ -1,9 +1,9 @@
-import { useContext } from "react";
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import { useContext } from "react";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { ColorsContext } from "@/context/colors-context";
-import { SuggestedPost } from "@/data/mock-feed";
+import type { SuggestedPost } from "@/data/mock-feed";
 
 import { SuggestedPostCard } from "./suggested-post-card";
 
@@ -23,7 +23,11 @@ export const SuggestedPostsSection = ({ posts }: { posts: SuggestedPost[] }) => 
           <Text style={[styles.seeAll, { color: colors.tint }]}>See All</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
         {posts.map((post) => (
           <SuggestedPostCard key={post.id} post={post} />
         ))}

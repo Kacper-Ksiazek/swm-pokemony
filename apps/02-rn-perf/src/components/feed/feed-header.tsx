@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IconSymbol } from "@/components/ui/icon-symbol";
@@ -16,8 +16,8 @@ export const FeedHeader = () => {
         {
           paddingTop: insets.top + 8,
           backgroundColor: colors.background,
-          borderBottomColor: colors.border
-        }
+          borderBottomColor: colors.border,
+        },
       ]}
     >
       <Image source={require("../../../assets/images/logo_appjs.png")} style={styles.logo} />
@@ -38,15 +38,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 16,
     paddingBottom: 12,
-    borderBottomWidth: 0.5
+    borderBottomWidth: 0.5,
   },
   logo: {
     height: 32,
-    width: 36
+    width: 36,
   },
   actions: {
     flexDirection: "row",
-    gap: 8
+    gap: 8,
   },
   dateBadge: {
     borderWidth: 1.5,
@@ -55,10 +55,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flexDirection: "row",
     alignItems: "center",
-    gap: 6
+    gap: 6,
   },
   dateText: {
     fontSize: 12,
-    fontWeight: "500"
-  }
+    fontWeight: "500",
+  },
 });

@@ -1,7 +1,7 @@
-import { type ReactNode } from "react";
 import { Canvas } from "@shopify/react-native-skia";
+import type { ReactNode } from "react";
 
-import { CHART_WIDTH, CHART_HEIGHT } from "../chart-utils";
+import { CHART_HEIGHT, CHART_WIDTH } from "../chart-utils";
 
 interface SkiaChartAreaProps {
   bgColor: string;
@@ -9,9 +9,5 @@ interface SkiaChartAreaProps {
 }
 
 export function SkiaChartArea({ children }: SkiaChartAreaProps) {
-  return (
-    <Canvas style={{ width: CHART_WIDTH, height: CHART_HEIGHT }}>
-      {children}
-    </Canvas>
-  );
+  return <Canvas style={{ width: CHART_WIDTH, height: CHART_HEIGHT }}>{children}</Canvas>;
 }

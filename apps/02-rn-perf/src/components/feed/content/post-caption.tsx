@@ -1,15 +1,9 @@
 import { useContext } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { ColorsContext } from "@/context/colors-context";
 
-export const PostCaption = ({
-  username,
-  caption,
-}: {
-  username: string;
-  caption: string;
-}) => {
+export const PostCaption = ({ username, caption }: { username: string; caption: string }) => {
   const colors = useContext(ColorsContext);
 
   if (caption.length === 0) return null;

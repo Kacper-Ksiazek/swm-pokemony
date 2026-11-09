@@ -1,11 +1,15 @@
-import { Platform } from "react-native";
 import { matchFont } from "@shopify/react-native-skia";
+import { Platform } from "react-native";
 
 // --- Shared fonts (used by both SVG and Skia for consistent measurement) ---
 
 const fontFamily = Platform.select({ ios: "Helvetica", default: "sans-serif" });
 export const labelFont = matchFont({ fontFamily: fontFamily!, fontSize: 9 });
-export const peakLabelFont = matchFont({ fontFamily: fontFamily!, fontSize: 8, fontWeight: "bold" as const });
+export const peakLabelFont = matchFont({
+  fontFamily: fontFamily!,
+  fontSize: 8,
+  fontWeight: "bold" as const,
+});
 
 export function measureText(text: string, font: ReturnType<typeof matchFont> = labelFont): number {
   "worklet";
@@ -44,9 +48,27 @@ export interface SeriesConfig {
 }
 
 export const SERIES_CONFIG: Record<DataSeries, SeriesConfig> = {
-  likes: { color: "#6C5CE7", starOuter: 4, starInner: 1.8, lineWidth: 2, gradientOpacity: [0.3, 0.02] },
-  comments: { color: "#00B894", starOuter: 3.5, starInner: 1.5, lineWidth: 1.5, gradientOpacity: [0.2, 0.01] },
-  shares: { color: "#FDCB6E", starOuter: 3.5, starInner: 1.5, lineWidth: 1.5, gradientOpacity: [0.25, 0.02] },
+  likes: {
+    color: "#6C5CE7",
+    starOuter: 4,
+    starInner: 1.8,
+    lineWidth: 2,
+    gradientOpacity: [0.3, 0.02],
+  },
+  comments: {
+    color: "#00B894",
+    starOuter: 3.5,
+    starInner: 1.5,
+    lineWidth: 1.5,
+    gradientOpacity: [0.2, 0.01],
+  },
+  shares: {
+    color: "#FDCB6E",
+    starOuter: 3.5,
+    starInner: 1.5,
+    lineWidth: 1.5,
+    gradientOpacity: [0.25, 0.02],
+  },
 };
 
 // --- Path string builders (worklet-safe) ---
@@ -77,23 +99,32 @@ export function buildAreaPath(data: number[], maxVal: number): string {
 export function starPath(cx: number, cy: number, outerR: number, innerR: number, pts = 5): string {
   "worklet";
   const step = Math.PI / pts;
-  return Array.from({ length: 2 * pts }, (_, i) => {
-    const r = i % 2 === 0 ? outerR : innerR;
-    const angle = i * step - Math.PI / 2;
-    const x = cx + r * Math.cos(angle);
-    const y = cy + r * Math.sin(angle);
-    return `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`;
-  }).join(" ") + " Z";
+  return (
+    Array.from({ length: 2 * pts }, (_, i) => {
+      const r = i % 2 === 0 ? outerR : innerR;
+      const angle = i * step - Math.PI / 2;
+      const x = cx + r * Math.cos(angle);
+      const y = cy + r * Math.sin(angle);
+      return `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`;
+    }).join(" ") + " Z"
+  );
 }
 
-export function buildStarsPath(data: number[], maxVal: number, outerR: number, innerR: number): string {
+export function buildStarsPath(
+  data: number[],
+  maxVal: number,
+  outerR: number,
+  innerR: number,
+): string {
   "worklet";
   const stepX = PLOT_W / (data.length - 1);
-  return data.map((val, i) => {
-    const cx = PADDING.left + i * stepX;
-    const cy = PADDING.top + PLOT_H - (val / maxVal) * PLOT_H;
-    return starPath(cx, cy, outerR, innerR);
-  }).join(" ");
+  return data
+    .map((val, i) => {
+      const cx = PADDING.left + i * stepX;
+      const cy = PADDING.top + PLOT_H - (val / maxVal) * PLOT_H;
+      return starPath(cx, cy, outerR, innerR);
+    })
+    .join(" ");
 }
 
 // --- Math helpers (worklet-safe) ---
@@ -145,20 +176,14 @@ export function formatLabel(val: number): string {
 // --- Grid helpers ---
 
 export function getGridYs(lines = 4): number[] {
-  return Array.from({ length: lines }, (_, i) =>
-    PADDING.top + (PLOT_H / (lines - 1)) * i
-  );
+  return Array.from({ length: lines }, (_, i) => PADDING.top + (PLOT_H / (lines - 1)) * i);
 }
 
 export function getGridLabels(maxVal: number, lines = 4): number[] {
-  return Array.from({ length: lines }, (_, i) =>
-    Math.round(maxVal * (1 - i / (lines - 1)))
-  );
+  return Array.from({ length: lines }, (_, i) => Math.round(maxVal * (1 - i / (lines - 1))));
 }
 
 export function getXLabelIndices(dataLength: number, count = 4): number[] {
   if (dataLength <= 1) return [0];
-  return Array.from({ length: count }, (_, i) =>
-    Math.round((i / (count - 1)) * (dataLength - 1))
-  );
+  return Array.from({ length: count }, (_, i) => Math.round((i / (count - 1)) * (dataLength - 1)));
 }
