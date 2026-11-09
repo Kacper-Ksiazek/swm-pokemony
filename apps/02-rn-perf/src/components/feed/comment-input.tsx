@@ -1,5 +1,13 @@
 import { forwardRef, useCallback, useMemo } from "react";
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  Text,
+  TextInput,
+  type TextInputInstance,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import type { Colors } from "@/constants/theme";
 import type { FeedComment } from "@/data/mock-feed";
@@ -75,7 +83,7 @@ interface CommentInputProps {
  * A comment input with a horizontal mention-suggestion bar that appears
  * when the user is typing an @mention.
  */
-const CommentInput = forwardRef<TextInput, CommentInputProps>(function CommentInput(
+const CommentInput = forwardRef<TextInputInstance, CommentInputProps>(function CommentInput(
   { value, onChangeText, onSubmit, placeholder, colors, comments, bottomInset, showTopBorder },
   ref,
 ) {

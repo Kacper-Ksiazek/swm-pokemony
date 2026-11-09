@@ -6,16 +6,23 @@
     "apps/*"
   ],
   "scripts": {
+    "postinstall": "node ./scripts/postinstall.mjs",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
-    "typecheck": "bun run --filter 01-rn-basics typecheck",
-    "export:native": "bun run --filter 01-rn-basics export:native",
+    "typecheck": "bun run --filter './apps/*' typecheck",
+    "export:native": "bun run --filter './apps/*' export:native",
     "start": "bun run --filter 01-rn-basics start",
+    "start:02": "bun run --filter 02-rn-perf start",
     "ios": "bun run --filter 01-rn-basics ios",
-    "android": "bun run --filter 01-rn-basics android"
+    "ios:02": "bun run --filter 02-rn-perf ios",
+    "android": "bun run --filter 01-rn-basics android",
+    "android:02": "bun run --filter 02-rn-perf android"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.4"
-  }
+  },
+  "trustedDependencies": [
+    "@shopify/react-native-skia"
+  ]
 }

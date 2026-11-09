@@ -6,7 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Text,
-  type TextInput,
+  type TextInputInstance,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -32,7 +32,7 @@ const PostDetailScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<TextInputInstance>(null);
   const prevCommentsLengthRef = useRef(0);
   const [post, setPost] = useState<FeedPost | null>(null);
   const [isLiked, setIsLiked] = useState(false);
@@ -279,7 +279,7 @@ const PostDetailScreen = () => {
                   )}
                 />
               </View>
-            ) : null
+            ) : undefined
           }
         />
 

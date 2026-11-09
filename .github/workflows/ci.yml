@@ -1,4 +1,6 @@
 # Lint, TypeScript, and JS bundle export for iOS + Android (Metro).
+# Lint runs once at repo root (Biome). typecheck + export:native fan out to every
+# workspace under apps/* that defines those scripts — see package.json "workspaces".
 # See docs/ci-required-checks.md for branch protection and what this proves.
 
 name: CI
@@ -17,7 +19,7 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4

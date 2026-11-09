@@ -1,5 +1,6 @@
+import { PlatformPressable } from "@react-navigation/elements";
 import { Tabs } from "expo-router";
-import React from "react";
+import type { ComponentProps } from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
@@ -19,7 +20,9 @@ export default function TabLayout() {
           borderTopColor: colorScheme === "dark" ? "#4a3d54" : "#c5c0cc",
         },
         headerShown: false,
-        tabBarButton: HapticTab,
+        tabBarButton: (props) => (
+          <HapticTab {...(props as ComponentProps<typeof PlatformPressable>)} />
+        ),
       }}
     >
       <Tabs.Screen

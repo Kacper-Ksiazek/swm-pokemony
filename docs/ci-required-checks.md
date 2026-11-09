@@ -2,11 +2,13 @@
 
 ## What runs on every PR
 
-The workflow [.github/workflows/ci.yml](../.github/workflows/ci.yml) runs on `ubuntu-latest` with a **10-minute** job timeout. **Bun** is pinned to a fixed version in the workflow file (not `latest`) so CI does not pick up breaking Bun releases unexpectedly.
+The workflow [.github/workflows/ci.yml](../.github/workflows/ci.yml) runs on `ubuntu-latest` with a **15-minute** job timeout. **Bun** is pinned to a fixed version in the workflow file (not `latest`) so CI does not pick up breaking Bun releases unexpectedly.
 
-1. **Lint** — `bun run lint` (Biome).
-2. **Typecheck** — `bun run typecheck` (`tsc --noEmit`).
-3. **Native JS bundle** — `bun run export:native` (`expo export -p ios -p android`).
+1. **Lint** — `bun run lint` (Biome, whole repo).
+2. **Typecheck** — `bun run typecheck` runs `tsc --noEmit` in **each** package under `apps/*` that defines a `typecheck` script (`bun run --filter './apps/*' typecheck`).
+3. **Native JS bundle** — `bun run export:native` runs `expo export -p ios -p android` in **each** such app the same way.
+
+Adding a new app: create `apps/<id>/` with `typecheck` and `export:native` in its `package.json`; root scripts pick it up automatically. Lint stays at the repo root only.
 
 Step 3 does **not** produce full `.ipa` / `.apk` files. It runs Metro and proves the JavaScript bundle compiles for **iOS and Android** targets. That is the usual “does the app still build at the JS layer?” check in CI without macOS runners or Android SDK setup.
 

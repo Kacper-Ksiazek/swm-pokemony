@@ -46,16 +46,20 @@ A hobby training app that talks to [PokeAPI](https://pokeapi.co) and grows throu
 
 ## Development
 
-Apps live under **`apps/`**. The first project is [`apps/01-rn-basics/`](apps/01-rn-basics/).
+Apps live under **`apps/`**:
+
+- [`apps/01-rn-basics/`](apps/01-rn-basics/) — Pokédex-style client (Expo SDK 58)
+- [`apps/02-rn-perf/`](apps/02-rn-perf/) — performance workshop feed (Expo SDK 58)
 
 ```bash
 bun install
 bun run start          # Expo dev server (01-rn-basics)
+bun run start:02       # Expo dev server (02-rn-perf)
 bun run ios            # development build when native modules are needed
-bun run lint && bun run typecheck
+bun run lint && bun run typecheck && bun run export:native
 ```
 
-You can also `cd apps/01-rn-basics` and run `bun run start` from there.
+`typecheck` and `export:native` run for **every** workspace app that defines those scripts. You can also `cd apps/<id>` and run app scripts directly.
 
 - **CI:** lint, TypeScript, and `expo export` for iOS + Android — [docs/ci-required-checks.md](docs/ci-required-checks.md)
 - **AI / process rules:** [docs/ai-coding-rules/](docs/ai-coding-rules/) and [project brief](docs/ai-coding-rules/concept/project-brief.md)

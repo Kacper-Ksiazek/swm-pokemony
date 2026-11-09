@@ -1,17 +1,16 @@
 {
   "expo": {
-    "name": "App.js 2026 Performance Workshop",
-    "slug": "appjs-performance-workshop",
+    "name": "02 RN Perf Workshop",
+    "slug": "02-rn-perf",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo_appjs.png",
-    "scheme": "appjsperformanceworkshop",
+    "scheme": "rnperf02",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.staszekscp.appjs-performance-workshop",
-      "appleTeamId": "Z24A5V6FXQ"
+      "bundleIdentifier": "com.anonymous.rn-perf-workshop"
     },
     "android": {
       "adaptiveIcon": {
@@ -22,7 +21,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.staszekscp.appjsperformanceworkshop"
+      "package": "com.anonymous.rnperfworkshop"
     },
     "web": {
       "output": "static",
