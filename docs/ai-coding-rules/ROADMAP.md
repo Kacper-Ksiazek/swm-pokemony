@@ -4,6 +4,11 @@ Living snapshot of what agents should know about this repo. Categories below are
 
 Output root: `docs/ai-coding-rules/`. One directory per category, one file per rule. Rules are English.
 
+## Repo layout
+
+- Learning apps: `apps/<id>/` (first app: `apps/01-rn-basics/`).
+- Shared docs, CI, and Biome at the repo root. README showcase screenshots: `docs/readme-assets/<id>/`.
+
 ## Stack
 
 - Expo SDK 58, Expo Router, React Native 0.88, React 19, TypeScript strict
