@@ -15,8 +15,10 @@ Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
 ```bash
 bun install                 # repo root (Bun workspaces)
 bun run lint                # Biome from root
-bun run typecheck           # all workspace apps
+bun run typecheck           # tsc in every apps/* package that defines it
+bun run export:native       # Metro export for every apps/* package that defines it
 bun run start               # Expo for 01-rn-basics
+bun run start:02            # Expo for 02-rn-perf
 
 cd apps/01-rn-basics && bunx expo install <package>  # SDK-compatible versions
 cd apps/01-rn-basics && bunx expo-doctor

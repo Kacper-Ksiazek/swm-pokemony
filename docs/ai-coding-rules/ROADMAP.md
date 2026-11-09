@@ -6,7 +6,7 @@ Output root: `docs/ai-coding-rules/`. One directory per category, one file per r
 
 ## Repo layout
 
-- Learning apps: `apps/<id>/` (first app: `apps/01-rn-basics/`).
+- Learning apps: `apps/<id>/` (`apps/01-rn-basics/`, `apps/02-rn-perf/` performance workshop).
 - Shared docs, CI, and Biome at the repo root. README showcase screenshots: `docs/readme-assets/<id>/`.
 
 ## Stack

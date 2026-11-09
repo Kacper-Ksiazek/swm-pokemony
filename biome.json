@@ -7,7 +7,13 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!!apps/**/assets", "!!docs", "!!apps/**/src/data/db/migrations"]
+    "includes": [
+      "**",
+      "!!apps/**/assets",
+      "!!apps/**/slides",
+      "!!docs",
+      "!!apps/**/src/data/db/migrations"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -54,7 +60,7 @@
             "noReactNativeRawText": {
               "level": "error",
               "options": {
-                "skip": ["NativeTabs.Trigger.Label", "Stack.Title"]
+                "skip": ["NativeTabs.Trigger.Label", "Stack.Title", "ThemedText"]
               }
             }
           }
