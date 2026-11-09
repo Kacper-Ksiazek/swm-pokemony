@@ -25,6 +25,12 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## App icon
+
+The iOS and Android home-screen icon is the trainer illustration in `assets/images/icon.png` (1024×1024). `app.json` points the shared `icon` at that file. iOS uses it directly. Android uses the same image as `android.adaptiveIcon.foregroundImage` (`assets/images/android-icon-foreground.png`).
+
+Expo Go does not show this icon. It appears after a development or store build. The web favicon is a separate file and is not this illustration.
+
 ## Get a fresh project
 
 When you're ready, run:
@@ -39,6 +45,7 @@ This command will move the starter code to the **example** directory and create 
 
 - This project uses [Biome](https://biomejs.dev/) for linting and formatting. Run `bun run lint` (or `bun run lint:fix`).
 - **CI:** Pull requests run lint, TypeScript (`bun run typecheck`), and a native JS bundle step (`bun run export:native`). To require green CI before merge on GitHub, see [docs/ci-required-checks.md](docs/ci-required-checks.md).
+- **Cursor code-review automation** (Glass / PR bot setup notes): [docs/cursor-automation-code-review.md](docs/cursor-automation-code-review.md).
 - If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
 - Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
 

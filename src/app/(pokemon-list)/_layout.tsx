@@ -12,7 +12,13 @@ export const unstable_settings = {
 export default function PokemonListLayout() {
   return (
     <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "Pokémon",
+          headerLargeTitle: true,
+        }}
+      />
       <Stack.Screen
         name="pokemon/[id]"
         options={({ route }) => ({

@@ -1,4 +1,6 @@
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
+
+import { Button } from "@/shared/components/button";
 
 import { statusScreenStyles } from "./status-screen.styles";
 
@@ -7,6 +9,8 @@ type ErrorStatusScreenProps = {
   message: string;
   onRetry: () => void;
   retryLabel?: string;
+  detail?: string;
+  compact?: boolean;
 };
 
 export function ErrorStatusScreen({
@@ -14,14 +18,17 @@ export function ErrorStatusScreen({
   message,
   onRetry,
   retryLabel = "Try again",
+  detail,
+  compact = false,
 }: ErrorStatusScreenProps) {
   return (
-    <View style={statusScreenStyles.centered}>
+    <View style={[statusScreenStyles.centered, compact && statusScreenStyles.compact]}>
       <Text style={statusScreenStyles.errorTitle}>{title}</Text>
       <Text style={statusScreenStyles.helperText}>{message}</Text>
-      <Pressable style={statusScreenStyles.retryButton} onPress={onRetry}>
-        <Text style={statusScreenStyles.retryLabel}>{retryLabel}</Text>
-      </Pressable>
+      {detail != null && detail.length > 0 ? (
+        <Text style={statusScreenStyles.devDetail}>{detail}</Text>
+      ) : null}
+      <Button label={retryLabel} onPress={onRetry} />
     </View>
   );
 }

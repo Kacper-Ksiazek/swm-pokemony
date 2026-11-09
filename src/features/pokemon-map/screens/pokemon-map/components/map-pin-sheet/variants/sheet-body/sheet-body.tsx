@@ -1,6 +1,8 @@
 import type { ReactElement } from "react";
 import { StyleSheet, View } from "react-native";
 
+import { COLORS } from "@/shared/styles/colors";
+
 type SheetBodyProps = {
   children: ReactElement;
 };
@@ -12,6 +14,6 @@ export function SheetBody({ children }: SheetBodyProps) {
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: COLORS.BACKGROUND,
   },
 });

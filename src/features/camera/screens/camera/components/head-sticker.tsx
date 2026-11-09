@@ -1,6 +1,12 @@
 import { Image } from "expo-image";
 import { StyleSheet } from "react-native";
-import Animated, { type SharedValue, useAnimatedStyle } from "react-native-reanimated";
+import Animated, {
+  type SharedValue,
+  useAnimatedReaction,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 import type { HeadStickerFrame } from "../sticker-frame.types";
 
@@ -12,6 +18,23 @@ type HeadStickerProps = {
 };
 
 export function HeadSticker({ uri, frame, previewWidth, previewHeight }: HeadStickerProps) {
+  const intro = useSharedValue(0);
+
+  useAnimatedReaction(
+    () => frame.get() != null,
+    (visible, previous) => {
+      if (visible && previous !== true) {
+        intro.set(0);
+        intro.set(withSpring(1, { damping: 14, stiffness: 220 }));
+        return;
+      }
+
+      if (!visible) {
+        intro.set(0);
+      }
+    },
+  );
+
   const animatedStyle = useAnimatedStyle(() => {
     const current = frame.get();
     const width = previewWidth.get();
@@ -21,6 +44,7 @@ export function HeadSticker({ uri, frame, previewWidth, previewHeight }: HeadSti
     }
 
     const size = current.size * width;
+    const scale = 0.6 + 0.4 * intro.get();
 
     return {
       opacity: 1,
@@ -28,6 +52,7 @@ export function HeadSticker({ uri, frame, previewWidth, previewHeight }: HeadSti
       top: current.top * previewHeight.get(),
       width: size,
       height: size,
+      transform: [{ scale }],
     };
   });
 

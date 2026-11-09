@@ -1,14 +1,17 @@
 import { POKEAPI_BASE_URL } from "../constants";
 import type { PokemonDetail } from "../pokemon-api.types";
+import { fetchPokemonSpecies } from "./fetch-pokemon-species";
+import { fetchTypeMatchups } from "./fetch-type-matchups";
 
 type PokemonDetailResponse = {
   id: number;
   name: string;
   height: number;
   weight: number;
-  types: Array<{ slot: number; type: { name: string } }>;
-  abilities: Array<{ is_hidden: boolean; ability: { name: string } }>;
-  stats: Array<{ base_stat: number; stat: { name: string } }>;
+  species: { url: string };
+  types: { slot: number; type: { name: string } }[];
+  abilities: { is_hidden: boolean; ability: { name: string } }[];
+  stats: { base_stat: number; stat: { name: string } }[];
 };
 
 export async function fetchPokemonDetail(id: number): Promise<PokemonDetail> {
@@ -19,6 +22,12 @@ export async function fetchPokemonDetail(id: number): Promise<PokemonDetail> {
   }
 
   const data = (await response.json()) as PokemonDetailResponse;
+  const typeNames = data.types.map((entry) => entry.type.name);
+
+  const [species, typeMatchups] = await Promise.allSettled([
+    fetchPokemonSpecies(data.species.url),
+    fetchTypeMatchups(typeNames),
+  ]);
 
   return {
     id: data.id,
@@ -37,5 +46,7 @@ export async function fetchPokemonDetail(id: number): Promise<PokemonDetail> {
       name: entry.stat.name,
       baseStat: entry.base_stat,
     })),
+    species: species.status === "fulfilled" ? species.value : null,
+    typeMatchups: typeMatchups.status === "fulfilled" ? typeMatchups.value : null,
   };
 }

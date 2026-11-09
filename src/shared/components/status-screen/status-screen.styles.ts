@@ -1,37 +1,36 @@
 import { StyleSheet } from "react-native";
 
+import { COLORS, SPACING, TYPE_SIZE } from "@/shared/styles/colors";
+
 export const statusScreenStyles = StyleSheet.create({
   centered: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 24,
-    backgroundColor: "#ffffff",
+    paddingHorizontal: SPACING.xl,
+    backgroundColor: COLORS.BACKGROUND,
+    gap: SPACING.md,
   },
   helperText: {
-    marginTop: 12,
     fontSize: 15,
-    color: "#666666",
+    color: COLORS.TEXT_MUTED,
     textAlign: "center",
   },
   errorTitle: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#111111",
+    color: COLORS.TEXT,
     textAlign: "center",
   },
-  retryButton: {
-    marginTop: 16,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-    backgroundColor: "#e3350d",
+  devDetail: {
+    fontSize: TYPE_SIZE.caption,
+    color: COLORS.TEXT_MUTED,
+    textAlign: "center",
   },
-  retryLabel: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: "#ffffff",
+  compact: {
+    flex: 0,
+    paddingVertical: SPACING.xl,
   },
 });
 
-export const defaultStatusAccentColor = "#e3350d";
+export const defaultStatusAccentColor = COLORS.PRIMARY;
