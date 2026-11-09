@@ -1,7 +1,7 @@
 import * as Clipboard from "expo-clipboard";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
-import { useContext, useState } from "react";
+import { memo, useContext, useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -36,14 +36,14 @@ interface MenuOption {
   destructive?: boolean;
 }
 
-export const PostOptionsMenu = ({
+export const PostOptionsMenu = memo(function PostOptionsMenu({
   visible,
   onClose,
   postId,
   username,
   onHidePost,
   anchorPosition,
-}: PostOptionsMenuProps) => {
+}: PostOptionsMenuProps) {
   const colors = useContext(ColorsContext);
   const router = useRouter();
   const [isReported, setIsReported] = useState(false);
@@ -158,7 +158,7 @@ export const PostOptionsMenu = ({
       </Pressable>
     </Modal>
   );
-};
+});
 
 const styles = StyleSheet.create({
   backdrop: {
