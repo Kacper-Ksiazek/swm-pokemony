@@ -71,7 +71,7 @@ export const PostHeader = ({
 
       <PostOptionsMenu
         visible={showOptionsMenu}
-        onClose={() => setShowOptionsMenu(false)}
+        setVisible={setShowOptionsMenu}
         postId={postId}
         username={username}
         onHidePost={onHidePost}

@@ -1,12 +1,11 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Colors } from "@/constants/theme";
+import { ColorsContext } from "@/context/colors-context";
 import { MOCK_FEED } from "@/data/mock-feed";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 
 interface SuggestedUser {
   username: string;
@@ -87,13 +86,12 @@ function generateFullName(username: string): string {
 
 function SuggestedUserCard({
   user,
-  colors,
   onProfilePress,
 }: {
   user: SuggestedUser;
-  colors: typeof Colors.light;
   onProfilePress: () => void;
 }) {
+  const colors = useContext(ColorsContext);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
 
@@ -198,8 +196,7 @@ function SuggestedUserCard({
 
 export default function SuggestionsScreen() {
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
+  const colors = useContext(ColorsContext);
   const insets = useSafeAreaInsets();
 
   const [users] = useState<SuggestedUser[]>(generateSuggestedUsers());
@@ -235,7 +232,6 @@ export default function SuggestionsScreen() {
         renderItem={({ item }) => (
           <SuggestedUserCard
             user={item}
-            colors={colors}
             onProfilePress={() => router.push(`/profile/${item.username}`)}
           />
         )}

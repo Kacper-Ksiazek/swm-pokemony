@@ -1,7 +1,7 @@
 import * as Clipboard from "expo-clipboard";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
-import { memo, useContext, useState } from "react";
+import { type Dispatch, memo, type SetStateAction, useContext, useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -20,7 +20,7 @@ const POPOVER_WIDTH = 220;
 
 interface PostOptionsMenuProps {
   visible: boolean;
-  onClose: () => void;
+  setVisible: Dispatch<SetStateAction<boolean>>;
   postId: string;
   username: string;
   onHidePost?: () => void;
@@ -38,7 +38,7 @@ interface MenuOption {
 
 export const PostOptionsMenu = memo(function PostOptionsMenu({
   visible,
-  onClose,
+  setVisible,
   postId,
   username,
   onHidePost,
@@ -48,9 +48,14 @@ export const PostOptionsMenu = memo(function PostOptionsMenu({
   const router = useRouter();
   const [isReported, setIsReported] = useState(false);
 
+  function onClose() {
+    setVisible(false);
+  }
+
   const handleCopyLink = async () => {
     await Clipboard.setStringAsync(`https://example.com/post/${postId}`);
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
     Alert.alert("Link Copied", "Post link has been copied to clipboard");
     onClose();
   };
@@ -64,12 +69,14 @@ export const PostOptionsMenu = memo(function PostOptionsMenu({
     } catch {
       // User cancelled
     }
+
     onClose();
   };
 
   const handleReport = () => {
     setIsReported(true);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+
     Alert.alert("Post Reported", "Thank you for your feedback. We will review this post.", [
       { text: "OK", onPress: onClose },
     ]);

@@ -1,16 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { FeedHeader } from "@/components/feed/feed-header";
 import { FeedList } from "@/components/feed/feed-list";
-import { Colors } from "@/constants/theme";
+
 import { ColorsContext } from "@/context/colors-context";
 import { type FeedListItem, MOCK_FEED, toSlimFeed } from "@/data/mock-feed";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 
 const HomeScreen = () => {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
+  const colors = useContext(ColorsContext);
 
   const [feedData, setFeedData] = useState<FeedListItem[]>(toSlimFeed(MOCK_FEED));
 
@@ -28,12 +26,10 @@ const HomeScreen = () => {
   };
 
   return (
-    <ColorsContext.Provider value={colors}>
-      <View style={[styles.container, { backgroundColor: colors.cardBackground }]}>
-        <FeedHeader />
-        <FeedList data={feedData} onLike={handleLike} />
-      </View>
-    </ColorsContext.Provider>
+    <View style={[styles.container, { backgroundColor: colors.cardBackground }]}>
+      <FeedHeader />
+      <FeedList data={feedData} onLike={handleLike} />
+    </View>
   );
 };
 

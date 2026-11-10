@@ -1,12 +1,11 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Colors } from "@/constants/theme";
+import { ColorsContext } from "@/context/colors-context";
 import { MOCK_FEED } from "@/data/mock-feed";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 
 interface UserItem {
   username: string;
@@ -99,15 +98,8 @@ function generateFullName(username: string): string {
   return `${firstNames[hash % firstNames.length]} ${lastNames[(hash * 7) % lastNames.length]}`;
 }
 
-function UserRow({
-  user,
-  colors,
-  onPress,
-}: {
-  user: UserItem;
-  colors: typeof Colors.light;
-  onPress: () => void;
-}) {
+function UserRow({ user, onPress }: { user: UserItem; onPress: () => void }) {
+  const colors = useContext(ColorsContext);
   const [isFollowing, setIsFollowing] = useState(user.isFollowing);
 
   return (
@@ -172,8 +164,7 @@ export default function FollowersScreen() {
     type: "followers" | "following";
   }>();
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
+  const colors = useContext(ColorsContext);
   const insets = useSafeAreaInsets();
 
   const [users, setUsers] = useState<UserItem[]>([]);
@@ -264,11 +255,7 @@ export default function FollowersScreen() {
         data={users}
         keyExtractor={(item) => item.username}
         renderItem={({ item }) => (
-          <UserRow
-            user={item}
-            colors={colors}
-            onPress={() => router.push(`/profile/${item.username}`)}
-          />
+          <UserRow user={item} onPress={() => router.push(`/profile/${item.username}`)} />
         )}
         contentContainerStyle={{ paddingBottom: insets.bottom }}
       />

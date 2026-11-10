@@ -46,15 +46,11 @@ export function PostDetailEngagement({
     <>
       <View style={styles.actionsRow}>
         <View style={styles.actionsLeading}>
-          <LikeButton isLiked={isLiked} colors={colors} onPress={handleLike} />
-          <ShareButton
-            postId={postId}
-            username={username}
-            colors={colors}
-            onShareComplete={handleShareComplete}
-          />
+          <LikeButton isLiked={isLiked} onPress={handleLike} />
+          <ShareButton postId={postId} username={username} onShareComplete={handleShareComplete} />
         </View>
-        <BookmarkButton initialIsBookmarked={initialIsBookmarked} colors={colors} />
+
+        <BookmarkButton initialIsBookmarked={initialIsBookmarked} />
       </View>
 
       <View style={styles.statsRow}>

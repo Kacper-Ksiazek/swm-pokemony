@@ -76,7 +76,7 @@ export const PostDetailHeader = ({
 
       <PostOptionsMenu
         visible={showOptionsMenu}
-        onClose={() => setShowOptionsMenu(false)}
+        setVisible={setShowOptionsMenu}
         postId={post.id}
         username={post.user.username}
         anchorPosition={menuAnchor}
