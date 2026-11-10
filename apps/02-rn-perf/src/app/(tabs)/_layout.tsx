@@ -1,4 +1,4 @@
-import { PlatformPressable } from "@react-navigation/elements";
+import type { PlatformPressable } from "@react-navigation/elements";
 import { Tabs } from "expo-router";
 import type { ComponentProps } from "react";
 

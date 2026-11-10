@@ -1,16 +1,11 @@
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { TouchableOpacity } from "react-native";
 
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import type { Colors } from "@/constants/theme";
+import { ColorsContext } from "@/context/colors-context";
 
-export function BookmarkButton({
-  initialIsBookmarked,
-  colors,
-}: {
-  initialIsBookmarked: boolean;
-  colors: typeof Colors.light;
-}) {
+export function BookmarkButton({ initialIsBookmarked }: { initialIsBookmarked: boolean }) {
+  const colors = useContext(ColorsContext);
   const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
 
   const handleBookmark = useCallback(() => {

@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { ColorsContext } from "@/context/colors-context";
@@ -9,7 +9,7 @@ export const TagList = ({ tags }: { tags: string[] }) => {
   const colors = useContext(ColorsContext);
   const router = useRouter();
 
-  const formattedTags = formatTags(tags);
+  const formattedTags = useMemo(() => formatTags(tags), [tags]);
 
   if (formattedTags.length === 0) return null;
 

@@ -1,8 +1,8 @@
 import { useRouter } from "expo-router";
 import { useContext, useState } from "react";
 import { type GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { VerifiedIcon } from "@/components/feed/icons/verified-icon";
-import { ImageWithShimmer } from "@/components/feed/shimmer/image-with-shimmer";
+import { displaySource, FeedImage } from "@/components/feed/feed-image";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 import { ColorsContext } from "@/context/colors-context";
 import { PostOptionsMenu } from "./post-options-menu";
 
@@ -44,7 +44,7 @@ export const PostHeader = ({
           onPress={() => router.push(`/profile/${username}`)}
         >
           <View style={styles.avatarClip}>
-            <ImageWithShimmer source={{ uri: avatar }} style={styles.avatar} />
+            <FeedImage source={displaySource(avatar, 32, 32)} style={styles.avatar} />
             <View style={styles.avatarOverlay} />
           </View>
 
@@ -53,11 +53,11 @@ export const PostHeader = ({
               <Text style={{ fontWeight: "600", fontSize: 14, color: colors.text }}>
                 {username}
               </Text>
-              {isVerified && <VerifiedIcon size={14} color="#3d2847" />}
+              {isVerified && <IconSymbol name="checkmark.seal.fill" size={14} color="#3d2847" />}
             </View>
             <TouchableOpacity onPress={openLocation}>
               <View style={styles.locationRow}>
-                <View style={[styles.locationDot, { backgroundColor: colors.tint + "50" }]} />
+                <IconSymbol name="mappin" size={11} color={colors.icon} />
                 <Text style={{ fontSize: 11, color: colors.icon }}>{locationName}</Text>
               </View>
             </TouchableOpacity>
@@ -65,13 +65,13 @@ export const PostHeader = ({
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handleMenuPress}>
-          <Text style={{ fontSize: 16, fontWeight: "bold", color: colors.text }}>•••</Text>
+          <IconSymbol name="ellipsis" size={18} color={colors.text} />
         </TouchableOpacity>
       </View>
 
       <PostOptionsMenu
         visible={showOptionsMenu}
-        onClose={() => setShowOptionsMenu(false)}
+        setVisible={setShowOptionsMenu}
         postId={postId}
         username={username}
         onHidePost={onHidePost}
@@ -123,10 +123,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-  },
-  locationDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
   },
 });

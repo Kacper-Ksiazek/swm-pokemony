@@ -1,16 +1,20 @@
-import { useRef, useState } from "react";
-import {
-  FlatList,
-  type LayoutChangeEvent,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Activity, useCallback, useMemo } from "react";
+import { type LayoutChangeEvent, StyleSheet, View } from "react-native";
+import Animated, {
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 
-import { FeedItem } from "@/components/feed/feed-item";
-import { SuggestedPostsSection } from "@/components/feed/suggestions/suggested-posts-section";
+import { FeedListFooter } from "@/components/feed/feed-list-footer";
+import { FeedListRow } from "@/components/feed/feed-list-row";
 import type { FeedListItem } from "@/data/mock-feed";
+import { useDeferredMountActivityProps } from "@/hooks/use-deferred-mount-activity-props";
+
+/** ~1 heavy post per viewport; values are VirtualizedList multiples of viewport height. */
+const FEED_LIST_WINDOW_SIZE = 5;
+const FEED_LIST_MAX_TO_RENDER_PER_BATCH = 2;
+const FEED_LIST_INITIAL_NUM_TO_RENDER = 2;
 
 export const FeedList = ({
   data,
@@ -19,48 +23,67 @@ export const FeedList = ({
   data: FeedListItem[];
   onLike: (id: string) => void;
 }) => {
-  const contentHeight = useRef(0);
-  const layoutHeight = useRef(0);
-  const [progress, setProgress] = useState(0);
+  const contentHeight = useSharedValue(0);
+  const layoutHeight = useSharedValue(0);
+  const trackWidth = useSharedValue(0);
+  const progress = useSharedValue(0);
 
-  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offset = e.nativeEvent.contentOffset.y;
-    const max = Math.max(1, contentHeight.current - layoutHeight.current);
-    const p = Math.min(1, Math.max(0, offset / max));
-    setProgress(p);
-  };
+  const handleScroll = useAnimatedScrollHandler((event) => {
+    const offset = event.contentOffset.y;
+    const max = Math.max(1, contentHeight.get() - layoutHeight.get());
+    progress.set(Math.min(1, Math.max(0, offset / max)));
+  });
+
+  const fillStyle = useAnimatedStyle(() => ({
+    width: trackWidth.get() * progress.get(),
+  }));
 
   const handleContentSizeChange = (_w: number, h: number) => {
-    contentHeight.current = h;
+    contentHeight.set(h);
   };
 
-  const handleLayout = (e: LayoutChangeEvent) => {
-    layoutHeight.current = e.nativeEvent.layout.height;
+  const handleLayout = (event: LayoutChangeEvent) => {
+    layoutHeight.set(event.nativeEvent.layout.height);
   };
+
+  const handleTrackLayout = (event: LayoutChangeEvent) => {
+    trackWidth.set(event.nativeEvent.layout.width);
+  };
+
+  const footerActivityProps = useDeferredMountActivityProps();
+
+  const listFooter = useMemo(() => {
+    if (footerActivityProps === null) return undefined;
+
+    return (
+      <Activity {...footerActivityProps}>
+        <FeedListFooter data={data} />
+      </Activity>
+    );
+  }, [data, footerActivityProps]);
+
+  const renderItem = useCallback(
+    ({ item }: { item: FeedListItem }) => <FeedListRow item={item} onLike={onLike} />,
+    [onLike],
+  );
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.progressTrack}>
-        <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
+      <View style={styles.progressTrack} onLayout={handleTrackLayout}>
+        <Animated.View style={[styles.progressFill, fillStyle]} />
       </View>
-      <FlatList
+
+      <Animated.FlatList
         data={data}
-        renderItem={({ item }) =>
-          item.type === "suggestions" ? (
-            <SuggestedPostsSection posts={item.posts} />
-          ) : (
-            <FeedItem item={item} onLike={onLike} />
-          )
-        }
-        keyExtractor={(_item, index) => String(index)}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        ListFooterComponent={listFooter}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
-        windowSize={21}
-        maxToRenderPerBatch={10}
-        initialNumToRender={5}
-        removeClippedSubviews={false}
+        windowSize={FEED_LIST_WINDOW_SIZE}
+        maxToRenderPerBatch={FEED_LIST_MAX_TO_RENDER_PER_BATCH}
+        initialNumToRender={FEED_LIST_INITIAL_NUM_TO_RENDER}
         onScroll={handleScroll}
-        scrollEventThrottle={16}
         onContentSizeChange={handleContentSizeChange}
         onLayout={handleLayout}
       />

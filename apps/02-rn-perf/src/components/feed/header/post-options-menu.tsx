@@ -1,7 +1,7 @@
 import * as Clipboard from "expo-clipboard";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
-import { useContext, useState } from "react";
+import { type Dispatch, memo, type SetStateAction, useContext, useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -12,7 +12,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { MenuIcon } from "@/components/feed/icons/menu-icon";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 import { ColorsContext } from "@/context/colors-context";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -20,14 +20,23 @@ const POPOVER_WIDTH = 220;
 
 interface PostOptionsMenuProps {
   visible: boolean;
-  onClose: () => void;
+  setVisible: Dispatch<SetStateAction<boolean>>;
   postId: string;
   username: string;
   onHidePost?: () => void;
   anchorPosition?: { x: number; y: number };
 }
 
-type MenuIconName = "bell" | "link" | "share" | "person" | "eye-slash" | "flag";
+const MENU_SYMBOLS = {
+  bell: "bell",
+  link: "link",
+  share: "square.and.arrow.up",
+  person: "person",
+  "eye-slash": "eye.slash",
+  flag: "flag",
+} as const;
+
+type MenuIconName = keyof typeof MENU_SYMBOLS;
 
 interface MenuOption {
   icon: MenuIconName;
@@ -36,21 +45,26 @@ interface MenuOption {
   destructive?: boolean;
 }
 
-export const PostOptionsMenu = ({
+export const PostOptionsMenu = memo(function PostOptionsMenu({
   visible,
-  onClose,
+  setVisible,
   postId,
   username,
   onHidePost,
   anchorPosition,
-}: PostOptionsMenuProps) => {
+}: PostOptionsMenuProps) {
   const colors = useContext(ColorsContext);
   const router = useRouter();
   const [isReported, setIsReported] = useState(false);
 
+  function onClose() {
+    setVisible(false);
+  }
+
   const handleCopyLink = async () => {
     await Clipboard.setStringAsync(`https://example.com/post/${postId}`);
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
     Alert.alert("Link Copied", "Post link has been copied to clipboard");
     onClose();
   };
@@ -64,12 +78,14 @@ export const PostOptionsMenu = ({
     } catch {
       // User cancelled
     }
+
     onClose();
   };
 
   const handleReport = () => {
     setIsReported(true);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+
     Alert.alert("Post Reported", "Thank you for your feedback. We will review this post.", [
       { text: "OK", onPress: onClose },
     ]);
@@ -142,8 +158,8 @@ export const PostOptionsMenu = ({
                 },
               ]}
             >
-              <MenuIcon
-                name={option.icon}
+              <IconSymbol
+                name={MENU_SYMBOLS[option.icon]}
                 size={18}
                 color={option.destructive ? "#FF6B6B" : colors.text}
               />
@@ -158,7 +174,7 @@ export const PostOptionsMenu = ({
       </Pressable>
     </Modal>
   );
-};
+});
 
 const styles = StyleSheet.create({
   backdrop: {

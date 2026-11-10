@@ -1,24 +1,24 @@
-import { useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { useContext, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 
+import { displaySource, FeedImage } from "@/components/feed/feed-image";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import type { Colors } from "@/constants/theme";
+import { ColorsContext } from "@/context/colors-context";
 import type { FeedComment } from "@/data/mock-feed";
 import { formatRelativeTime } from "@/utils/feed-utils";
 
 export const CommentItem = ({
   comment,
-  colors,
   onReply,
   onProfilePress,
   isReply = false,
 }: {
   comment: FeedComment;
-  colors: typeof Colors.light;
   onReply: (commentId: string, username: string) => void;
   onProfilePress: (username: string) => void;
   isReply?: boolean;
 }) => {
+  const colors = useContext(ColorsContext);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(comment.likes);
   const [showReplies, setShowReplies] = useState(false);
@@ -39,8 +39,8 @@ export const CommentItem = ({
         }}
       >
         <TouchableOpacity onPress={() => onProfilePress(comment.username)}>
-          <Image
-            source={{ uri: comment.avatar }}
+          <FeedImage
+            source={displaySource(comment.avatar, isReply ? 28 : 36, isReply ? 28 : 36)}
             style={{
               width: isReply ? 28 : 36,
               height: isReply ? 28 : 36,
@@ -120,7 +120,6 @@ export const CommentItem = ({
           <CommentItem
             key={reply.id}
             comment={reply}
-            colors={colors}
             onReply={onReply}
             onProfilePress={onProfilePress}
             isReply

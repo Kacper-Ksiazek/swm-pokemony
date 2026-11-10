@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useContext, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { ImageWithShimmer } from "@/components/feed/shimmer/image-with-shimmer";
+import { displaySource, FeedImage } from "@/components/feed/feed-image";
 import { ColorsContext } from "@/context/colors-context";
 import type { SuggestedPost } from "@/data/mock-feed";
 
@@ -23,11 +23,11 @@ export const SuggestedPostCard = ({ post }: { post: SuggestedPost }) => {
       style={[styles.card, { borderColor: colors.border, backgroundColor: colors.cardBackground }]}
     >
       <TouchableOpacity onPress={openPost}>
-        <ImageWithShimmer source={{ uri: post.image }} style={styles.image} resizeMode="cover" />
+        <FeedImage source={displaySource(post.image, 160, 160)} style={styles.image} />
       </TouchableOpacity>
       <View style={styles.info}>
         <TouchableOpacity onPress={openProfile} style={styles.userRow}>
-          <ImageWithShimmer source={{ uri: post.avatar }} style={styles.avatar} />
+          <FeedImage source={displaySource(post.avatar, 20, 20)} style={styles.avatar} />
           <Text numberOfLines={1} style={[styles.username, { color: colors.text }]}>
             {post.username}
           </Text>

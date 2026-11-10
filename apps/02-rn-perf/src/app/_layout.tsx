@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
+import { ColorsProvider } from "@/context/colors-provider";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 // App.js Conference custom themes
@@ -41,23 +42,25 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? AppJSDarkTheme : AppJSLightTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="post/[id]" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="post/comments/[id]"
-          options={{ headerShown: false, presentation: "modal" }}
-        />
-        <Stack.Screen name="profile/[username]" options={{ headerShown: false }} />
-        <Stack.Screen name="hashtag/[tag]" options={{ headerShown: false }} />
-        <Stack.Screen name="location/[name]" options={{ headerShown: false }} />
-        <Stack.Screen name="followers/[username]" options={{ headerShown: false }} />
-        <Stack.Screen name="likes/[postId]" options={{ headerShown: false }} />
-        <Stack.Screen name="suggestions" options={{ headerShown: false }} />
-        <Stack.Screen name="analytics" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal", title: "Modal" }} />
-      </Stack>
-      <StatusBar style="auto" />
+      <ColorsProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="post/[id]" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="post/comments/[id]"
+            options={{ headerShown: false, presentation: "modal" }}
+          />
+          <Stack.Screen name="profile/[username]" options={{ headerShown: false }} />
+          <Stack.Screen name="hashtag/[tag]" options={{ headerShown: false }} />
+          <Stack.Screen name="location/[name]" options={{ headerShown: false }} />
+          <Stack.Screen name="followers/[username]" options={{ headerShown: false }} />
+          <Stack.Screen name="likes/[postId]" options={{ headerShown: false }} />
+          <Stack.Screen name="suggestions" options={{ headerShown: false }} />
+          <Stack.Screen name="analytics" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: "modal", title: "Modal" }} />
+        </Stack>
+        <StatusBar style="auto" />
+      </ColorsProvider>
     </ThemeProvider>
   );
 }

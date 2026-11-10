@@ -1,20 +1,20 @@
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { Share, TouchableOpacity } from "react-native";
 
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import type { Colors } from "@/constants/theme";
+import { ColorsContext } from "@/context/colors-context";
 
 export function ShareButton({
   postId,
   username,
-  colors,
   onShareComplete,
 }: {
   postId: string;
   username: string;
-  colors: typeof Colors.light;
   onShareComplete: () => void;
 }) {
+  const colors = useContext(ColorsContext);
+
   const handleShare = useCallback(async () => {
     try {
       const result = await Share.share({
