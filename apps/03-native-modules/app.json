@@ -8,7 +8,8 @@
     "scheme": "nativemodules03",
     "userInterfaceStyle": "light",
     "ios": {
-      "bundleIdentifier": "com.anonymous.native-modules"
+      "bundleIdentifier": "com.anonymous.native-modules",
+      "requireFullScreen": true
     },
     "android": {
       "adaptiveIcon": {
@@ -36,6 +37,12 @@
           "backgroundColor": "#FFFFFF",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
+        }
+      ],
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
         }
       ]
     ],
