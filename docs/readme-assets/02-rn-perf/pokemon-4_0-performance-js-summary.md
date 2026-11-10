@@ -191,14 +191,3 @@ Rows are heavy (~1 post per viewport), so the window was narrowed deliberately:
 | `windowSize` | 21 | **5** |
 | `maxToRenderPerBatch` | 10 | **2** |
 | `initialNumToRender` | 5 | **2** |
-
----
-
-## Takeaways
-
-1. **Move state down.** Engagement and comment draft state in leaf components removed whole-screen re-renders (73.6 → 2.2 ms, 262.6 → 17.2 ms).
-2. **Let React Compiler do the memoization** on the feed: ~204 → ~51.6 ms with zero manual `memo()`.
-3. **Defer what is not needed for first paint** with `Activity` + `startTransition`: footer and feed hydration no longer block the first frame (197 → 56 ms on Home).
-4. **Draw less per row:** native images with right-sized decode, symbols instead of SVG, no JS-driven shimmer, a smaller list window.
-
-Not covered yet: stable keys / per-row like state / `memo` (Lever 2), and FlashList (`getItemType`, `getMappingKey`, nested carousel).
