@@ -62,14 +62,14 @@ A mock social feed (home, post detail, threaded comments) used to practice **Jav
 
 <br />
 
-| Exercise | What changed | Before → after |
-|----------|--------------|----------------|
-| 1 | Like/bookmark in `PostDetailEngagement` | Whole `./post/[id]` ~74 ms → **2.2 ms** on the control (~33×) |
-| 2 | Split `PostDetailScreen`, isolated `CommentInput`, theme in root layout | `VirtualizedList` commit **262 ms → 17 ms** (~15×) |
-| 2.3 | React Compiler on the feed | Heaviest like commit **~204 ms → ~52 ms** (~4×) |
-| 3 | `Activity` + `startTransition` for related posts | Footer off the first interactive paint |
-| 3.2 | Deferred mock feed hydration + compiler | First Home commit **~197 ms → ~56 ms** (~3.5×) |
-| 4 | `FeedImage` (`expo-image`), `IconSymbol`, tighter `FlatList` window | Less decode/layout work per row (−528 / +91 lines in the measured diff) |
+| Exercise | What changed                                                            | Before → after                                                          |
+| -------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 1        | Like/bookmark in `PostDetailEngagement`                                 | Whole `./post/[id]` ~74 ms → **2.2 ms** on the control (~33×)           |
+| 2        | Split `PostDetailScreen`, isolated `CommentInput`, theme in root layout | `VirtualizedList` commit **262 ms → 17 ms** (~15×)                      |
+| 2.3      | React Compiler on the feed                                              | Heaviest like commit **~204 ms → ~52 ms** (~4×)                         |
+| 3        | `Activity` + `startTransition` for related posts                        | Footer off the first interactive paint                                  |
+| 3.2      | Deferred mock feed hydration + compiler                                 | First Home commit **~197 ms → ~56 ms** (~3.5×)                          |
+| 4        | `FeedImage` (`expo-image`), `IconSymbol`, tighter `FlatList` window     | Less decode/layout work per row (−528 / +91 lines in the measured diff) |
 
 <p align="center">
   <img src="docs/assets/02-rn-perf/exercise-2-3-before.png" width="320" alt="Feed like — profiler before React Compiler" />
