@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Activity, useCallback, useEffect, useRef, useState } from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -19,6 +19,8 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
 import { type FeedComment, type FeedPost, findPostForDetails } from "@/data/mock-feed";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useDeferredMountActivityProps } from "@/hooks/use-deferred-mount-activity-props";
+// import { useDeferredMount } from "@/hooks/use-deferred-mount";
 import { buildMentionSuggestions } from "@/utils/mention-utils";
 import { detectSpam } from "@/utils/spam-detection";
 
@@ -26,6 +28,27 @@ interface ReplyInfo {
   commentId: string;
   username: string;
 }
+
+// --- Lazy + Suspense (comparison) ---
+// import { lazy, Suspense } from "react";
+// import { ActivityIndicator } from "react-native";
+//
+// const LazyPostDetailRelatedPosts = lazy(async () => {
+//   const { PostDetailRelatedPosts } = await import("@/components/feed/post-detail-related-posts");
+//   return { default: PostDetailRelatedPosts };
+// });
+//
+// interface RelatedPostsFooterFallbackProps {
+//   spinnerColor: string;
+// }
+//
+// function RelatedPostsFooterFallback({ spinnerColor }: RelatedPostsFooterFallbackProps) {
+//   return (
+//     <View style={styles.relatedFooterFallback}>
+//       <ActivityIndicator color={spinnerColor} />
+//     </View>
+//   );
+// }
 
 const PostDetailScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -36,6 +59,8 @@ const PostDetailScreen = () => {
   const [post, setPost] = useState<FeedPost | null>(null);
   const [comments, setComments] = useState<FeedComment[]>([]);
   const [replyInfo, setReplyInfo] = useState<ReplyInfo | null>(null);
+  const relatedActivityProps = useDeferredMountActivityProps();
+  // const showRelatedFooter = useDeferredMount();
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? "light"];
 
@@ -173,7 +198,18 @@ const PostDetailScreen = () => {
             </Text>
           </View>
         }
-        ListFooterComponent={<PostDetailRelatedPosts post={post} />}
+        ListFooterComponent={
+          relatedActivityProps === null ? undefined : (
+            <Activity {...relatedActivityProps}>
+              <PostDetailRelatedPosts post={post} />
+            </Activity>
+          )
+          // showRelatedFooter ? (
+          //   <Suspense fallback={<RelatedPostsFooterFallback spinnerColor={colors.icon} />}>
+          //     <LazyPostDetailRelatedPosts post={post} />
+          //   </Suspense>
+          // ) : undefined
+        }
       />
 
       {/* Reply indicator */}
@@ -248,6 +284,12 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 14,
   },
+  // relatedFooterFallback: {
+  //   paddingVertical: 32,
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   minHeight: 120,
+  // },
   replyBar: {
     flexDirection: "row",
     alignItems: "center",

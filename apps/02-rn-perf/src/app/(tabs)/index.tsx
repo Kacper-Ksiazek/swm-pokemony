@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { startTransition, useCallback, useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { FeedHeader } from "@/components/feed/feed-header";
@@ -10,9 +10,15 @@ import { type FeedListItem, MOCK_FEED, toSlimFeed } from "@/data/mock-feed";
 const HomeScreen = () => {
   const colors = useContext(ColorsContext);
 
-  const [feedData, setFeedData] = useState<FeedListItem[]>(toSlimFeed(MOCK_FEED));
+  const [feedData, setFeedData] = useState<FeedListItem[]>([]);
 
-  const handleLike = (id: string) => {
+  useEffect(() => {
+    startTransition(() => {
+      setFeedData(toSlimFeed(MOCK_FEED));
+    });
+  }, []);
+
+  const handleLike = useCallback((id: string) => {
     setFeedData((prev) =>
       prev.map((item) => {
         if (item.type !== "post" || item.id !== id) return item;
@@ -23,7 +29,7 @@ const HomeScreen = () => {
         };
       }),
     );
-  };
+  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.cardBackground }]}>

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { StyleSheet, Text } from "react-native";
 
 import { ColorsContext } from "@/context/colors-context";
@@ -7,7 +7,7 @@ import { formatRelativeTime } from "@/utils/feed-utils";
 export const PostTimestamp = ({ timestamp }: { timestamp: string }) => {
   const colors = useContext(ColorsContext);
 
-  const formattedTime = formatRelativeTime(timestamp);
+  const formattedTime = useMemo(() => formatRelativeTime(timestamp), [timestamp]);
 
   return <Text style={[styles.text, { color: colors.icon }]}>{formattedTime}</Text>;
 };

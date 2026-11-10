@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { HeartIcon } from "@/components/feed/icons/heart-icon";
 import { ImageWithShimmer } from "@/components/feed/shimmer/image-with-shimmer";
@@ -17,7 +17,7 @@ export const CommentPreview = ({ comment, postId }: { comment: FeedComment; post
     setLikeCount(comment.likes);
   }, [comment.likes]);
 
-  const formattedTime = formatRelativeTime(comment.timestamp);
+  const formattedTime = useMemo(() => formatRelativeTime(comment.timestamp), [comment.timestamp]);
 
   const handleReply = () => {
     router.push(`/post/comments/${postId}`);

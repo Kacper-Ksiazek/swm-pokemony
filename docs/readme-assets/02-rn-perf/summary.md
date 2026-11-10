@@ -77,3 +77,99 @@ Włączenie React Compiler w Expo (`experiments.reactCompiler: true` w `apps/02-
 **Wynik (after)**
 
 Ten sam workflow (scroll + like). W DevTools widać **Memo ✨** przy `TagList`, `FeedItem`, `PostHeader`, ikonach itd. — compiler pominął re-render wierszy, których propsy się nie zmieniły. Commit after (~**51.6 ms** renderu dla tego wybranego momentu vs ~**204 ms** before na rankingu) ma krótszy ranked i mniej powtórzeń tych samych komponentów; na osi commitów (143 w sesji) większość pasków to niskie, zielone commity zamiast gęstego żółtego „szumu” przy każdym like.
+
+---
+
+### Exercise 3 — `Activity` + `useTransition` (`PostDetailRelatedPosts`)
+
+**Problem**
+
+Footer `PostDetailRelatedPosts` (`findRelatedPosts`) wchodzi w pierwszy paint ekranu szczegółu. W Performance widać długi **blocking Render** na `PostDetailScreen` i czerwony pasek `PostDetailRelatedPosts` w tym samym oknie co mount listy.
+
+**Workflow**
+
+Wejście na `post/[id]` (Performance tab, CPU / Scheduler / Components).
+
+**Porównanie**
+
+| Podejście | Co robi | Trace |
+|---|---|---|
+| Lazy + `Activity` | `React.lazy` + `Suspense` na footerze | `docs/assets/02-rn-perf/exercise-3-lazy-activity.png` — self time **Render ~379 ms**, obok **Promise Resolved ~217 ms** (ładowanie chunka), `Update Blocked` przed ciężkim renderem, `PostDetailRelatedPosts` nadal na ścieżce CPU |
+| Domyślnie | Footer w `ListFooterComponent` od razu | `docs/assets/02-rn-perf/exercise-3-default.png` — mount `PostDetailScreen` i **czerwony `PostDetailRelatedPosts` w tym samym blocking renderze** co `FlatList` |
+| `Activity` + `startTransition` (`useEffect`) | Hook odkłada mount: pierwszy paint bez footera, potem `hidden`, potem `visible` na priorytecie transition | `docs/assets/02-rn-perf/exercise-3-activity-transition.png` — pierwszy paint krótszy; `PostDetailRelatedPosts` + `Reconnect` schodzą na późniejszy render (~741 ms zaznaczenie CPU), po `Update Blocked` |
+
+**Implementacja (wariant wybrany)**
+
+`apps/02-rn-perf/src/hooks/use-deferred-mount-activity-props.ts`:
+
+```ts
+export function useDeferredMountActivityProps(): ActivityProps | null {
+  const [mode, setMode] = useState<ActivityMode | null>(null);
+
+  useEffect(() => {
+    startTransition(() => {
+      setMode("hidden");
+    });
+  }, []);
+
+  useEffect(() => {
+    if (mode !== "hidden") return;
+
+    startTransition(() => {
+      setMode("visible");
+    });
+  }, [mode]);
+
+  return mode === null ? null : { mode };
+}
+```
+
+W `post/[id].tsx` footer jest `undefined`, dopóki hook zwraca `null`. Potem:
+
+```tsx
+<Activity {...relatedActivityProps}>
+  <PostDetailRelatedPosts post={post} />
+</Activity>
+```
+
+`mode="hidden"` pre-renderuje drzewo poza ekranem (React `Activity` trzyma stan, bez pokazywania), `mode="visible"` je odsłania. Oba `setMode` idą przez `startTransition`, więc nie blokują pierwszego interaktywnego paintu ekranu posta. Warianty lazy/`Suspense` i „zawsze w footerze” zostały w pliku jako zakomentowane porównanie.
+
+---
+
+### Exercise 3.2 — transitions i deferred values (wejście na feed)
+
+**Problem**
+
+Pierwszy render taba Home montował cały widoczny feed synchronicznie: `toSlimFeed(MOCK_FEED)` było w `useState` initializerze, więc jeden commit ciągnął dziesiątki `TagList` / `ActionButtons` / `PostHeader`.
+
+**Implementacja**
+
+- `apps/02-rn-perf/src/app/(tabs)/index.tsx` — lista startuje pusta; hydracja mocka idzie w `useEffect` + `startTransition`, żeby ciężki mount feedu nie blokował pierwszej klatki shella (header, tab bar, `Content`).
+- `ActionButtons` — `useDeferredValue(likes)` zasila `computeEngagementRate`, więc drogie liczenie engagementu może zostać w tyle za tapem like, zamiast wydłużać ten sam commit.
+- React Compiler (`experiments.reactCompiler`, commit `6a1e561`) memoizuje wiersze, których propsy się nie zmieniły.
+
+**Profiler — pierwszy render `Content` (ten sam typ commitu)**
+
+| | Screenshot |
+|---|---|
+| Before | `docs/assets/02-rn-perf/exercise-3-2-before.png` |
+| After | `docs/assets/02-rn-perf/exercise-3-2-after.png` |
+
+| Metryka | Przed | Po |
+|---|---|---|
+| Czas commitu (zaznaczony w prawym panelu) | ~197 ms (2.4 s) | ~56 ms (2.3 s) |
+| `Content` (self-time) | 4.7 ms | 4.5 ms |
+| Drugi commit w okolicy | ~15 ms (2.5 s) | ~14 ms (2.3 s) |
+
+Różnica to ok. **3.5×** krótszy pierwszy ciężki commit (~140 ms mniej). To realny zysk na UX: mniej pracy w jednej klatce przy wejściu na tab.
+
+**Co widać w drzewie**
+
+Przed: w Ranked wiele kopii `TagList`, `ActionButtons`, `PostHeader`, `CommentIcon` — mount całego widocznego feedu wiersz po wierszu.
+
+Po: lista krótsza i płytsza; `FeedList` ze ✨ (React Compiler), mniej powtarzalnych liści w TOP rankingu. Self-time `Content` prawie bez zmian — wygrało poddrzewo (lista + wiersze), nie slot nawigacji.
+
+**Jak to czytać**
+
+- `Content` ~4.5–4.7 ms — szum / ten sam poziom nawigacji; sukcesu fixu nie mierzy się tutaj.
+- Commit ~197 → ~56 ms — tu widać, że odłożenie hydracji feedu (`startTransition`) i compiler na wierszach skracają wejście na listę.

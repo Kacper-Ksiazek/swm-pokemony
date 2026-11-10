@@ -1,3 +1,4 @@
+import { Activity, useCallback, useMemo } from "react";
 import { type LayoutChangeEvent, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
@@ -5,9 +6,10 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import { FeedItem } from "@/components/feed/feed-item";
-import { SuggestedPostsSection } from "@/components/feed/suggestions/suggested-posts-section";
+import { FeedListFooter } from "@/components/feed/feed-list-footer";
+import { FeedListRow } from "@/components/feed/feed-list-row";
 import type { FeedListItem } from "@/data/mock-feed";
+import { useDeferredMountActivityProps } from "@/hooks/use-deferred-mount-activity-props";
 
 export const FeedList = ({
   data,
@@ -43,21 +45,34 @@ export const FeedList = ({
     trackWidth.set(event.nativeEvent.layout.width);
   };
 
+  const footerActivityProps = useDeferredMountActivityProps();
+
+  const listFooter = useMemo(() => {
+    if (footerActivityProps === null) return undefined;
+
+    return (
+      <Activity {...footerActivityProps}>
+        <FeedListFooter data={data} />
+      </Activity>
+    );
+  }, [data, footerActivityProps]);
+
+  const renderItem = useCallback(
+    ({ item }: { item: FeedListItem }) => <FeedListRow item={item} onLike={onLike} />,
+    [onLike],
+  );
+
   return (
     <View style={styles.wrapper}>
       <View style={styles.progressTrack} onLayout={handleTrackLayout}>
         <Animated.View style={[styles.progressFill, fillStyle]} />
       </View>
+
       <Animated.FlatList
         data={data}
-        renderItem={({ item }) =>
-          item.type === "suggestions" ? (
-            <SuggestedPostsSection posts={item.posts} />
-          ) : (
-            <FeedItem item={item} onLike={onLike} />
-          )
-        }
+        renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        ListFooterComponent={listFooter}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
         windowSize={21}
