@@ -8,15 +8,18 @@ Small Expo apps built step by step to learn React Native. Each project gets a sh
 
 A hobby training app that talks to [PokeAPI](https://pokeapi.co) and grows through four native tabs. The list paginates and drills into detail; favorite and map pins persist in SQLite on device. The camera tab uses face detection to stick your favorite Pokémon on screen and save a composed photo.
 
-<h2 align="center">
-  <a href="https://www.youtube.com/shorts/C_FTkzZ7Y3o">
-    <img src="https://img.shields.io/badge/YouTube-Watch_the_demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo on YouTube" />
-  </a>
-</h2>
+<br />
 
-<p align="center">
-  <strong><a href="https://www.youtube.com/shorts/C_FTkzZ7Y3o">▶ youtube.com/shorts/C_FTkzZ7Y3o</a></strong>
-</p>
+<div align="center">
+  <p>
+    <img src="https://img.shields.io/badge/YouTube-Watch_the_demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo on YouTube" />
+  </p>
+  <p>
+    <strong><a href="https://www.youtube.com/shorts/C_FTkzZ7Y3o">▶ youtube.com/shorts/C_FTkzZ7Y3o</a></strong>
+  </p>
+</div>
+
+<br />
 
 <p align="center">
   <img src="docs/readme-assets/01-rn-basics/screenshots/list.png" width="200" alt="List tab" />
@@ -40,27 +43,50 @@ A hobby training app that talks to [PokeAPI](https://pokeapi.co) and grows throu
 - [expo-image](https://docs.expo.dev/versions/latest/sdk/image/) + [react-native-nitro-image](https://github.com/mrousavy/nitro/tree/main/packages/react-native-nitro-image) — fast Pokémon artwork loading
 - [Biome](https://biomejs.dev/) + [Bun](https://bun.sh/) — lint, format, and installs in this repo
 
-<!-- Future apps: copy the block above (heading, 3 sentences, YouTube badge, screenshot row, stack list). -->
-
 ---
 
-## Development
+## `02_rn_perf` — feed performance workshop
 
-Apps live under **`apps/`**:
+A mock social feed (home, post detail, threaded comments) used to practice **JavaScript-side** React Native performance. Each exercise starts from a profiler-visible bottleneck—parent re-renders, blocking first paint, or heavy list rows—and lands a fix you can re-measure on the same workflow in React Native DevTools (Profiler and Performance tabs). Hermes, React 19, Expo SDK 58; frame budget is **16 ms** at 60 fps.
 
-- [`apps/01-rn-basics/`](apps/01-rn-basics/) — Pokédex-style client (Expo SDK 58)
-- [`apps/02-rn-perf/`](apps/02-rn-perf/) — performance workshop feed (Expo SDK 58)
+<br />
 
-```bash
-bun install
-bun run start          # Expo dev server (01-rn-basics)
-bun run start:02       # Expo dev server (02-rn-perf)
-bun run ios            # development build when native modules are needed
-bun run lint && bun run typecheck && bun run export:native
-```
+<div align="center">
+  <p>
+    <img src="https://img.shields.io/badge/Measured_wins-Full_JS_walkthrough-3178C6?style=for-the-badge&logo=react&logoColor=white" alt="Read the full JS performance walkthrough" />
+  </p>
+  <p>
+    <strong><a href="docs/readme-assets/02-rn-perf/pokemon-4_0-performance-js-summary.md">▶ JS performance summary (exercises 1–4)</a></strong>
+  </p>
+</div>
 
-`typecheck` and `export:native` run for **every** workspace app that defines those scripts. You can also `cd apps/<id>` and run app scripts directly.
+<br />
 
-- **CI:** lint, TypeScript, and `expo export` for iOS + Android — [docs/ci-required-checks.md](docs/ci-required-checks.md)
-- **AI / process rules:** [docs/ai-coding-rules/](docs/ai-coding-rules/) and [project brief](docs/ai-coding-rules/concept/project-brief.md)
-- **README screenshots:** add PNGs under [docs/readme-assets/01-rn-basics/screenshots/](docs/readme-assets/01-rn-basics/screenshots/) (see [docs/readme-assets/README.md](docs/readme-assets/README.md))
+| Exercise | What changed | Before → after |
+|----------|--------------|----------------|
+| 1 | Like/bookmark in `PostDetailEngagement` | Whole `./post/[id]` ~74 ms → **2.2 ms** on the control (~33×) |
+| 2 | Split `PostDetailScreen`, isolated `CommentInput`, theme in root layout | `VirtualizedList` commit **262 ms → 17 ms** (~15×) |
+| 2.3 | React Compiler on the feed | Heaviest like commit **~204 ms → ~52 ms** (~4×) |
+| 3 | `Activity` + `startTransition` for related posts | Footer off the first interactive paint |
+| 3.2 | Deferred mock feed hydration + compiler | First Home commit **~197 ms → ~56 ms** (~3.5×) |
+| 4 | `FeedImage` (`expo-image`), `IconSymbol`, tighter `FlatList` window | Less decode/layout work per row (−528 / +91 lines in the measured diff) |
+
+<p align="center">
+  <img src="docs/assets/02-rn-perf/exercise-2-3-before.png" width="320" alt="Feed like — profiler before React Compiler" />
+  <img src="docs/assets/02-rn-perf/exercise-2-3-after.png" width="320" alt="Feed like — profiler after React Compiler" />
+</p>
+<p align="center">
+  <img src="docs/assets/02-rn-perf/exercise-3-2-before.png" width="320" alt="Home first paint — before deferred hydration" />
+  <img src="docs/assets/02-rn-perf/exercise-3-2-after.png" width="320" alt="Home first paint — after deferred hydration" />
+</p>
+
+**Stack highlights**
+
+- [React Compiler](https://react.dev/learn/react-compiler) — `experiments.reactCompiler: true` in Expo; fewer manual `memo()` passes on the feed
+- React 19 — `Activity`, `startTransition`, and `useDeferredValue` for non-blocking updates
+- React Native DevTools — ranked renders and Performance traces as the source of truth for each fix
+- [expo-image](https://docs.expo.dev/versions/latest/sdk/image/) — `FeedImage` + display-sized URLs, blurhash placeholders (shimmer removed)
+- [FlatList](https://reactnative.dev/docs/flatlist) — narrower `windowSize` / batch sizes for heavy post rows
+- `IconSymbol` (SF Symbols / Material) — replaced six hand-rolled SVG icon components
+
+<!-- Future apps: copy a showcase block above (heading, short intro, optional YouTube badge, screenshots or profiler captures, stack list). -->
