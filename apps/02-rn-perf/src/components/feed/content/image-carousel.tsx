@@ -1,18 +1,41 @@
-import { useContext, useState } from "react";
-import {
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
+import { useContext } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+import Animated, {
+  type SharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 
 import { ColorsContext } from "@/context/colors-context";
 import type { FeedImage } from "@/data/mock-feed";
 import { CarouselImage } from "./carousel-image";
 
 const IMAGE_WIDTH = 400;
+
+function CarouselDot({
+  index,
+  scrollX,
+  activeColor,
+  inactiveColor,
+}: {
+  index: number;
+  scrollX: SharedValue<number>;
+  activeColor: string;
+  inactiveColor: string;
+}) {
+  const style = useAnimatedStyle(() => {
+    const active = Math.round(scrollX.get() / IMAGE_WIDTH) === index;
+    return {
+      width: active ? 8 : 6,
+      height: active ? 8 : 6,
+      borderRadius: active ? 4 : 3,
+      backgroundColor: active ? activeColor : inactiveColor,
+    };
+  });
+
+  return <Animated.View style={[styles.dot, style]} />;
+}
 
 export const ImageCarousel = ({
   images,
@@ -21,44 +44,38 @@ export const ImageCarousel = ({
   images: FeedImage[];
   onImagePress?: () => void;
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
   const colors = useContext(ColorsContext);
+  const scrollX = useSharedValue(0);
+  const inactiveColor = `${colors.icon}40`;
 
-  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offset = e.nativeEvent.contentOffset.x;
-    const index = Math.round(offset / IMAGE_WIDTH);
-    if (index !== activeIndex) {
-      setActiveIndex(index);
-    }
-  };
+  const handleScroll = useAnimatedScrollHandler((event) => {
+    scrollX.set(event.contentOffset.x);
+  });
 
   return (
     <View>
-      <ScrollView
+      <Animated.ScrollView
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
-        scrollEventThrottle={16}
       >
         {images.map((image) => (
           <Pressable key={image.uri} onPress={onImagePress}>
             <CarouselImage image={image} />
           </Pressable>
         ))}
-      </ScrollView>
+      </Animated.ScrollView>
 
       {images.length > 1 && (
         <View style={styles.dotsContainer}>
           {images.map((image, index) => (
-            <View
+            <CarouselDot
               key={`dot-${image.uri}`}
-              style={[
-                styles.dot,
-                index === activeIndex
-                  ? [styles.dotActive, { backgroundColor: colors.tint }]
-                  : { backgroundColor: colors.icon + "40" },
-              ]}
+              index={index}
+              scrollX={scrollX}
+              activeColor={colors.tint}
+              inactiveColor={inactiveColor}
             />
           ))}
         </View>
@@ -80,10 +97,5 @@ const styles = StyleSheet.create({
     height: 6,
     borderRadius: 3,
     overflow: "hidden",
-  },
-  dotActive: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
   },
 });

@@ -1,12 +1,9 @@
-import { useRef, useState } from "react";
-import {
-  FlatList,
-  type LayoutChangeEvent,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
-  StyleSheet,
-  View,
-} from "react-native";
+import { type LayoutChangeEvent, StyleSheet, View } from "react-native";
+import Animated, {
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 
 import { FeedItem } from "@/components/feed/feed-item";
 import { SuggestedPostsSection } from "@/components/feed/suggestions/suggested-posts-section";
@@ -19,31 +16,39 @@ export const FeedList = ({
   data: FeedListItem[];
   onLike: (id: string) => void;
 }) => {
-  const contentHeight = useRef(0);
-  const layoutHeight = useRef(0);
-  const [progress, setProgress] = useState(0);
+  const contentHeight = useSharedValue(0);
+  const layoutHeight = useSharedValue(0);
+  const trackWidth = useSharedValue(0);
+  const progress = useSharedValue(0);
 
-  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offset = e.nativeEvent.contentOffset.y;
-    const max = Math.max(1, contentHeight.current - layoutHeight.current);
-    const p = Math.min(1, Math.max(0, offset / max));
-    setProgress(p);
-  };
+  const handleScroll = useAnimatedScrollHandler((event) => {
+    const offset = event.contentOffset.y;
+    const max = Math.max(1, contentHeight.get() - layoutHeight.get());
+    progress.set(Math.min(1, Math.max(0, offset / max)));
+  });
+
+  const fillStyle = useAnimatedStyle(() => ({
+    width: trackWidth.get() * progress.get(),
+  }));
 
   const handleContentSizeChange = (_w: number, h: number) => {
-    contentHeight.current = h;
+    contentHeight.set(h);
   };
 
-  const handleLayout = (e: LayoutChangeEvent) => {
-    layoutHeight.current = e.nativeEvent.layout.height;
+  const handleLayout = (event: LayoutChangeEvent) => {
+    layoutHeight.set(event.nativeEvent.layout.height);
+  };
+
+  const handleTrackLayout = (event: LayoutChangeEvent) => {
+    trackWidth.set(event.nativeEvent.layout.width);
   };
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.progressTrack}>
-        <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
+      <View style={styles.progressTrack} onLayout={handleTrackLayout}>
+        <Animated.View style={[styles.progressFill, fillStyle]} />
       </View>
-      <FlatList
+      <Animated.FlatList
         data={data}
         renderItem={({ item }) =>
           item.type === "suggestions" ? (
@@ -52,15 +57,13 @@ export const FeedList = ({
             <FeedItem item={item} onLike={onLike} />
           )
         }
-        keyExtractor={(_item, index) => String(index)}
+        keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
         windowSize={21}
         maxToRenderPerBatch={10}
         initialNumToRender={5}
-        removeClippedSubviews={false}
         onScroll={handleScroll}
-        scrollEventThrottle={16}
         onContentSizeChange={handleContentSizeChange}
         onLayout={handleLayout}
       />

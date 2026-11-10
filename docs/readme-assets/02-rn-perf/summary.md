@@ -46,3 +46,34 @@ Przy workflowie komentarzy (rozwinięcie odpowiedzi + dodanie reply do jednego w
 |---|---|
 | Before (ciężki commit ekranu szczegółu) | `docs/assets/02-rn-perf/exercise-2-before.png` |
 | After (workflow komentarzy) | `docs/assets/02-rn-perf/exercise-2-after.png` |
+
+---
+
+### Exercise 2.3 — React Compiler (feed)
+
+**Kontekst**
+
+Tab **Home** (`FeedList` / `FeedItem`). Like na poście aktualizuje `feedData` w `HomeScreen`; przy scrollu i interakcjach profiler łapie długą serię commitów (np. **51** w sesji).
+
+**Problem (before — bez React Compiler)**
+
+Jeden commit w ranked (np. **2 / 51**, ~**204 ms** renderu) pokazuje lawinę powtórzeń **`TagList`**, **`ActionButtons`**, **`PostHeader`** i ikon w każdym widocznym wierszu. W „Why did this render?” dla `Tag` / `TagList` widać wyłącznie: **The parent component rendered** — propsy tagów się nie zmieniły, a dzieci i tak przeliczają cały subtree feedu po każdym `setFeedData` / re-renderze rodzica listy.
+
+**Workflow w profilerze**
+
+Scroll feedu → like na poście (opcjonalnie kilka like’ów pod rząd) → wybór commitu z gęstego paska na osi czasu.
+
+| | Screenshot |
+|---|---|
+| Before (ranked — `TagList` / `ActionButtons`) | `docs/assets/02-rn-perf/exercise-2-3-before.png` |
+| Before (oś commitów, 2 / 51) | `docs/assets/02-rn-perf/exercise-2-3-before-commits.png` |
+| After (ranked — badge **Memo ✨**, commit 19 / 143) | `docs/assets/02-rn-perf/exercise-2-3-after.png` |
+| After (oś commitów; większość commitów to niskie paski) | `docs/assets/02-rn-perf/exercise-2-3-after-commits.png` |
+
+**Rozwiązanie**
+
+Włączenie React Compiler w Expo (`experiments.reactCompiler: true` w `apps/02-rn-perf/app.json`) — bez ręcznego `memo()` na całym feedzie.
+
+**Wynik (after)**
+
+Ten sam workflow (scroll + like). W DevTools widać **Memo ✨** przy `TagList`, `FeedItem`, `PostHeader`, ikonach itd. — compiler pominął re-render wierszy, których propsy się nie zmieniły. Commit after (~**51.6 ms** renderu dla tego wybranego momentu vs ~**204 ms** before na rankingu) ma krótszy ranked i mniej powtórzeń tych samych komponentów; na osi commitów (143 w sesji) większość pasków to niskie, zielone commity zamiast gęstego żółtego „szumu” przy każdym like.
