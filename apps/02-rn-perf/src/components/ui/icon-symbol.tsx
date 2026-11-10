@@ -23,12 +23,22 @@ const MAPPING = {
   "chevron.right": "chevron-right",
   "message.fill": "chat-bubble",
   "person.fill": "person",
+  person: "person",
   heart: "favorite-border",
   "heart.fill": "favorite",
   "bubble.right": "chat-bubble-outline",
   paperplane: "send",
   bookmark: "bookmark-border",
   "bookmark.fill": "bookmark",
+  "checkmark.seal.fill": "verified",
+  calendar: "event",
+  ellipsis: "more-horiz",
+  mappin: "place",
+  bell: "notifications-none",
+  link: "link",
+  "square.and.arrow.up": "share",
+  "eye.slash": "visibility-off",
+  flag: "flag",
 } as IconMapping;
 
 /**

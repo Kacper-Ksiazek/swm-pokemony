@@ -1,8 +1,8 @@
 import { useRouter } from "expo-router";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { HeartIcon } from "@/components/feed/icons/heart-icon";
-import { ImageWithShimmer } from "@/components/feed/shimmer/image-with-shimmer";
+import { displaySource, FeedImage } from "@/components/feed/feed-image";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 import { ColorsContext } from "@/context/colors-context";
 import type { FeedComment } from "@/data/mock-feed";
 import { formatRelativeTime } from "@/utils/feed-utils";
@@ -30,8 +30,8 @@ export const CommentPreview = ({ comment, postId }: { comment: FeedComment; post
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={openProfile}>
-        <ImageWithShimmer
-          source={{ uri: comment.avatar }}
+        <FeedImage
+          source={displaySource(comment.avatar, 28, 28)}
           style={[styles.avatar, styles.avatarClip]}
         />
       </TouchableOpacity>
@@ -57,7 +57,11 @@ export const CommentPreview = ({ comment, postId }: { comment: FeedComment; post
         }}
         style={styles.heartButton}
       >
-        <HeartIcon size={12} color={isLiked ? "#FF6B6B" : colors.icon} filled={isLiked} />
+        <IconSymbol
+          name={isLiked ? "heart.fill" : "heart"}
+          size={12}
+          color={isLiked ? "#FF6B6B" : colors.icon}
+        />
       </TouchableOpacity>
     </View>
   );

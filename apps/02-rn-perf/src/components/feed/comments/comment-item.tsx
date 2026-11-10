@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
+import { displaySource, FeedImage } from "@/components/feed/feed-image";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { ColorsContext } from "@/context/colors-context";
 import type { FeedComment } from "@/data/mock-feed";
@@ -38,8 +39,8 @@ export const CommentItem = ({
         }}
       >
         <TouchableOpacity onPress={() => onProfilePress(comment.username)}>
-          <Image
-            source={{ uri: comment.avatar }}
+          <FeedImage
+            source={displaySource(comment.avatar, isReply ? 28 : 36, isReply ? 28 : 36)}
             style={{
               width: isReply ? 28 : 36,
               height: isReply ? 28 : 36,

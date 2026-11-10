@@ -173,3 +173,59 @@ Po: lista krótsza i płytsza; `FeedList` ze ✨ (React Compiler), mniej powtarz
 
 - `Content` ~4.5–4.7 ms — szum / ten sam poziom nawigacji; sukcesu fixu nie mierzy się tutaj.
 - Commit ~197 → ~56 ms — tu widać, że odłożenie hydracji feedu (`startTransition`) i compiler na wierszach skracają wejście na listę.
+
+---
+
+### Exercise 4 — list performance, dźwignia „draw less” (+ ciaśniejsze okno FlatList)
+
+Budżet klatki to **16 ms** przy 60 fps (8 ms przy 120). Ten diff (niezacommitowany) pokrywa z briefu list performance **Lever 1** w całości i kawałek **Lever 3 / Exercise 3.1**. Lever 2 (stabilne klucze, stan like w wierszu, profiler, `memo`) oraz FlashList (`getItemType`, `getMappingKey`, zagnieżdżony carousel) **nie wchodzą** w ten diff.
+
+Bilans plików: **21** zmienionych w git, **−528 / +91** linii, plus nowy `feed-image.tsx`. Usunięte **9** plików (6 ikon SVG + 3 shimmery).
+
+#### 1.1 — `expo-image` zamiast `Image` z `react-native`
+
+**Do zrobienia:** każdy zdalny obraz w feedzie przez `expo-image`, w rozdzielczości bliskiej temu, co widać na ekranie (punkty × pixel ratio).
+
+**Zrobione:** jeden wrapper `FeedImage` + `displaySource(uri, widthPoints, heightPoints)`. `displaySource` ustawia `width` / `height` źródła na `Math.round(points * PixelRatio.get())`, żeby dekoder nie brał pełnej bitmapy pod avatar 20–36 px. **8** wywołań `FeedImage`:
+
+| Miejsce | Rozmiar w punktach |
+|---|---|
+| `carousel-image` | 400 × 400 / aspect |
+| `post-detail-related-posts` | 140 × 140 |
+| `suggested-post-card` zdjęcie | 160 × 160 |
+| `post-detail-header` avatar | 36 × 36 |
+| `comment-item` avatar | 36 albo 28 (reply) |
+| `post-header` avatar | 32 × 32 |
+| `comment-preview` avatar | 28 × 28 |
+| `suggested-post-card` avatar | 20 × 20 |
+
+Logo w `feed-header` to lokalny asset przez `Image` z `expo-image` (nie idzie przez `displaySource`).
+
+#### 1.2 — shimmer precz, blurhash
+
+**Do zrobienia:** wywalić `ImageWithShimmer` i cały `src/components/feed/shimmer/`, placeholder to blurhash w `expo-image`.
+
+**Zrobione:** skasowane **3** pliki (`shimmer-view.tsx` z pętlą `Animated` **bez** native drivera, `image-shimmer.tsx`, `image-with-shimmer.tsx`). `FeedImage` zawsze dostaje `placeholder={{ blurhash: DEFAULT_BLURHASH }}`, `contentFit="cover"`, crossfade `transition={200}`. **5** dawnych `ImageWithShimmer` (karuzela, avatar w nagłówku posta, preview komentarza, zdjęcie i avatar suggested) plus **3** surowe `Image` z RN (avatar w detalu, avatar komentarza, miniatura related) idą teraz przez ten sam komponent.
+
+#### 1.3 — SVG → `IconSymbol`
+
+**Do zrobienia:** serce, komentarz, share, bookmark, menu, verified, pin — SF Symbol / Material zamiast `react-native-svg`.
+
+**Zrobione:** skasowany katalog `icons/` — **6** komponentów (`heart`, `comment`, `share`, `bookmark`, `verified`, `menu`; sam `menu-icon` to 154 linie ścieżek). W `icon-symbol.tsx` doszło **10** wpisów `MAPPING` (`person`, `checkmark.seal.fill`, `calendar`, `ellipsis`, `mappin`, `bell`, `link`, `square.and.arrow.up`, `eye.slash`, `flag`). Podmiany w wierszu:
+
+- pasek akcji: `heart` / `heart.fill`, `bubble.right`, `paperplane` (`action-buttons`)
+- serce w `comment-preview`
+- nagłówek posta i detal: `checkmark.seal.fill`, `mappin` (zamiast kropki), `ellipsis` (zamiast tekstu `•••`)
+- menu opcji: **6** ikon przez `MENU_SYMBOLS` (`bell`, `link`, `square.and.arrow.up`, `person`, `eye.slash`, `flag`)
+
+`LikeButton` / `ShareButton` / `BookmarkButton` już wcześniej siedziały na `IconSymbol` — ten diff ich nie tyka.
+
+#### 3.1 — okno FlatList (nie defaults)
+
+Brief mówi: bez pomiaru zostaw defaults. Tu świadomie ściągnęliśmy okno, bo wiersz to ciężki post (~1 na viewport), nie cienki wiersz:
+
+| Prop | Było | Jest |
+|---|---|---|
+| `windowSize` | 21 | **5** |
+| `maxToRenderPerBatch` | 10 | **2** |
+| `initialNumToRender` | 5 | **2** |

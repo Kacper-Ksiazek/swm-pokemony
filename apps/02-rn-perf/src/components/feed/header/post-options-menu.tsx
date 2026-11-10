@@ -12,7 +12,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { MenuIcon } from "@/components/feed/icons/menu-icon";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 import { ColorsContext } from "@/context/colors-context";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -27,7 +27,16 @@ interface PostOptionsMenuProps {
   anchorPosition?: { x: number; y: number };
 }
 
-type MenuIconName = "bell" | "link" | "share" | "person" | "eye-slash" | "flag";
+const MENU_SYMBOLS = {
+  bell: "bell",
+  link: "link",
+  share: "square.and.arrow.up",
+  person: "person",
+  "eye-slash": "eye.slash",
+  flag: "flag",
+} as const;
+
+type MenuIconName = keyof typeof MENU_SYMBOLS;
 
 interface MenuOption {
   icon: MenuIconName;
@@ -149,8 +158,8 @@ export const PostOptionsMenu = memo(function PostOptionsMenu({
                 },
               ]}
             >
-              <MenuIcon
-                name={option.icon}
+              <IconSymbol
+                name={MENU_SYMBOLS[option.icon]}
                 size={18}
                 color={option.destructive ? "#FF6B6B" : colors.text}
               />

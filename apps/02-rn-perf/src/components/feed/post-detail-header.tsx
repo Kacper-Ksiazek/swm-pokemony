@@ -1,14 +1,8 @@
 import { useRouter } from "expo-router";
 import { useContext, useMemo, useState } from "react";
-import {
-  type GestureResponderEvent,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { type GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ImageCarousel } from "@/components/feed/content/image-carousel";
+import { displaySource, FeedImage } from "@/components/feed/feed-image";
 import { PostOptionsMenu } from "@/components/feed/header/post-options-menu";
 import { PostDetailEngagement } from "@/components/feed/post-detail-engagement";
 import { IconSymbol } from "@/components/ui/icon-symbol";
@@ -43,7 +37,7 @@ export const PostDetailHeader = ({
           style={styles.authorRow}
           onPress={() => router.push(`/profile/${post.user.username}`)}
         >
-          <Image source={{ uri: post.user.avatar }} style={styles.avatar} />
+          <FeedImage source={displaySource(post.user.avatar, 36, 36)} style={styles.avatar} />
           <View>
             <View style={styles.usernameRow}>
               <Text style={[styles.usernameText, { color: colors.text }]}>
@@ -56,9 +50,12 @@ export const PostDetailHeader = ({
             <TouchableOpacity
               onPress={() => router.push(`/location/${encodeURIComponent(post.location.name)}`)}
             >
-              <Text style={[styles.locationText, { color: colors.icon }]}>
-                {post.location.name}
-              </Text>
+              <View style={styles.locationRow}>
+                <IconSymbol name="mappin" size={11} color={colors.icon} />
+                <Text style={[styles.locationText, { color: colors.icon }]}>
+                  {post.location.name}
+                </Text>
+              </View>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -70,7 +67,7 @@ export const PostDetailHeader = ({
             setShowOptionsMenu(true);
           }}
         >
-          <Text style={[styles.optionsText, { color: colors.text }]}>•••</Text>
+          <IconSymbol name="ellipsis" size={18} color={colors.text} />
         </TouchableOpacity>
       </View>
 
@@ -140,12 +137,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 14,
   },
+  locationRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
   locationText: {
     fontSize: 11,
-  },
-  optionsText: {
-    fontSize: 16,
-    fontWeight: "bold",
   },
   timestamp: {
     paddingHorizontal: 12,

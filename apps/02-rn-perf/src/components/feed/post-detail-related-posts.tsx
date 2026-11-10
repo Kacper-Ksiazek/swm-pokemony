@@ -1,7 +1,8 @@
 import { useRouter } from "expo-router";
 import { memo, useContext, useMemo } from "react";
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import { displaySource, FeedImage } from "@/components/feed/feed-image";
 import { ColorsContext } from "@/context/colors-context";
 import type { FeedPost } from "@/data/mock-feed";
 import { findRelatedPosts } from "@/utils/related-posts";
@@ -35,10 +36,12 @@ export const PostDetailRelatedPosts = memo(function PostDetailRelatedPosts({
             onPress={() => router.push(`/post/${item.post.id}`)}
             style={styles.card}
           >
-            <Image
-              source={{
-                uri: item.post.images[0]?.thumbnailUri || item.post.images[0]?.uri,
-              }}
+            <FeedImage
+              source={displaySource(
+                item.post.images[0]?.thumbnailUri || item.post.images[0]?.uri || "",
+                140,
+                140,
+              )}
               style={styles.thumbnail}
             />
             <Text numberOfLines={1} style={[styles.username, { color: colors.text }]}>

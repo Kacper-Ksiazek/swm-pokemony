@@ -11,6 +11,11 @@ import { FeedListRow } from "@/components/feed/feed-list-row";
 import type { FeedListItem } from "@/data/mock-feed";
 import { useDeferredMountActivityProps } from "@/hooks/use-deferred-mount-activity-props";
 
+/** ~1 heavy post per viewport; values are VirtualizedList multiples of viewport height. */
+const FEED_LIST_WINDOW_SIZE = 5;
+const FEED_LIST_MAX_TO_RENDER_PER_BATCH = 2;
+const FEED_LIST_INITIAL_NUM_TO_RENDER = 2;
+
 export const FeedList = ({
   data,
   onLike,
@@ -75,9 +80,9 @@ export const FeedList = ({
         ListFooterComponent={listFooter}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
-        windowSize={21}
-        maxToRenderPerBatch={10}
-        initialNumToRender={5}
+        windowSize={FEED_LIST_WINDOW_SIZE}
+        maxToRenderPerBatch={FEED_LIST_MAX_TO_RENDER_PER_BATCH}
+        initialNumToRender={FEED_LIST_INITIAL_NUM_TO_RENDER}
         onScroll={handleScroll}
         onContentSizeChange={handleContentSizeChange}
         onLayout={handleLayout}
