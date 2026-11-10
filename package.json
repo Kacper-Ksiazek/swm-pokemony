@@ -14,10 +14,13 @@
     "export:native": "bun run --filter './apps/*' export:native",
     "start": "bun run --filter 01-rn-basics start",
     "start:02": "bun run --filter 02-rn-perf start",
+    "start:03": "bun run --filter 03-native-modules start",
     "ios": "bun run --filter 01-rn-basics ios",
     "ios:02": "bun run --filter 02-rn-perf ios",
+    "ios:03": "bun run --filter 03-native-modules ios",
     "android": "bun run --filter 01-rn-basics android",
-    "android:02": "bun run --filter 02-rn-perf android"
+    "android:02": "bun run --filter 02-rn-perf android",
+    "android:03": "bun run --filter 03-native-modules android"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.4"
