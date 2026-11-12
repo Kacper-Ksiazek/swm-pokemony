@@ -37,14 +37,14 @@ Checklista krok po kroku dla `apps/03-native-modules` (Expo SDK 58, React Native
 
 ## Faza 1 — Szkielet lokalnego modułu (Swift + autolinking)
 
-- [ ] W `apps/03-native-modules/` utwórz lokalny moduł, np. `modules/device-orientation/`  
+- [x] W `apps/03-native-modules/` utwórz lokalny moduł: `modules/kksiazek-device-orientation/`  
   Typowa struktura: `expo-module.config.json`, `ios/*.swift`, `src/index.ts`, `package.json` modułu.
-- [ ] Spójna nazwa w Swift/JS, np. `DeviceOrientation`.
-- [ ] W `expo-module.config.json` ustaw platformę **ios** (Android na później).
-- [ ] Szkic API w TypeScript:
+- [x] Spójna nazwa w Swift/JS: `KksiazekDeviceOrientation` (pakiet npm: `kksiazek-device-orientation`).
+- [x] W `expo-module.config.json` ustaw platformę **ios** (Android na później).
+- [x] Szkic API w TypeScript:
 
 ```ts
-// modules/device-orientation/src/index.ts — docelowy kontrakt
+// modules/kksiazek-device-orientation/src/index.ts — docelowy kontrakt
 export type Orientation =
   | "PORTRAIT_UP"
   | "PORTRAIT_DOWN"
@@ -76,8 +76,8 @@ Dokumentacja: [Expo Modules — get started](https://docs.expo.dev/modules/get-s
 
 ## Faza 2 — Swift: odczyt orientacji
 
-- [ ] W `DeviceOrientationModule.swift` (Expo `Module`):
-  - [ ] `Name("DeviceOrientation")`
+- [ ] W `KksiazekDeviceOrientationModule.swift` (Expo `Module`):
+  - [ ] `Name("KksiazekDeviceOrientation")`
   - [ ] `AsyncFunction("getOrientationAsync")` → mapowanie UIKit → enum stringowy w JS
 - [ ] Mapowanie (świadomie, jak przy `expo-screen-orientation`):
 
@@ -156,7 +156,7 @@ Gdy Expo Module już działa:
 
 | Tab | Zakres |
 |-----|--------|
-| **Task 1** | Moduł `device-orientation` + UI lab |
+| **Task 1** | Moduł `kksiazek-device-orientation` + UI lab |
 | **Task 2** | Lock orientacji (`lockAsync` / API iOS) — pełniejsza kopia Expo |
 | **Task 3** | Android (Kotlin), ten sam kontrakt TS |
 | **Task 4** | Czysty Turbo Module / codegen |
@@ -193,7 +193,7 @@ bunx expo install <package>
 
 ## Done definition (Task 1)
 
-- [ ] Własny moduł w `modules/device-orientation/` z `getOrientationAsync` + listenerem na zmianę.
+- [ ] Własny moduł w `modules/kksiazek-device-orientation/` z `getOrientationAsync` + listenerem na zmianę.
 - [ ] Task 1 pokazuje live orientację i historię eventów.
 - [ ] Opcjonalnie: obok wartości z `expo-screen-orientation` — zgodność lub udokumentowana różnica.
 - [ ] `bun run lint` + `bun run typecheck` przechodzą.
