@@ -3,6 +3,9 @@
 # dependencies
 node_modules/
 
+# Downloaded native linters (see scripts/ensure-native-linters.mjs)
+.tools/
+
 # Expo (root + workspace apps)
 **/.expo/
 **/dist/

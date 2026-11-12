@@ -1,0 +1,14 @@
+# Kotlin (ktlint) and shared editor defaults. JS/TS formatting is Prettier (.prettierrc.json).
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{kt,kts}]
+indent_style = space
+indent_size = 4
+max_line_length = 100

@@ -14,7 +14,8 @@ Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
 
 ```bash
 bun install                 # repo root (Bun workspaces)
-bun run lint                # Biome from root
+bun run lint                # ESLint + Prettier (+ Swift/ktlint for native modules)
+bun run ci                  # same checks as GitHub Actions (eslint, prettier:check, typecheck, export:native)
 bun run typecheck           # tsc in every apps/* package that defines it
 bun run export:native       # Metro export for every apps/* package that defines it
 bun run start               # Expo for 01-rn-basics

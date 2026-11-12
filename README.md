@@ -41,7 +41,7 @@ A hobby training app that talks to [PokeAPI](https://pokeapi.co) and grows throu
 - [react-native-view-shot](https://github.com/gre/react-native-view-shot) + [expo-media-library](https://docs.expo.dev/versions/latest/sdk/media-library/) — capture composed shots to the gallery
 - [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/) — animations and worklets (React Compiler–friendly patterns)
 - [expo-image](https://docs.expo.dev/versions/latest/sdk/image/) + [react-native-nitro-image](https://github.com/mrousavy/nitro/tree/main/packages/react-native-nitro-image) — fast Pokémon artwork loading
-- [Biome](https://biomejs.dev/) + [Bun](https://bun.sh/) — lint, format, and installs in this repo
+- [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/) + [Bun](https://bun.sh/) — lint and format JS/TS; [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) / [ktlint](https://pinterest.github.io/ktlint/) for native modules under `apps/**/modules/`
 
 ---
 

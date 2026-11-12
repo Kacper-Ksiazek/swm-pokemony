@@ -1,6 +1,6 @@
 # Visible strings inside Text
 
-Visible strings go inside React Native `Text`. Biome treats `noReactNativeRawText` as an error under `src/app/**`. `NativeTabs.Trigger.Label` and `Stack.Title` are the only skip entries, because those APIs take raw text children.
+Visible strings go inside React Native `Text`. ESLint enforces `react-native/no-raw-text` under `src/app/**`. `NativeTabs.Trigger.Label` and `Stack.Title` are in the skip list, because those APIs take raw text children.
 
 ## Good
 

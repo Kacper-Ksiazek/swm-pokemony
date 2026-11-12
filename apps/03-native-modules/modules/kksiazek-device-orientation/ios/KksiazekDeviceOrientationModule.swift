@@ -28,7 +28,8 @@ public class KksiazekDeviceOrientationModule: Module {
       self.stopObservingDeviceOrientationIfNeeded()
     }
 
-    // Device orientation (fizyczny obrót) ≠ interface orientation (np. gdy app.json blokuje obrót UI).
+    // Device orientation (fizyczny obrót) ≠ interface orientation (np. gdy app.json blokuje obrót
+    // UI).
     AsyncFunction("getOrientationAsync") { () -> String in
       Self.stringify(deviceOrientation: UIDevice.current.orientation)
     }
@@ -67,22 +68,23 @@ public class KksiazekDeviceOrientationModule: Module {
   }
 
   /// Mapowanie 1:1 `UIDeviceOrientation` → kontrakt JS (jak w turbo-modules-orientation-todo).
-  /// UIKit: `landscapeLeft` = urządzenie obrócone tak, że **górna krawędź** jest po lewej stronie ekranu;
+  /// UIKit: `landscapeLeft` = urządzenie obrócone tak, że **górna krawędź** jest po lewej stronie
+  /// ekranu;
   /// to bywa mylące względem etykiet w `expo-screen-orientation` — porównaj na Task 1.
   private static func stringify(deviceOrientation: UIDeviceOrientation) -> String {
     switch deviceOrientation {
     case .portrait:
-      return "PORTRAIT_UP"
+      "PORTRAIT_UP"
     case .portraitUpsideDown:
-      return "PORTRAIT_DOWN"
+      "PORTRAIT_DOWN"
     case .landscapeLeft:
-      return "LANDSCAPE_LEFT"
+      "LANDSCAPE_LEFT"
     case .landscapeRight:
-      return "LANDSCAPE_RIGHT"
+      "LANDSCAPE_RIGHT"
     case .faceUp, .faceDown, .unknown:
-      return "UNKNOWN"
+      "UNKNOWN"
     @unknown default:
-      return "UNKNOWN"
+      "UNKNOWN"
     }
   }
 }

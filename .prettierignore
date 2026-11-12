@@ -1,0 +1,13 @@
+**/node_modules/**
+**/.expo/**
+**/dist/**
+**/web-build/**
+apps/**/assets/**
+apps/**/slides/**
+docs/**
+.cursor/**
+apps/**/docs/**
+apps/**/src/data/db/migrations/**
+apps/**/ios/**
+apps/**/android/**
+**/expo-env.d.ts
