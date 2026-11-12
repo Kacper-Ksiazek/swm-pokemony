@@ -28,8 +28,6 @@ public class KksiazekDeviceOrientationModule: Module {
       self.stopObservingDeviceOrientationIfNeeded()
     }
 
-    // Device orientation (fizyczny obrót) ≠ interface orientation (np. gdy app.json blokuje obrót
-    // UI).
     AsyncFunction("getOrientationAsync") { () -> String in
       Self.stringify(deviceOrientation: UIDevice.current.orientation)
     }

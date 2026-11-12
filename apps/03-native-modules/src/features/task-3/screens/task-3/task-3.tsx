@@ -1,24 +1,40 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { ReferenceThemePanel } from "./reference";
+import { type ThemeLabSource, ThemeLabSourceTabs } from "./shared";
+import { SolutionThemePanel } from "./solution";
 
 export function Task3Screen() {
+  const insets = useSafeAreaInsets();
+  const [source, setSource] = useState<ThemeLabSource>("reference");
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Task 3</Text>
+    <View
+      style={[
+        styles.screen,
+        { paddingTop: Math.max(insets.top, 12), paddingBottom: insets.bottom },
+      ]}
+    >
+      <ThemeLabSourceTabs value={source} onChange={setSource} />
+
+      <View style={styles.panelSlot}>
+        {source === "reference" ? <ReferenceThemePanel /> : <SolutionThemePanel />}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "#ffffff",
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
+    gap: 16,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "600",
-    color: "#111111",
+  panelSlot: {
+    flex: 1,
+    minHeight: 0,
   },
 });

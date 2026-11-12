@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "nativemodules03",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "ios": {
       "bundleIdentifier": "com.anonymous.native-modules",
       "requireFullScreen": true
@@ -43,6 +43,14 @@
         "expo-screen-orientation",
         {
           "initialOrientation": "DEFAULT"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "17.0"
+          }
         }
       ]
     ],
