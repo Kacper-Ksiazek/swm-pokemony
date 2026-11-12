@@ -18,6 +18,8 @@ Adding a new app: create `apps/<id>/` with `typecheck` and `export:native` in it
 
 Step 3 does **not** produce full `.ipa` / `.apk` files. It runs Metro and proves the JavaScript bundle compiles for **iOS and Android** targets. That is the usual “does the app still build at the JS layer?” check in CI without macOS runners or Android SDK setup.
 
+**Swift / Kotlin in `apps/*/modules/**`** — `lint:native` is format-only. Locally on macOS, run `bun run verify:native` (`lint:native` + `compile:ios` via `xcodebuild`) before merge when module native sources change. See [verify before done](ai-coding-rules/tooling/verify-before-done.md).
+
 Full **native** binaries need Xcode / Gradle (or **EAS Build** in the cloud). See [EAS Build](https://docs.expo.dev/build/introduction/).
 
 ## Why web export is not in CI (for now)

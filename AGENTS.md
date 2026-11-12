@@ -18,6 +18,7 @@ bun run lint                # ESLint + Prettier (+ Swift/ktlint for native modul
 bun run ci                  # same checks as GitHub Actions (eslint, prettier:check, typecheck, export:native)
 bun run typecheck           # tsc in every apps/* package that defines it
 bun run export:native       # Metro export for every apps/* package that defines it
+bun run verify:native       # SwiftFormat/ktlint + compile:ios when apps/*/modules/** changed (macOS)
 bun run start               # Expo for 01-rn-basics
 bun run start:02            # Expo for 02-rn-perf
 bun run start:03            # Expo for 03-native-modules
@@ -26,7 +27,7 @@ cd apps/01-rn-basics && bunx expo install <package>  # SDK-compatible versions
 cd apps/01-rn-basics && bunx expo-doctor
 ```
 
-Run lint and typecheck before declaring any task done.
+Run lint and typecheck before declaring any task done. After editing `apps/*/modules/**`, also run `bun run verify:native` on macOS.
 
 ## Navigation & Routing
 

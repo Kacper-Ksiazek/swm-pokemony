@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {
+    "modules": ["KksiazekNumericTextModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.kksiazeknumerictext.KksiazekNumericTextModule"]
+  }
+}

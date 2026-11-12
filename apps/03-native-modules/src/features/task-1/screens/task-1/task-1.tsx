@@ -2,16 +2,13 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { ExpoOrientationPanel } from "./components/expo-orientation-panel";
-import { NativeOrientationPanel } from "./components/native-orientation-panel";
-import {
-  type OrientationLabSource,
-  OrientationSourceTabs,
-} from "./components/orientation-source-tabs";
+import { ExpoOrientationPanel } from "./reference";
+import { NativeOrientationPanel } from "./solution";
+import { type OrientationLabSource, OrientationSourceTabs } from "./shared";
 
 export function Task1Screen() {
   const insets = useSafeAreaInsets();
-  const [source, setSource] = useState<OrientationLabSource>("expo");
+  const [source, setSource] = useState<OrientationLabSource>("reference");
 
   return (
     <View
@@ -23,7 +20,7 @@ export function Task1Screen() {
       <OrientationSourceTabs value={source} onChange={setSource} />
 
       <View style={styles.panelSlot}>
-        {source === "expo" ? <ExpoOrientationPanel /> : <NativeOrientationPanel />}
+        {source === "reference" ? <ExpoOrientationPanel /> : <NativeOrientationPanel />}
       </View>
     </View>
   );

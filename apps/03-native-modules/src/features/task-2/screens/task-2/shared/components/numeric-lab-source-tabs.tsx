@@ -1,18 +1,18 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-export type OrientationLabSource = "expo" | "native";
+export type NumericLabSource = "reference" | "solution";
 
-type OrientationSourceTabsProps = {
-  value: OrientationLabSource;
-  onChange: (value: OrientationLabSource) => void;
+type NumericLabSourceTabsProps = {
+  value: NumericLabSource;
+  onChange: (value: NumericLabSource) => void;
 };
 
-const TABS: { id: OrientationLabSource; label: string; hint: string }[] = [
-  { id: "expo", label: "Expo", hint: "Referencja" },
-  { id: "native", label: "Native", hint: "Twój moduł" },
+const TABS: { id: NumericLabSource; label: string; hint: string }[] = [
+  { id: "reference", label: "Reference", hint: "Referencja" },
+  { id: "solution", label: "Solution", hint: "Twój moduł" },
 ];
 
-export function OrientationSourceTabs({ value, onChange }: OrientationSourceTabsProps) {
+export function NumericLabSourceTabs({ value, onChange }: NumericLabSourceTabsProps) {
   return (
     <View style={styles.root}>
       <View style={styles.track} accessibilityRole="tablist">
@@ -85,12 +85,5 @@ const styles = StyleSheet.create({
   },
   tabHintSelected: {
     color: "#0d74ce",
-  },
-  caption: {
-    fontSize: 13,
-    lineHeight: 18,
-    color: "#888888",
-    textAlign: "center",
-    paddingHorizontal: 4,
   },
 });

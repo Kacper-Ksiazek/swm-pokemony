@@ -1,6 +1,6 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
-import { useExpoScreenOrientation } from "../hooks/use-expo-screen-orientation";
+import { useExpoScreenOrientation } from "./hooks/use-expo-screen-orientation";
 
 export function ExpoOrientationPanel() {
   const { orientation, orientationLabel } = useExpoScreenOrientation();

@@ -23,6 +23,10 @@ export default function RootLayout() {
         <NativeTabs.Trigger.Label>Task 5</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="5.circle.fill" md="looks_5" />
       </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="task-6">
+        <NativeTabs.Trigger.Label>Task 6</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="6.circle.fill" md="looks_6" />
+      </NativeTabs.Trigger>
     </NativeTabs>
   );
 }

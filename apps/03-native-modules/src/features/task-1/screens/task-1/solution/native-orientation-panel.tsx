@@ -1,6 +1,6 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
-import { useNativeDeviceOrientation } from "../hooks/use-native-device-orientation";
+import { useNativeDeviceOrientation } from "./hooks/use-native-device-orientation";
 
 export function NativeOrientationPanel() {
   const { orientation, orientationLabel } = useNativeDeviceOrientation();

@@ -15,6 +15,8 @@
     "ci": "node scripts/ensure-native-linters.mjs && bun run eslint && bun run prettier:check && bun run lint:native && bun run typecheck && bun run export:native",
     "lint:native": "node scripts/lint-native.mjs check",
     "format:native": "node scripts/lint-native.mjs write",
+    "compile:ios": "node scripts/compile-ios-apps.mjs",
+    "verify:native": "bun run lint:native && bun run compile:ios",
     "typecheck": "bun run --filter './apps/*' typecheck",
     "export:native": "bun run --filter './apps/*' export:native",
     "start": "bun run --filter 01-rn-basics start",

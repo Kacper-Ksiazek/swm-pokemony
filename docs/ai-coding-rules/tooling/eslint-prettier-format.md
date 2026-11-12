@@ -12,6 +12,8 @@ bun run ci            # CI parity: eslint, prettier:check, lint:native, typechec
 bun run lint:fix      # eslint --fix + prettier --write + format native
 bun run format        # prettier --write + native format
 bun run lint:native   # Swift + Kotlin only
+bun run compile:ios   # macOS: xcodebuild for apps with Swift modules (type-check)
+bun run verify:native # lint:native + compile:ios
 ```
 
-Before declaring a change done, also run `bun run typecheck`. See [verify before done](./verify-before-done.md).
+Before declaring a change done, also run `bun run typecheck`. When `apps/**/modules/**` changed, run `bun run verify:native`. See [verify before done](./verify-before-done.md).
