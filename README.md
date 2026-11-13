@@ -41,7 +41,7 @@ A hobby training app that talks to [PokeAPI](https://pokeapi.co) and grows throu
 - [react-native-view-shot](https://github.com/gre/react-native-view-shot) + [expo-media-library](https://docs.expo.dev/versions/latest/sdk/media-library/) — capture composed shots to the gallery
 - [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/) — animations and worklets (React Compiler–friendly patterns)
 - [expo-image](https://docs.expo.dev/versions/latest/sdk/image/) + [react-native-nitro-image](https://github.com/mrousavy/nitro/tree/main/packages/react-native-nitro-image) — fast Pokémon artwork loading
-- [Biome](https://biomejs.dev/) + [Bun](https://bun.sh/) — lint, format, and installs in this repo
+- [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/) + [Bun](https://bun.sh/) — lint and format JS/TS; [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) / [ktlint](https://pinterest.github.io/ktlint/) for native modules under `apps/**/modules/`
 
 ---
 
@@ -62,14 +62,14 @@ A mock social feed (home, post detail, threaded comments) used to practice **Jav
 
 <br />
 
-| Exercise | What changed | Before → after |
-|----------|--------------|----------------|
-| 1 | Like/bookmark in `PostDetailEngagement` | Whole `./post/[id]` ~74 ms → **2.2 ms** on the control (~33×) |
-| 2 | Split `PostDetailScreen`, isolated `CommentInput`, theme in root layout | `VirtualizedList` commit **262 ms → 17 ms** (~15×) |
-| 2.3 | React Compiler on the feed | Heaviest like commit **~204 ms → ~52 ms** (~4×) |
-| 3 | `Activity` + `startTransition` for related posts | Footer off the first interactive paint |
-| 3.2 | Deferred mock feed hydration + compiler | First Home commit **~197 ms → ~56 ms** (~3.5×) |
-| 4 | `FeedImage` (`expo-image`), `IconSymbol`, tighter `FlatList` window | Less decode/layout work per row (−528 / +91 lines in the measured diff) |
+| Exercise | What changed                                                            | Before → after                                                          |
+| -------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| 1        | Like/bookmark in `PostDetailEngagement`                                 | Whole `./post/[id]` ~74 ms → **2.2 ms** on the control (~33×)           |
+| 2        | Split `PostDetailScreen`, isolated `CommentInput`, theme in root layout | `VirtualizedList` commit **262 ms → 17 ms** (~15×)                      |
+| 2.3      | React Compiler on the feed                                              | Heaviest like commit **~204 ms → ~52 ms** (~4×)                         |
+| 3        | `Activity` + `startTransition` for related posts                        | Footer off the first interactive paint                                  |
+| 3.2      | Deferred mock feed hydration + compiler                                 | First Home commit **~197 ms → ~56 ms** (~3.5×)                          |
+| 4        | `FeedImage` (`expo-image`), `IconSymbol`, tighter `FlatList` window     | Less decode/layout work per row (−528 / +91 lines in the measured diff) |
 
 <p align="center">
   <img src="docs/assets/02-rn-perf/exercise-2-3-before.png" width="320" alt="Feed like — profiler before React Compiler" />

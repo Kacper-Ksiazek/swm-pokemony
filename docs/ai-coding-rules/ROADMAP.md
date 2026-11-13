@@ -6,15 +6,15 @@ Output root: `docs/ai-coding-rules/`. One directory per category, one file per r
 
 ## Repo layout
 
-- Learning apps: `apps/<id>/` (`apps/01-rn-basics/`, `apps/02-rn-perf/` performance workshop).
-- Shared docs, CI, and Biome at the repo root. README showcase screenshots: `docs/readme-assets/<id>/`.
+- Learning apps: `apps/<id>/` (`apps/01-rn-basics/`, `apps/02-rn-perf/` performance workshop, `apps/03-native-modules/` stripped SDK 58 shell: native tabs Task 1–Task 5, Task 1 is the landing route `/`, `apps/03-jsi/` JSI workshop: one C++ installer shared by iOS and Android, Task 1 is the landing route `/`).
+- Shared docs, CI, ESLint, and Prettier at the repo root. README showcase screenshots: `docs/readme-assets/<id>/`.
 
 ## Stack
 
 - Expo SDK 58, Expo Router, React Native 0.88, React 19, TypeScript strict
 - Entry: `expo-router/entry`. Routes live in `src/app/`
 - Native tabs (`expo-router/native-tabs`) with a nested `Stack` on Screen B and Screen C
-- Bun (`bun.lock`). Lint and format: Biome 2. Path alias `@/*` → `src/*`
+- Bun (`bun.lock`). Lint and format: ESLint + Prettier (+ SwiftFormat/ktlint for `apps/**/modules/**`). Path alias `@/*` → `src/*`
 - GitHub Actions **CI** on PRs: lint, typecheck, `expo export` for iOS + Android JS bundles — see `docs/ci-required-checks.md`
 - Local DB: expo-sqlite + drizzle-orm in `src/data/db/` (`favorite_pokemon`, `map_pin`)
 - PokeAPI-backed list and detail (`src/data/pokemon-api/`). Pagination and pull-to-refresh exist on the list screen.
@@ -27,8 +27,8 @@ Output root: `docs/ai-coding-rules/`. One directory per category, one file per r
 - [x] `architecture` — thin route files, `src/features`, screen folders, public feature `index.ts`, no cross-feature imports, DB module layout, splash held until migrations finish. In the tree for List, Favorite, Map, and Camera.
 - [x] `navigation` — `NativeTabs` triggers, nested stacks for headers and back, layouts stay in `src/app`. Covers `src/app/_layout.tsx`, `screen-b/_layout.tsx`, `screen-c/_layout.tsx`.
 - [x] `typescript` — `strict`, `@/*` imports, named exports from features, default export only at the route boundary. Covers `tsconfig.json` and route/feature files.
-- [x] `react-native` — `StyleSheet` beside the screen, strings inside `Text`, Reanimated shared values via `.get()` / `.set()` (React Compiler). Biome skip list for `NativeTabs.Trigger.Label` and `Stack.Title` in `src/app/**`.
-- [x] `tooling` — Biome (double quotes, semicolons, trailing commas, width 100), `bun run lint`, `bunx tsc --noEmit`. The assignment text mentions ESLint and Prettier; this repo uses Biome.
+- [x] `react-native` — `StyleSheet` beside the screen, strings inside `Text`, Reanimated shared values via `.get()` / `.set()` (React Compiler). ESLint `react-native/no-raw-text` skip list for `NativeTabs.Trigger.Label` and `Stack.Title` in `src/app/**`.
+- [x] `tooling` — ESLint + Prettier (double quotes, semicolons, trailing commas, width 100), `bun run lint`, `bunx tsc --noEmit`.
 - [x] `expo` — read the installed SDK docs before using an Expo API, install with `npx expo install`, do not hand-edit `ios/` or `android/`, development build rather than Expo Go once native modules land.
 - [x] `git` — one PR per step, several commits per PR, squash-merge, hand-written PR description, owner merges. Process rule from the brief, not from git history.
 

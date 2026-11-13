@@ -7,22 +7,40 @@
   ],
   "scripts": {
     "postinstall": "node ./scripts/postinstall.mjs",
-    "lint": "biome check .",
-    "lint:fix": "biome check --write .",
-    "format": "biome format --write .",
+    "eslint": "eslint .",
+    "prettier:check": "prettier --check .",
+    "lint": "bun run eslint && bun run prettier:check && bun run lint:native",
+    "lint:fix": "eslint . --fix && prettier --write . && bun run format:native",
+    "format": "prettier --write . && bun run format:native",
+    "ci": "node scripts/ensure-native-linters.mjs && bun run eslint && bun run prettier:check && bun run lint:native && bun run typecheck && bun run export:native",
+    "lint:native": "node scripts/lint-native.mjs check",
+    "format:native": "node scripts/lint-native.mjs write",
+    "compile:ios": "node scripts/compile-ios-apps.mjs",
+    "verify:native": "bun run lint:native && bun run compile:ios",
     "typecheck": "bun run --filter './apps/*' typecheck",
     "export:native": "bun run --filter './apps/*' export:native",
     "start": "bun run --filter 01-rn-basics start",
     "start:02": "bun run --filter 02-rn-perf start",
+    "start:03": "bun run --filter 03-native-modules start",
+    "start:03-jsi": "bun run --filter 03-jsi start",
     "ios": "bun run --filter 01-rn-basics ios",
     "ios:02": "bun run --filter 02-rn-perf ios",
+    "ios:03": "bun run --filter 03-native-modules ios",
+    "ios:03-jsi": "bun run --filter 03-jsi ios",
     "android": "bun run --filter 01-rn-basics android",
-    "android:02": "bun run --filter 02-rn-perf android"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.6.4"
+    "android:02": "bun run --filter 02-rn-perf android",
+    "android:03": "bun run --filter 03-native-modules android",
+    "android:03-jsi": "bun run --filter 03-jsi android"
   },
   "trustedDependencies": [
     "@shopify/react-native-skia"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^9.39.0",
+    "eslint-config-expo": "~58.0.4",
+    "eslint-config-prettier": "^10.1.0",
+    "eslint-plugin-prettier": "^5.5.0",
+    "eslint-plugin-react-native": "^5.0.0",
+    "prettier": "^3.10.0"
+  }
 }

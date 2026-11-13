@@ -551,14 +551,7 @@ function generateCommentReactions(
   replyIndex: number,
 ): Reaction[] {
   const reactionTypes: (
-    | "like"
-    | "love"
-    | "laugh"
-    | "wow"
-    | "sad"
-    | "angry"
-    | "celebrate"
-    | "insightful"
+    "like" | "love" | "laugh" | "wow" | "sad" | "angry" | "celebrate" | "insightful"
   )[] = ["like", "love", "laugh", "wow", "sad", "angry", "celebrate", "insightful"];
   const reactions: Reaction[] = [];
   const numReactions = 1 + ((postIndex + commentIndex + replyIndex) % 4);
@@ -762,14 +755,7 @@ function generateMutualFollowers(userIndex: number): { username: string; avatar:
 
 function generateReactions(postIndex: number): Reaction[] {
   const reactionTypes: (
-    | "like"
-    | "love"
-    | "laugh"
-    | "wow"
-    | "sad"
-    | "angry"
-    | "celebrate"
-    | "insightful"
+    "like" | "love" | "laugh" | "wow" | "sad" | "angry" | "celebrate" | "insightful"
   )[] = ["like", "love", "laugh", "wow", "celebrate", "insightful"];
   const reactions: Reaction[] = [];
   const numReactions = 2 + (postIndex % 5);

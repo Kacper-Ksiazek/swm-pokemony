@@ -1,0 +1,19 @@
+**/node_modules/**
+**/.expo/**
+**/dist/**
+**/web-build/**
+apps/**/assets/**
+apps/**/slides/**
+docs/**
+.cursor/**
+apps/**/docs/**
+apps/**/src/data/db/migrations/**
+# Generated Expo app native projects (CNG), not local modules under apps/*/modules/
+apps/*/ios/**
+apps/*/android/**
+# Native module platform sources (SwiftFormat / ktlint)
+**/*.swift
+**/*.kt
+**/*.podspec
+apps/**/modules/**/android/**
+**/expo-env.d.ts

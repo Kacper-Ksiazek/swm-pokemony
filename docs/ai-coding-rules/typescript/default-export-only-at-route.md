@@ -1,6 +1,6 @@
 # Default exports only on route files
 
-Expo Router route files under `src/app/`, including every `_layout.tsx`, use a default export. Biome has `style.noDefaultExport` set to `"off"` in `biome.json` so those files can. Feature modules use named exports. A screen route re-exports that named screen:
+Expo Router route files under `src/app/`, including every `_layout.tsx`, use a default export. ESLint allows default exports in route files; feature modules use named exports. A screen route re-exports that named screen:
 
 ```ts
 export { ScreenA as default } from "@/features/feature-a";
