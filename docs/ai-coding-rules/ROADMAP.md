@@ -6,7 +6,7 @@ Output root: `docs/ai-coding-rules/`. One directory per category, one file per r
 
 ## Repo layout
 
-- Learning apps: `apps/<id>/` (`apps/01-rn-basics/`, `apps/02-rn-perf/` performance workshop, `apps/03-native-modules/` stripped SDK 58 shell: native tabs Task 1–Task 5, Task 1 is the landing route `/`).
+- Learning apps: `apps/<id>/` (`apps/01-rn-basics/`, `apps/02-rn-perf/` performance workshop, `apps/03-native-modules/` stripped SDK 58 shell: native tabs Task 1–Task 5, Task 1 is the landing route `/`, `apps/03-jsi/` JSI workshop: one C++ installer shared by iOS and Android, Task 1 is the landing route `/`).
 - Shared docs, CI, ESLint, and Prettier at the repo root. README showcase screenshots: `docs/readme-assets/<id>/`.
 
 ## Stack

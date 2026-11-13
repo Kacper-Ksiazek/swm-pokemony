@@ -1,0 +1,40 @@
+If:
+  PathMatch: ios/.*\.(mm|m)
+CompileFlags:
+  Add:
+    - -std=c++20
+    - -xobjective-c++
+    - -DRCT_NEW_ARCH_ENABLED=1
+    - --target=arm64-apple-ios17.0-simulator
+    - -isysroot
+    - /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
+    - -I../cpp
+    - -I../../../node_modules/react-native/ReactCommon/jsi
+    - -I../../../ios/Pods/React-Core-prebuilt/Headers
+    - -F../../../ios/Pods/React-Core-prebuilt/React.xcframework/ios-arm64_x86_64-simulator
+    - -fmodule-map-file=../../../ios/Pods/React-Core-prebuilt/React.xcframework/ios-arm64_x86_64-simulator/React.framework/Modules/module.modulemap
+    - -fmodule-map-file=../../../ios/Pods/React-Core-prebuilt/Headers/module.modulemap
+---
+If:
+  PathMatch: ^cpp/.*\.(cpp|hpp)
+CompileFlags:
+  Add:
+    - -std=c++20
+    - -I../../../node_modules/react-native/ReactCommon/jsi
+---
+If:
+  PathMatch: ^android/.*\.cpp
+CompileFlags:
+  Add:
+    - -std=c++20
+    - --target=aarch64-linux-android24
+    - --sysroot=/Users/kacperksiazek/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/sysroot
+    - -isystem
+    - /Users/kacperksiazek/Library/Android/sdk/ndk/27.1.12297006/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1
+    - -I../../../../cpp
+    - -I../../../../../../node_modules/react-native/ReactCommon
+    - -I../../../../../../node_modules/react-native/ReactCommon/jsi
+    - -I../../../../../../node_modules/react-native/ReactCommon/callinvoker
+    - -I../../../../../../node_modules/react-native/ReactCommon/react/nativemodule/core
+    - -I../../../../../../node_modules/react-native/ReactAndroid/src/main/jni/react/turbomodule
+    - -I/Users/kacperksiazek/.gradle/caches/9.4.1/transforms/c9863d8d8580d5bbbe7d670f1f9c3745/transformed/fbjni-0.7.0/prefab/modules/fbjni/include

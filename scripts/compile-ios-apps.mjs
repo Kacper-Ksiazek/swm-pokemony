@@ -1,5 +1,5 @@
-// Compile iOS targets for apps that ship Swift under apps/<id>/modules/ (type-checks native code).
-// macOS + Xcode only; other platforms exit 0 with a skip message.
+// Compile iOS targets for apps that ship native module sources under apps/<id>/modules/
+// (Swift, Objective-C++, or C++). macOS + Xcode only; other platforms exit 0 with a skip message.
 
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
@@ -8,10 +8,26 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-function appsWithSwiftSources() {
+function appsWithNativeModuleSources() {
   const out = spawnSync(
     "find",
-    ["apps", "-path", "*/modules/*", "-name", "*.swift", "-type", "f"],
+    [
+      "apps",
+      "-path",
+      "*/modules/*",
+      "(",
+      "-name",
+      "*.swift",
+      "-o",
+      "-name",
+      "*.mm",
+      "-o",
+      "-name",
+      "*.cpp",
+      ")",
+      "-type",
+      "f",
+    ],
     { cwd: ROOT, encoding: "utf8" },
   );
   if (out.status !== 0) {
@@ -98,10 +114,10 @@ if (spawnSync("xcodebuild", ["-version"], { encoding: "utf8" }).status !== 0) {
 }
 
 const explicitApp = process.argv[2];
-const apps = explicitApp ? [explicitApp.replace(/^\.\//, "")] : appsWithSwiftSources();
+const apps = explicitApp ? [explicitApp.replace(/^\.\//, "")] : appsWithNativeModuleSources();
 
 if (apps.length === 0) {
-  console.log("No Swift sources under apps/*/modules/; nothing to compile.");
+  console.log("No native module sources under apps/*/modules/; nothing to compile.");
   process.exit(0);
 }
 

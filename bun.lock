@@ -98,6 +98,38 @@
         "typescript": "~6.0.3",
       },
     },
+    "apps/03-jsi": {
+      "name": "03-jsi",
+      "version": "1.0.0",
+      "dependencies": {
+        "babel-preset-expo": "~58.0.0",
+        "expo": "~58.0.23",
+        "expo-build-properties": "~58.0.12",
+        "expo-constants": "~58.0.15",
+        "expo-dev-client": "~58.0.18",
+        "expo-font": "~58.0.11",
+        "expo-linking": "~58.0.16",
+        "expo-router": "~58.0.30",
+        "expo-splash-screen": "~58.0.13",
+        "expo-status-bar": "~58.0.4",
+        "expo-symbols": "~58.0.4",
+        "expo-system-ui": "~58.0.7",
+        "kksiazek-jsi": "file:./modules/kksiazek-jsi",
+        "react": "19.3.0",
+        "react-dom": "19.3.0",
+        "react-native": "0.88.1",
+        "react-native-gesture-handler": "~3.3.0",
+        "react-native-reanimated": "4.7.1",
+        "react-native-safe-area-context": "~5.11.1",
+        "react-native-screens": "~4.30.1",
+        "react-native-web": "~0.21.4",
+        "react-native-worklets": "0.13.0",
+      },
+      "devDependencies": {
+        "@types/react": "~19.3.0",
+        "typescript": "~6.0.3",
+      },
+    },
     "apps/03-native-modules": {
       "name": "03-native-modules",
       "version": "1.0.0",
@@ -145,6 +177,8 @@
     "01-rn-basics": ["01-rn-basics@workspace:apps/01-rn-basics"],
 
     "02-rn-perf": ["02-rn-perf@workspace:apps/02-rn-perf"],
+
+    "03-jsi": ["03-jsi@workspace:apps/03-jsi"],
 
     "03-native-modules": ["03-native-modules@workspace:apps/03-native-modules"],
 
@@ -1781,6 +1815,8 @@
     "zod": ["zod@4.6.7", "", {}, "sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg=="],
 
     "zod-validation-error": ["zod-validation-error@4.0.2", "", { "peerDependencies": { "zod": "^3.25.0 || ^4.0.0" } }, "sha512-Q6/nZLe6jxuU80qb/4uJ4t5v2VEZ44lzQjPDhYJNztRQ4wyWc6VF3D3Kb/fAuPetZQnhS3hnajCf9CsWesghLQ=="],
+
+    "03-jsi/kksiazek-jsi": ["kksiazek-jsi@file:apps/03-jsi/modules/kksiazek-jsi", { "peerDependencies": { "react": "*", "react-native": "*" } }],
 
     "03-native-modules/kksiazek-device-orientation": ["kksiazek-device-orientation@file:apps/03-native-modules/modules/kksiazek-device-orientation", { "peerDependencies": { "expo": "*" } }],
 

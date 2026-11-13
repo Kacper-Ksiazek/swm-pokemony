@@ -1,0 +1,91 @@
+def safeExtGet(name, fallback) {
+    rootProject.ext.has(name) ? rootProject.ext.get(name) : fallback
+}
+
+def shouldEnableAgpFallback() {
+    def agpMajorVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize(".")[0].toInteger()
+    if (agpMajorVersion <= 8) {
+        return true
+    }
+    def propertyVal = providers.gradleProperty("android.builtInKotlin").orNull
+    def isBuiltInKotlinEnabled = propertyVal != null ? propertyVal.toBoolean() : true
+    return !isBuiltInKotlinEnabled
+}
+
+apply plugin: "com.android.library"
+
+if (shouldEnableAgpFallback()) {
+    apply plugin: "kotlin-android"
+}
+
+def reactNativePackageJson = providers.exec {
+    workingDir(rootDir)
+    commandLine("node", "--print", "require.resolve('react-native/package.json')")
+}.standardOutput.asText.get().trim()
+def reactNativeDir = file(reactNativePackageJson).parentFile
+
+def reactNativeArchitectures() {
+    def value = project.findProperty("reactNativeArchitectures")
+    if (value instanceof String && value.trim()) {
+        return value.split(",").collect { it.trim() }.findAll { it }
+    }
+    return ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
+}
+
+android {
+    namespace "expo.modules.kksiazekjsi"
+    compileSdk safeExtGet("compileSdkVersion", 37)
+
+    def resolvedNdkPath = rootProject.findProperty("ndkPath")
+    if (resolvedNdkPath) {
+        ndkPath resolvedNdkPath
+    }
+    def resolvedNdkVersion = rootProject.findProperty("ndkVersion")
+    if (resolvedNdkVersion) {
+        ndkVersion resolvedNdkVersion
+    }
+
+    defaultConfig {
+        minSdk safeExtGet("minSdkVersion", 24)
+        consumerProguardFiles "proguard-rules.pro"
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared",
+                    "-DANDROID_TOOLCHAIN=clang",
+                    "-DREACT_NATIVE_DIR=${reactNativeDir.absolutePath}",
+                    "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+                abiFilters(*reactNativeArchitectures())
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+
+    buildFeatures {
+        prefab true
+    }
+
+    packaging {
+        jniLibs {
+            excludes += ["**/libc++_shared.so", "**/libfbjni.so", "**/libjsi.so", "**/libreactnative.so"]
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation "com.facebook.react:react-android"
+}
