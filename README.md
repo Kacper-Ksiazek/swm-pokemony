@@ -89,4 +89,85 @@ A mock social feed (home, post detail, threaded comments) used to practice **Jav
 - [FlatList](https://reactnative.dev/docs/flatlist) — narrower `windowSize` / batch sizes for heavy post rows
 - `IconSymbol` (SF Symbols / Material) — replaced six hand-rolled SVG icon components
 
+---
+
+## `03_native_modules` — Expo Modules, native views & config plugins
+
+A five-tab workshop app (`apps/03-native-modules`) for building custom native capabilities on iOS and Android using **Expo Modules API** and **Continuous Native Generation (CNG)**. Each tab pairs a reference implementation (existing Expo/community packages) with a custom local module written in Swift and Kotlin, or a custom Config Plugin.
+
+<br />
+
+<div align="center">
+  <p>
+    <img src="https://img.shields.io/badge/YouTube-Watch_the_demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo on YouTube" />
+  </p>
+  <p>
+    <strong><a href="https://youtube.com/shorts/ixXBM7iSLlg">▶ youtube.com/shorts/ixXBM7iSLlg</a></strong>
+  </p>
+</div>
+
+<br />
+
+<p align="center">
+  <img src="docs/readme-assets/03-native-modules/screenshots/orientation.png" width="200" alt="Orientation tab" />
+  <img src="docs/readme-assets/03-native-modules/screenshots/fonts.png" width="200" alt="Fonts tab (600-icon benchmark)" />
+</p>
+
+<br />
+
+| Tab         | Local module / plugin         | What it implements                                                                                                                          |
+| ----------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Orientation | `kksiazek-device-orientation` | `AsyncFunction` (`getOrientationAsync`) + `onOrientationChange` event observer (`UIDevice` / `OrientationEventListener`)                    |
+| Numeric     | `kksiazek-numeric-text`       | `ExpoUIView` counter built in **SwiftUI** (iOS) and **Jetpack Compose** (Android)                                                           |
+| Theme       | `kksiazek-system-theme`       | Synchronous `Function` (`getColorScheme`) + `onColorSchemeChange` trait/configuration listener                                              |
+| WebView     | `kksiazek-webview`            | Native `View` wrapping `WKWebView` / Android `WebView` with `url` prop and `onLoad` event                                                   |
+| Fonts       | `plugins/with-icon-font.ts`   | Custom Expo Config Plugin injecting `.ttf` icon fonts into `Info.plist` / Xcode resources & Android assets (600-icon SVG vs font benchmark) |
+
+**Stack highlights**
+
+- [Expo Modules API](https://docs.expo.dev/modules/overview/) — Swift (iOS) and Kotlin (Android) modules with `ModuleDefinition`, `Function`, `AsyncFunction`, `Events`, and `View`
+- [@expo/ui](https://docs.expo.dev/versions/latest/sdk/ui/) — `ExpoUIView` bridging SwiftUI and Jetpack Compose views into React Native
+- [Expo Config Plugins](https://docs.expo.dev/config-plugins/introduction/) — idempotent `withXcodeProject`, `withInfoPlist`, and `withDangerousMod` mods for CNG
+- [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) + [ktlint](https://pinterest.github.io/ktlint/) — native code formatting and linting via `bun run verify:native`
+
+---
+
+## `03_jsi` — C++ JSI & TurboModule bindings
+
+A hands-on **JavaScript Interface (JSI)** lab (`apps/03-jsi`) where a local TurboModule (`kksiazek-jsi`) installs C++ bindings directly into `facebook::jsi::Runtime` on startup, bypassing the asynchronous bridge. All **15 / 15** JSI assignments are implemented and wired to interactive demo screens.
+
+<br />
+
+<div align="center">
+  <p>
+    <img src="https://img.shields.io/badge/YouTube-Watch_the_demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo on YouTube" />
+  </p>
+  <p>
+    <strong><a href="https://youtube.com/shorts/Vm431yy_Kew">▶ youtube.com/shorts/Vm431yy_Kew</a></strong>
+  </p>
+</div>
+
+<br />
+
+<p align="center">
+  <img src="docs/readme-assets/03-jsi/screenshots/landing.png" width="200" alt="JSI Workshop landing screen" />
+  <img src="docs/readme-assets/03-jsi/screenshots/array-map.png" width="200" alt="Array Map JSI callback demo" />
+</p>
+
+<br />
+
+| Group                  | Assignments | Key JSI concepts covered                                                                                             |
+| ---------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| Globals                | #1–4        | Primitive `int`, `bool`, `jsi::String`, and `jsi::Array` values on `runtime.global()`                                |
+| HostFunctions & errors | #5–7, #10   | `HostFunction` counter, variadic array calculator, throwing `jsi::JSError` on divide-by-zero                         |
+| Callbacks & strings    | #8, #11–12  | String transforms, `nativeMap` invoking JS callbacks from C++, calling `global.console.log` from C++                 |
+| HostObjects            | #13–14      | `jsi::HostObject` implementations (`getDateObject` with getters/setters, `InfinityObject`)                           |
+| Objects & NativeState  | #9, #15     | Reading/returning `jsi::Object` properties (`sumMeThisObject`) and attaching `jsi::NativeState` (`trackNativeState`) |
+
+**Stack highlights**
+
+- [React Native JSI (C++)](https://reactnative.dev/architecture/fabric-renderer) — `jsi::Runtime`, `jsi::HostFunction`, `jsi::HostObject`, `jsi::NativeState`, and `jsi::JSError`
+- [Turbo Native Modules](https://reactnative.dev/docs/the-new-architecture/pillars-turbomodules) — `NativeKksiazekJsi` Codegen spec (`TurboModuleRegistry.getEnforcing`) installing C++ globals on iOS & Android
+- [Expo Router](https://docs.expo.dev/router/introduction/) — landing index and per-assignment interactive screens under `src/features/`
+
 <!-- Future apps: copy a showcase block above (heading, short intro, optional YouTube badge, screenshots or profiler captures, stack list). -->
