@@ -1,6 +1,7 @@
-import type { PrimitiveBaseProps } from "@expo/ui/jetpack-compose";
+import { Host, type PrimitiveBaseProps } from "@expo/ui/jetpack-compose";
 import { createViewModifierEventListener } from "@expo/ui/jetpack-compose/modifiers";
 import { requireNativeView } from "expo";
+import { View } from "react-native";
 
 export interface KksiazekNumericTextComposeViewProps extends PrimitiveBaseProps {
   title: string;
@@ -17,10 +18,14 @@ export default function KksiazekNumericTextComposeView({
   ...rest
 }: KksiazekNumericTextComposeViewProps) {
   return (
-    <NativeKksiazekNumericTextComposeView
-      modifiers={modifiers}
-      {...(modifiers ? createViewModifierEventListener(modifiers) : undefined)}
-      {...rest}
-    />
+    <View style={{ width: "100%", alignSelf: "stretch" }}>
+      <Host matchContents={{ vertical: true }} style={{ width: "100%" }}>
+        <NativeKksiazekNumericTextComposeView
+          modifiers={modifiers}
+          {...(modifiers ? createViewModifierEventListener(modifiers) : undefined)}
+          {...rest}
+        />
+      </Host>
+    </View>
   );
 }

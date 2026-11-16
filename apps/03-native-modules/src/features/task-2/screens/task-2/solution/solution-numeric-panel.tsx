@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
   },
   nativeView: {
     width: "100%",
-    minHeight: 240,
+    flexGrow: 0,
+    alignSelf: "stretch",
   },
 });
