@@ -12,11 +12,14 @@ if(EXISTS "${REACT_NATIVE_DIR}/ReactAndroid/cmake-utils/folly-flags.cmake")
   add_compile_options(${folly_FLAGS})
 endif()
 
+file(GLOB KKSIAZEK_JSI_CPP_SOURCES CONFIGURE_DEPENDS "../cpp/*.cpp"
+     "../cpp/tasks/*.cpp")
+
 add_library(
   kksiazekjsi
   SHARED
   src/main/cpp/JsiBindingsInstaller.cpp
-  ../cpp/JsiInstaller.cpp)
+  ${KKSIAZEK_JSI_CPP_SOURCES})
 
 target_include_directories(kksiazekjsi PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../cpp"
                                                "${REACT_NATIVE_DIR}/ReactAndroid/src/main/jni/react/turbomodule")

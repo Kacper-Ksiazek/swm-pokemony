@@ -1,0 +1,1 @@
+export { GlobalsScreen } from "./globals";

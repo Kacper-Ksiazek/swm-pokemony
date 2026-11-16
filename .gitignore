@@ -44,3 +44,8 @@ example
 # generated native folders (per app)
 apps/*/ios
 apps/*/android
+
+# Android build & CMake/Codegen artifacts inside local modules
+apps/*/modules/*/android/build/
+apps/*/modules/*/android/.cxx/
+apps/*/modules/*/android/.gradle/

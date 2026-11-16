@@ -1,1 +1,1 @@
-export { CounterScreen as default } from "@/features/counter";
+export { CounterScreen as default } from "@/features/functions";

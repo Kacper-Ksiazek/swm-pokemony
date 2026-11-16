@@ -1,9 +1,10 @@
 import { useLayoutEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { NativeTabs } from "expo-router/native-tabs";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import { setupJsiBindings } from "kksiazek-jsi";
+import { theme } from "@/components/theme";
 
 type JsiInitState = {
   ready: boolean;
@@ -49,42 +50,49 @@ export default function RootLayout() {
   }
 
   return (
-    <NativeTabs tintColor="#38BDF8">
-      <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Native Data</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="cpu.fill" md="memory" />
-      </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="counter">
-        <NativeTabs.Trigger.Label>Counter</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="plusminus.circle.fill" md="exposure" />
-      </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="strings">
-        <NativeTabs.Trigger.Label>Strings</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="textformat.abc" md="text_fields" />
-      </NativeTabs.Trigger>
-    </NativeTabs>
+    <Stack
+      screenOptions={{
+        headerStyle: { backgroundColor: theme.colors.background },
+        headerTintColor: theme.colors.accent,
+        headerTitleStyle: { color: theme.colors.textPrimary },
+        contentStyle: { backgroundColor: theme.colors.background },
+        headerBackButtonDisplayMode: "minimal",
+      }}
+    >
+      <Stack.Screen name="index" options={{ title: "JSI Workshop" }} />
+      <Stack.Screen name="globals" options={{ title: "Globals" }} />
+      <Stack.Screen name="counter" options={{ title: "Counter" }} />
+      <Stack.Screen name="math-functions" options={{ title: "Math functions" }} />
+      <Stack.Screen name="divide" options={{ title: "Divide" }} />
+      <Stack.Screen name="array-map" options={{ title: "Array Map" }} />
+      <Stack.Screen name="strings" options={{ title: "Strings" }} />
+      <Stack.Screen name="date" options={{ title: "Date" }} />
+      <Stack.Screen name="infinity" options={{ title: "Infinity" }} />
+      <Stack.Screen name="sum-object" options={{ title: "Sum Object" }} />
+      <Stack.Screen name="native-state" options={{ title: "Native State" }} />
+    </Stack>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#0B1020",
+    backgroundColor: theme.colors.background,
     justifyContent: "center",
     paddingHorizontal: 20,
   },
   errorCard: {
-    backgroundColor: "#2D121D",
+    backgroundColor: theme.colors.dangerBg,
     borderWidth: 1,
-    borderColor: "#881337",
-    borderRadius: 16,
+    borderColor: theme.colors.dangerBorder,
+    borderRadius: theme.radius.lg + 2,
     padding: 16,
     gap: 6,
   },
   errorTitle: {
     fontSize: 13,
     fontWeight: "700",
-    color: "#FDA4AF",
+    color: theme.colors.danger,
     textTransform: "uppercase",
     letterSpacing: 0.6,
   },

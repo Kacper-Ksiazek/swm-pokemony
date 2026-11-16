@@ -14,7 +14,10 @@ Pod::Spec.new do |s|
   s.source         = { :git => "" }
   s.static_framework = true
 
-  s.source_files = "ios/**/*.{h,m,mm}", "cpp/**/*.{hpp,cpp}"
+  s.source_files =
+    "ios/**/*.{h,m,mm}",
+    "cpp/*.{hpp,cpp}",
+    "cpp/tasks/*.{hpp,cpp}"
 
   s.pod_target_xcconfig = {
     "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)/cpp\"",

@@ -1,1 +1,1 @@
-export { BasicsJsiTypesScreen as default } from "@/features/basics-jsi-types";
+export { LandingScreen as default } from "@/features/landing";

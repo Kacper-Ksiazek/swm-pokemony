@@ -16,11 +16,19 @@ CompileFlags:
     - -fmodule-map-file=../../../ios/Pods/React-Core-prebuilt/Headers/module.modulemap
 ---
 If:
-  PathMatch: ^cpp/.*\.(cpp|hpp)
+  PathMatch: ^cpp/[^/]+\.(cpp|hpp)
 CompileFlags:
   Add:
     - -std=c++20
     - -I../../../node_modules/react-native/ReactCommon/jsi
+---
+If:
+  PathMatch: ^cpp/tasks/.*\.(cpp|hpp)
+CompileFlags:
+  Add:
+    - -std=c++20
+    - -I..
+    - -I../../../../node_modules/react-native/ReactCommon/jsi
 ---
 If:
   PathMatch: ^android/.*\.cpp

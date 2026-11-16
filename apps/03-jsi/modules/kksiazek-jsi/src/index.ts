@@ -1,6 +1,8 @@
 /// <reference path="./global.d.ts" />
 
-import { Platform, TurboModuleRegistry, type TurboModule } from "react-native";
+import { Platform, TurboModuleRegistry } from "react-native";
+
+import type { Spec } from "./specs/NativeKksiazekJsi";
 
 const MODULE_NAME = "KksiazekJsi";
 
@@ -10,5 +12,5 @@ export function setupJsiBindings(): void {
     throw new Error("JSI bindings are set up on iOS and Android only.");
   }
 
-  TurboModuleRegistry.getEnforcing<TurboModule>(MODULE_NAME);
+  TurboModuleRegistry.getEnforcing<Spec>(MODULE_NAME);
 }

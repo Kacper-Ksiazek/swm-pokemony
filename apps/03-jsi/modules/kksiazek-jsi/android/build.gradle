@@ -13,6 +13,7 @@ def shouldEnableAgpFallback() {
 }
 
 apply plugin: "com.android.library"
+apply plugin: "com.facebook.react"
 
 if (shouldEnableAgpFallback()) {
     apply plugin: "kotlin-android"
@@ -83,6 +84,12 @@ android {
 
     lint {
         abortOnError false
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs += "${project.buildDir}/generated/source/codegen/java"
+        }
     }
 }
 
