@@ -7,7 +7,7 @@ Hands-on feed app for diagnosing list performance, React re-renders, and native 
 - **Package / scripts** — `package.json` (`02-rn-perf`), same script names as `01-rn-basics` where it matters (`typecheck`, `export:native`).
 - **Routes** — `src/app/` (Expo Router).
 - **UI & workshop code** — `src/components/`, `src/data/`, `src/utils/` (workshop layout; not split into `src/features` yet).
-- **Lint & format** — repo root [Biome](https://biomejs.dev/): `bun run lint`.
+- **Lint & format** — repo root ESLint + Prettier: `bun run lint`.
 - **Installs** — Bun workspaces: `bun install` at repo root only.
 
 Do not add ESLint, Prettier, `package-lock.json`, or Yarn lockfiles in this app. Match [`apps/01-rn-basics/`](../01-rn-basics/) for `typecheck` and `export:native` scripts.

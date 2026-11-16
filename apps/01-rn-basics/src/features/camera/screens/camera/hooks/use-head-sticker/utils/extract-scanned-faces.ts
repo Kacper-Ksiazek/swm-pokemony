@@ -3,8 +3,7 @@ import { type CameraRef, isScannedFace, type ScannedObject } from "react-native-
 import type { FaceBounds } from "../../../sticker-frame.types";
 
 type ExtractScannedFacesResult =
-  | { ok: true; faces: { bounds: FaceBounds }[] }
-  | { ok: false; errorMessage: string };
+  { ok: true; faces: { bounds: FaceBounds }[] } | { ok: false; errorMessage: string };
 
 export function extractScannedFaces(
   camera: CameraRef,

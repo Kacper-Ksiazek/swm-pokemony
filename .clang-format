@@ -1,0 +1,12 @@
+BasedOnStyle: LLVM
+IndentWidth: 2
+ColumnLimit: 80
+
+# Put each argument/parameter on its own line when wrapping
+BinPackArguments: false
+BinPackParameters: false
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+
+# Break cleanly after '(' with 2-space indent instead of aligning to '('
+AlignAfterOpenBracket: BlockIndent

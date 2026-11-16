@@ -1,5 +1,5 @@
 # Lint, TypeScript, and JS bundle export for iOS + Android (Metro).
-# Lint runs once at repo root (Biome). typecheck + export:native fan out to every
+# Lint runs once at repo root (ESLint + Prettier + native formatters). typecheck + export:native fan out to every
 # workspace under apps/* that defines those scripts — see package.json "workspaces".
 # See docs/ci-required-checks.md for branch protection and what this proves.
 
@@ -33,11 +33,5 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Lint
-        run: bun run lint
-
-      - name: Typecheck
-        run: bun run typecheck
-
-      - name: Bundle (native Hermes / Metro export)
-        run: bun run export:native
+      - name: CI (ESLint, Prettier, native formatters, typecheck, export)
+        run: bun run ci

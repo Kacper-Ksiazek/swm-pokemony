@@ -1,0 +1,2 @@
+-keep class expo.modules.kksiazekjsi.KksiazekJsiModule { *; }
+-keep class expo.modules.kksiazekjsi.KksiazekJsiPackage { *; }

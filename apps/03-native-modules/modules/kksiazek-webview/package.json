@@ -1,0 +1,13 @@
+{
+  "name": "kksiazek-webview",
+  "version": "0.1.0",
+  "description": "Custom Expo module — native WebView (WKWebView / Android WebView)",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "private": true,
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  }
+}

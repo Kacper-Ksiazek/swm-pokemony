@@ -31,7 +31,7 @@ export function AnimatedNumber({
 
   useEffect(() => {
     animated.value = withTiming(value, { duration });
-  }, [value, duration]);
+  }, [animated, value, duration]);
 
   const animatedProps = useAnimatedProps(() => {
     const formatted = formatFn(animated.value);

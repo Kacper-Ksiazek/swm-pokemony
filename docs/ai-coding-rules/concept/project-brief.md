@@ -22,7 +22,7 @@ UX should be clear and polished. Animations and extra ideas are welcome when the
 
 ## Current code
 
-The first app is `apps/01-rn-basics/`: Expo SDK 58 + TypeScript (React Native 0.88, Expo Router, Bun, Biome). Lint and format run from the repo root (`bun run lint`), not ESLint + Prettier.
+The first app is `apps/01-rn-basics/`: Expo SDK 58 + TypeScript (React Native 0.88, Expo Router, Bun, ESLint, Prettier). Lint and format run from the repo root (`bun run lint`).
 
 Routes stay in `apps/01-rn-basics/src/app`; screen UI lives in `src/features` under that app. The tab bar has four tabs. List is the landing tab (route group `(pokemon-list)`, URL `/`):
 

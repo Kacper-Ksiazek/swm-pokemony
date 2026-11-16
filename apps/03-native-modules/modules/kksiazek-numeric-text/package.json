@@ -1,0 +1,12 @@
+{
+  "name": "kksiazek-numeric-text",
+  "version": "0.1.0",
+  "description": "Custom Expo module — numeric text lab (SwiftUI / Compose)",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "private": true,
+  "peerDependencies": {
+    "expo": "*",
+    "@expo/ui": "*"
+  }
+}

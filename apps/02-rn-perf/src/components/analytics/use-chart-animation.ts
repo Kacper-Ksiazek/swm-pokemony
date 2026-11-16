@@ -84,6 +84,7 @@ export function useChartAnimation(post: FeedPost, days: number): ChartAnimationR
   const prevPeakX = useSharedValue(currentPeakX);
   const targetPeakX = useSharedValue(currentPeakX);
 
+  // Shared values are updated in one batch when post/days change; listing every SV would be noisy and wrong on reference churn.
   useEffect(() => {
     prevLikes.value = prevLikesRef.current;
     prevComments.value = prevCommentsRef.current;
@@ -111,6 +112,7 @@ export function useChartAnimation(post: FeedPost, days: number): ChartAnimationR
     prevMaxCommentsRef.current = maxComments;
     prevMaxSharesRef.current = maxShares;
     prevPeakXRef.current = currentPeakX;
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- animate only when post or range changes
   }, [post.id, days]);
 
   return {

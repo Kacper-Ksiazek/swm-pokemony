@@ -1,0 +1,11 @@
+{
+  "name": "kksiazek-device-orientation",
+  "version": "0.1.0",
+  "description": "Custom Expo module — device orientation (iOS blueprint)",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "private": true,
+  "peerDependencies": {
+    "expo": "*"
+  }
+}

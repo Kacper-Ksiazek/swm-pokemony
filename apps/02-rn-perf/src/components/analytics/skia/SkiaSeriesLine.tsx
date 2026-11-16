@@ -1,5 +1,5 @@
 import { LinearGradient, Path as SkiaPath, vec } from "@shopify/react-native-skia";
-import { type SharedValue, useDerivedValue } from "react-native-reanimated";
+import { useDerivedValue } from "react-native-reanimated";
 
 import {
   buildAreaPath,
