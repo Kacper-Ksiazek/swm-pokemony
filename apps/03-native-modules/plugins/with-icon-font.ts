@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 import type { ExpoConfig } from "expo/config";
 import {
   type ConfigPlugin,
@@ -26,7 +28,9 @@ function resolveFontFiles(projectRoot: string, props: WithIconFontProps): string
 
   const entries = fs.readdirSync(absoluteDir, { withFileTypes: true });
   const fonts = entries
-    .filter((entry) => entry.isFile() && FONT_EXTENSIONS.has(path.extname(entry.name).toLowerCase()))
+    .filter(
+      (entry) => entry.isFile() && FONT_EXTENSIONS.has(path.extname(entry.name).toLowerCase()),
+    )
     .map((entry) => path.join(absoluteDir, entry.name))
     .sort();
 

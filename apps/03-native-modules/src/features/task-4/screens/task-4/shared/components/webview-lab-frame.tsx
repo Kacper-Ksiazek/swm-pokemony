@@ -1,37 +1,30 @@
-import type { ReactNode } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Activity, type ReactNode } from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 type WebViewLabFrameProps = {
-  packageName: string;
-  badge: string;
-  tone: "reference" | "solution";
   isLoading: boolean;
   loadedUrl: string | null;
   children: ReactNode;
 };
 
-export function WebViewLabFrame({
-  packageName,
-  badge,
-  tone,
-  isLoading,
-  loadedUrl,
-  children,
-}: WebViewLabFrameProps) {
+export function WebViewLabFrame({ isLoading, loadedUrl, children }: WebViewLabFrameProps) {
   return (
     <View style={styles.frame}>
-      <Text style={styles.packageName}>{packageName}</Text>
-      <Text
-        style={[styles.badge, tone === "reference" ? styles.badgeReference : styles.badgeSolution]}
-      >
-        {badge}
-      </Text>
+      <View style={styles.viewport}>
+        <View style={styles.viewportStack}>
+          <Activity mode={isLoading ? "visible" : "hidden"}>
+            <View style={styles.spinnerOverlay} pointerEvents="none">
+              <ActivityIndicator size="large" />
+            </View>
+          </Activity>
 
-      <View style={styles.viewport}>{children}</View>
-
-      <Text style={styles.status} numberOfLines={2}>
-        {isLoading ? "Czekam na onLoad…" : loadedUrl}
-      </Text>
+          <Activity mode="visible">
+            <View style={[styles.webSlot, isLoading && styles.webSlotWhileLoading]}>
+              {children}
+            </View>
+          </Activity>
+        </View>
+      </View>
     </View>
   );
 }
@@ -75,9 +68,26 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     backgroundColor: "#ffffff",
   },
+  viewportStack: {
+    flex: 1,
+    minHeight: 0,
+    position: "relative",
+  },
+  webSlot: {
+    flex: 1,
+    minHeight: 0,
+  },
+  webSlotWhileLoading: {
+    opacity: 0,
+  },
   status: {
     fontSize: 13,
     color: "#666666",
     minHeight: 18,
+  },
+  spinnerOverlay: {
+    ...StyleSheet.absoluteFill,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

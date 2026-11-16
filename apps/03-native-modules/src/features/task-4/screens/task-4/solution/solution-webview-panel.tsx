@@ -11,13 +11,7 @@ export function SolutionWebViewPanel({ url }: SolutionWebViewPanelProps) {
   const { isLoading, loadedUrl, handleLoad } = useWebViewLoadState(url);
 
   return (
-    <WebViewLabFrame
-      packageName="kksiazek-webview"
-      badge="Native WebView"
-      tone="solution"
-      isLoading={isLoading}
-      loadedUrl={loadedUrl}
-    >
+    <WebViewLabFrame isLoading={isLoading} loadedUrl={loadedUrl}>
       <KksiazekWebView
         url={url}
         onLoad={(event) => {

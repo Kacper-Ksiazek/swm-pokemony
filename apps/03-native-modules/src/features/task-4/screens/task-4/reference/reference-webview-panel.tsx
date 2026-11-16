@@ -11,13 +11,7 @@ export function ReferenceWebViewPanel({ url }: ReferenceWebViewPanelProps) {
   const { isLoading, loadedUrl, handleLoad } = useWebViewLoadState(url);
 
   return (
-    <WebViewLabFrame
-      packageName="react-native-webview"
-      badge="Referencja — biblioteka"
-      tone="reference"
-      isLoading={isLoading}
-      loadedUrl={loadedUrl}
-    >
+    <WebViewLabFrame isLoading={isLoading} loadedUrl={loadedUrl}>
       <WebView
         source={{ uri: url }}
         onLoad={(event) => {

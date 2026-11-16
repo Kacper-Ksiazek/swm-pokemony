@@ -53,10 +53,7 @@
           }
         }
       ],
-      [
-        "./plugins/with-icon-font.ts",
-        "./assets/fonts/icomoon"
-      ]
+      ["./plugins/with-icon-font.ts", "./assets/fonts/icomoon"]
     ],
     "experiments": {
       "typedRoutes": true,
