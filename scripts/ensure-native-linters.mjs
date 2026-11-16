@@ -3,7 +3,7 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { chmodSync, createWriteStream, existsSync, mkdirSync } from "node:fs";
+import { chmodSync, createWriteStream, existsSync, mkdirSync, renameSync } from "node:fs";
 import { pipeline } from "node:stream/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,6 +13,13 @@ const TOOLS = path.join(ROOT, ".tools");
 
 const SWIFTFORMAT_VERSION = "0.64.6";
 const KTLINT_VERSION = "1.8.0";
+
+/** Release zips use platform-specific filenames; we normalize to `.tools/swiftformat`. */
+const SWIFTFORMAT_UNZIPPED_NAMES = [
+  "swiftformat",
+  "swiftformat_linux",
+  "swiftformat_linux_aarch64",
+];
 
 const platform = process.platform;
 const arch = process.arch;
@@ -59,12 +66,19 @@ export async function ensureSwiftFormat() {
     throw new Error(`unzip swiftformat failed: ${unzip.stderr}`);
   }
 
-  const nested = path.join(TOOLS, "swiftformat");
-  if (!existsSync(nested)) {
+  const unpacked = SWIFTFORMAT_UNZIPPED_NAMES.map((name) => path.join(TOOLS, name)).find((p) =>
+    existsSync(p),
+  );
+  if (!unpacked) {
     throw new Error("SwiftFormat binary missing after unzip");
   }
-  chmodSync(nested, 0o755);
-  return nested;
+
+  const canonical = path.join(TOOLS, "swiftformat");
+  if (unpacked !== canonical) {
+    renameSync(unpacked, canonical);
+  }
+  chmodSync(canonical, 0o755);
+  return canonical;
 }
 
 export async function ensureKtlint() {

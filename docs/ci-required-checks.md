@@ -14,7 +14,7 @@ On GitHub the same steps run as:
 4. **Typecheck** — `bun run typecheck` runs `tsc --noEmit` in **each** package under `apps/*` that defines a `typecheck` script (`bun run --filter './apps/*' typecheck`).
 5. **Native JS bundle** — `bun run export:native` runs `expo export -p ios -p android` in **each** such app the same way.
 
-Adding a new app: create `apps/<id>/` with `typecheck` and `export:native` in its `package.json`; root scripts pick it up automatically. Lint stays at the repo root only.
+Adding a new app: create `apps/<id>/` with `lint`, `typecheck`, and `export:native` in its `package.json`; root scripts pick up typecheck/export automatically. Use root `bun run lint` / `bun run ci` for full-repo checks (ESLint + Prettier + native formatters), or `bun run lint` inside an app for that package only.
 
 Step 3 does **not** produce full `.ipa` / `.apk` files. It runs Metro and proves the JavaScript bundle compiles for **iOS and Android** targets. That is the usual “does the app still build at the JS layer?” check in CI without macOS runners or Android SDK setup.
 

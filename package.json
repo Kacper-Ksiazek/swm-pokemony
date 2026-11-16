@@ -10,6 +10,7 @@
     "eslint": "eslint .",
     "prettier:check": "prettier --check .",
     "lint": "bun run eslint && bun run prettier:check && bun run lint:native",
+    "lint:apps": "bun run --filter './apps/*' lint",
     "lint:fix": "eslint . --fix && prettier --write . && bun run format:native",
     "format": "prettier --write . && bun run format:native",
     "ci": "node scripts/ensure-native-linters.mjs && bun run eslint && bun run prettier:check && bun run lint:native && bun run typecheck && bun run export:native",
