@@ -29,7 +29,9 @@ public class KksiazekDeviceOrientationModule: Module {
     }
 
     AsyncFunction("getOrientationAsync") { () -> String in
-      Self.stringify(deviceOrientation: UIDevice.current.orientation)
+      Self.stringify(
+        interfaceOrientation: Self.interfaceOrientation(from: UIDevice.current.orientation)
+      )
     }
   }
 
@@ -58,19 +60,37 @@ public class KksiazekDeviceOrientationModule: Module {
 
   @objc
   private func handleDeviceOrientationDidChange() {
-    let orientation = Self.stringify(deviceOrientation: UIDevice.current.orientation)
+    let orientation = Self.stringify(
+      interfaceOrientation: Self.interfaceOrientation(from: UIDevice.current.orientation)
+    )
 
     sendEvent(orientationChangeEventName, [
       "orientation": orientation
     ])
   }
 
-  /// Mapowanie 1:1 `UIDeviceOrientation` → kontrakt JS (jak w turbo-modules-orientation-todo).
-  /// UIKit: `landscapeLeft` = urządzenie obrócone tak, że **górna krawędź** jest po lewej stronie
-  /// ekranu;
-  /// to bywa mylące względem etykiet w `expo-screen-orientation` — porównaj na Task 1.
-  private static func stringify(deviceOrientation: UIDeviceOrientation) -> String {
+  /// Jak `UIDeviceOrientation.toInterfaceOrientation()` w `expo-screen-orientation` — landscape L/R
+  /// w `UIDevice` jest zamienione względem orientacji interfejsu.
+  private static func interfaceOrientation(from deviceOrientation: UIDeviceOrientation)
+    -> UIInterfaceOrientation
+  {
     switch deviceOrientation {
+    case .portrait:
+      .portrait
+    case .portraitUpsideDown:
+      .portraitUpsideDown
+    case .landscapeLeft:
+      .landscapeRight
+    case .landscapeRight:
+      .landscapeLeft
+    default:
+      .unknown
+    }
+  }
+
+  /// Kontrakt JS = `Orientation` z `expo-screen-orientation` (interface, nie raw `UIDevice`).
+  private static func stringify(interfaceOrientation: UIInterfaceOrientation) -> String {
+    switch interfaceOrientation {
     case .portrait:
       "PORTRAIT_UP"
     case .portraitUpsideDown:
@@ -79,7 +99,7 @@ public class KksiazekDeviceOrientationModule: Module {
       "LANDSCAPE_LEFT"
     case .landscapeRight:
       "LANDSCAPE_RIGHT"
-    case .faceUp, .faceDown, .unknown:
+    case .unknown:
       "UNKNOWN"
     @unknown default:
       "UNKNOWN"

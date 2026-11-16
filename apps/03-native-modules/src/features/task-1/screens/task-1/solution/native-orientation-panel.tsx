@@ -17,10 +17,6 @@ export function NativeOrientationPanel() {
           {orientationLabel}
         </Text>
       )}
-
-      <Text style={styles.hint}>
-        Po pierwszym iOS rebuild moduł zwraca stałe UNKNOWN; log w konsoli Metro to smoke test.
-      </Text>
     </View>
   );
 }
@@ -57,12 +53,5 @@ const styles = StyleSheet.create({
   },
   spinner: {
     marginVertical: 12,
-  },
-  hint: {
-    fontSize: 15,
-    color: "#888888",
-    textAlign: "center",
-    lineHeight: 22,
-    maxWidth: 320,
   },
 });

@@ -52,6 +52,10 @@
             "deploymentTarget": "17.0"
           }
         }
+      ],
+      [
+        "./plugins/with-icon-font.ts",
+        "./assets/fonts/icomoon"
       ]
     ],
     "experiments": {

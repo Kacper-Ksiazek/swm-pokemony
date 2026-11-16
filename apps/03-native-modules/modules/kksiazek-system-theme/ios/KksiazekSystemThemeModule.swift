@@ -31,7 +31,13 @@ public class KksiazekSystemThemeModule: Module {
     }
 
     Function("getColorScheme") { () -> String in
-      DispatchQueue.main.sync { Self.currentColorScheme() }
+      if Thread.isMainThread {
+        return Self.currentColorScheme()
+      }
+
+      return DispatchQueue.main.sync {
+        Self.currentColorScheme()
+      }
     }
   }
 
