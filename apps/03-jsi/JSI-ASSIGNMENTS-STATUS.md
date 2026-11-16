@@ -6,9 +6,19 @@
 | ✅ **Completed**           | Zgodnie ze slajdem (nazwy + zachowanie)                                 |
 | 🚀 **Completed + stretch** | Ten sam cel JSI, inne API i/lub tab w aplikacji (szczegóły w **Notes**) |
 
-_Installer hooks `task1`–`task13` are wired in `JsiInstaller.cpp`; the file prefix `task-NN` is the hook number, which is not always the assignment number (see Notes)._
+## Podsumowanie
 
-**Repo wiring:** `modules/kksiazek-jsi/cpp/JsiInstaller.cpp` runs installer hooks `task1`–`task13` (`task-0N-*.cpp` plus `task-10`–`task-13`). Installer numbers are **not** always the same as assignment numbers — see Notes.
+**15 / 15** — wszystko zrobione w `apps/03-jsi`.
+
+|                        | Liczba | Assignmenty                            |
+| ---------------------- | -----: | -------------------------------------- |
+| ✅ Completed           |      3 | **#4**, **#7**, **#9**                 |
+| 🚀 Completed + stretch |     12 | **#1–3**, **#5–6**, **#8**, **#10–15** |
+| ⬜ TO_DO               |      0 | —                                      |
+
+Installer: `task1`–`task13` w `modules/kksiazek-jsi/cpp/JsiInstaller.cpp` (prefix pliku `task-0N` ≠ numer assignmentu — patrz **Notes** w tabeli).
+
+---
 
 |   # | Topic (short)                   | Status                 | Notes                                                                                                                                                    |
 | --: | ------------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -27,16 +37,3 @@ _Installer hooks `task1`–`task13` are wired in `JsiInstaller.cpp`; the file pr
 |  13 | `getDateObject` HostObject      | 🚀 Completed + stretch | As spec (+ setters): `task-09-date.cpp` · **Date** tab                                                                                                   |
 |  14 | `getInfinityObject`             | 🚀 Completed + stretch | `InfinityObject` HostObject with read-increments / write-decrements counter (`task-10-infinity.cpp`, installer hook `task10`) · **Counter** tab          |
 |  15 | Native state on `simpleObject`  | 🚀 Completed + stretch | `trackNativeState(obj)` attaches `CounterNativeState` (`task-12-native-state.cpp`, hook `task12`) · **Native State** tab                                 |
-
-## Summary
-
-| Status                 | Count |
-| ---------------------- | ----: |
-| ⬜ TO_DO               |     0 |
-| ✅ Completed           |     3 |
-| 🚀 Completed + stretch |    12 |
-
-```text
-Assignments:     15 total — all implemented
-Installer hooks: task1–task13 in C++ (wired in JsiInstaller.cpp)
-```
