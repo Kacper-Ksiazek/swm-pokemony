@@ -1,38 +1,88 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
-import { DemoScreen } from "@/components/demo-screen";
-import { theme } from "@/components/theme";
+import { IconSymbol } from "@/components/icon-symbol";
+
+import { BodyInfoDrawer } from "./components/body-info-drawer";
+import { type FocusRequest, SolarSystemScene } from "./components/solar-system-scene";
 
 export function Stars3dScreen() {
+  const insets = useSafeAreaInsets();
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [focusRequest, setFocusRequest] = useState<FocusRequest | null>(null);
+  const [drawerHeight, setDrawerHeight] = useState(0);
+
+  function handleSelectBodyFromScene(index: number | null) {
+    setSelectedIndex(index);
+
+    if (index === null) {
+      setDrawerHeight(0);
+    }
+  }
+
+  function handleNavigateFromDrawer(index: number) {
+    setSelectedIndex(index);
+    setFocusRequest((prev) => ({
+      index,
+      nonce: (prev?.nonce ?? 0) + 1,
+    }));
+  }
+
+  function handleCloseDrawer() {
+    setSelectedIndex(null);
+    setDrawerHeight(0);
+  }
+
   return (
-    <DemoScreen>
-      <View style={styles.card}>
-        <Text style={styles.eyebrow}>TO DO</Text>
-        <Text style={styles.body}>3D parallax star field</Text>
-      </View>
-    </DemoScreen>
+    <View style={styles.screen}>
+      <StatusBar style="light" />
+
+      <SolarSystemScene
+        focusRequest={focusRequest}
+        drawerHeight={drawerHeight}
+        onSelectBody={handleSelectBodyFromScene}
+      />
+
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Wróć"
+        hitSlop={8}
+        onPress={() => router.back()}
+        style={[styles.backButton, { top: insets.top + 8 }]}
+      >
+        <IconSymbol name="chevron.left" size={20} color="#FFFFFF" />
+      </Pressable>
+
+      <BodyInfoDrawer
+        bodyIndex={selectedIndex}
+        onSelectBody={handleNavigateFromDrawer}
+        onRefocus={handleNavigateFromDrawer}
+        onClose={handleCloseDrawer}
+        onHeightChange={setDrawerHeight}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: theme.colors.card,
+  screen: {
+    flex: 1,
+    backgroundColor: "#232323",
+  },
+  backButton: {
+    position: "absolute",
+    left: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.14)",
     borderWidth: 1,
-    borderColor: theme.colors.cardBorder,
-    borderRadius: theme.radius.lg + 2,
-    padding: 16,
-    gap: 8,
-  },
-  eyebrow: {
-    fontSize: 12,
-    fontWeight: "700",
-    letterSpacing: 0.6,
-    textTransform: "uppercase",
-    color: theme.colors.textMuted,
-  },
-  body: {
-    fontSize: 14,
-    lineHeight: 20,
-    color: theme.colors.textSecondary,
+    borderColor: "rgba(255, 255, 255, 0.22)",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 100000,
   },
 });

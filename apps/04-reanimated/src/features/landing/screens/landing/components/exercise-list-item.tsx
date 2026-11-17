@@ -32,11 +32,15 @@ export function ExerciseListItem({ item, index }: ExerciseListItemProps) {
           <Text style={styles.rowTitle}>{item.title}</Text>
           <Text style={styles.rowSubtitle}>{item.subtitle}</Text>
         </View>
-        <View style={[styles.statusPill, item.status === "todo" && styles.statusTodo]}>
-          <Text style={[styles.statusText, item.status === "todo" && styles.statusTextTodo]}>
-            {item.status === "done" ? "Done" : "TO_DO"}
-          </Text>
-        </View>
+        {item.status === "todo" ? (
+          <View style={styles.statusPill}>
+            <Text style={styles.statusText}>TO_DO</Text>
+          </View>
+        ) : (
+          <View style={styles.statusDone}>
+            <IconSymbol name="checkmark" size={17} color={theme.colors.success} />
+          </View>
+        )}
       </Pressable>
     </Animated.View>
   );
@@ -78,20 +82,22 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
   },
   statusPill: {
-    backgroundColor: theme.colors.successBg,
+    backgroundColor: theme.colors.dangerBg,
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
-  statusTodo: {
-    backgroundColor: theme.colors.dangerBg,
+  statusDone: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: theme.colors.successBg,
+    alignItems: "center",
+    justifyContent: "center",
   },
   statusText: {
     fontSize: 11,
     fontWeight: "700",
-    color: theme.colors.success,
-  },
-  statusTextTodo: {
     color: theme.colors.danger,
   },
   pressed: {

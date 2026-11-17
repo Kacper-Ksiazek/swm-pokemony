@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,13 +19,11 @@ export function LandingScreen() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<ExerciseFilter>("all");
 
-  const filteredItems = useMemo(() => {
-    const items = DEMO_SECTIONS.flatMap((section) => section.items);
-    return filterDemoItems(items, query, filter);
-  }, [query, filter]);
+  const items = DEMO_SECTIONS.flatMap((section) => section.items);
+  const filteredItems = filterDemoItems(items, query, filter);
 
   return (
-    <SafeAreaView style={styles.screen} edges={["left", "right"]}>
+    <SafeAreaView style={styles.screen} edges={["left", "right", "top"]}>
       <StatusBar style="dark" />
       <View style={styles.listFrame}>
         <ScrollView

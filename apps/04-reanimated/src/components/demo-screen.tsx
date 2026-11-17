@@ -1,4 +1,4 @@
-import { Platform, ScrollView, StyleSheet } from "react-native";
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
@@ -10,25 +10,33 @@ export const monoFont = Platform.select({
   default: "monospace",
 });
 
-/** Shared page chrome for every exercise: scroll body inside safe area. */
+/** Shared page chrome for every exercise. Turn scroll off when a gesture owns the screen. */
 export function DemoScreen({
   keyboardShouldPersistTaps = "handled",
+  scroll = true,
+  fullWidth = false,
   children,
 }: {
   keyboardShouldPersistTaps?: "handled" | "always" | "never";
+  scroll?: boolean;
+  fullWidth?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <SafeAreaView style={styles.screen} edges={["left", "right"]}>
       <StatusBar style="dark" />
 
-      <ScrollView
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-        showsVerticalScrollIndicator={false}
-      >
-        {children}
-      </ScrollView>
+      {scroll ? (
+        <ScrollView
+          contentContainerStyle={[styles.content, fullWidth && styles.fullWidth]}
+          keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+          showsVerticalScrollIndicator={false}
+        >
+          {children}
+        </ScrollView>
+      ) : (
+        <View style={[styles.content, fullWidth && styles.fullWidth]}>{children}</View>
+      )}
     </SafeAreaView>
   );
 }
@@ -44,5 +52,8 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
     gap: 18,
     flex: 1,
+  },
+  fullWidth: {
+    paddingHorizontal: 0,
   },
 });

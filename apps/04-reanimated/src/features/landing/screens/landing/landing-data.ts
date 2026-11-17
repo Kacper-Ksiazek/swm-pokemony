@@ -36,14 +36,14 @@ export const DEMO_SECTIONS: { title: string; items: DemoItem[] }[] = [
         subtitle: "02-svg-circle · Animated SVG circle",
         href: "/svg-circle",
         icon: "circle.fill",
-        status: "todo",
+        status: "done",
       },
       {
         title: "Stars 3D",
-        subtitle: "03-stars-3d · 3D parallax star field",
+        subtitle: "03-stars-3d · 3D solar system, drag and pinch",
         href: "/stars-3d",
         icon: "cube.fill",
-        status: "todo",
+        status: "done",
       },
       {
         title: "Physics ball",

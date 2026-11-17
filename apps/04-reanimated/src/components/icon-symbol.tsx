@@ -18,6 +18,10 @@ const MAPPING = {
   "square.grid.3x3.fill": "grid-on",
   magnifyingglass: "search",
   "chevron.down": "expand-more",
+  "chevron.left": "chevron-left",
+  scope: "my-location",
+  xmark: "close",
+  checkmark: "check",
 } as const satisfies Record<string, ComponentProps<typeof MaterialIcons>["name"]>;
 
 export type ExerciseIconName = keyof typeof MAPPING;
