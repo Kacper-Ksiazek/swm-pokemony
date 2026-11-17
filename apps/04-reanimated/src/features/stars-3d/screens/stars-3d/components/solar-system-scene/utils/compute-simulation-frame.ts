@@ -31,6 +31,35 @@ export type SimulationFrameOutput = {
   nextProjections: ProjectedBody[] | null;
 };
 
+/** Updates a body's orbital angle by `dt` (stays `0` for fixed central bodies). */
+function updateOrbitAngle(prevAngle: number, radius: number, velocity: number, dt: number): number {
+  "worklet";
+  return radius > 0 ? prevAngle + velocity * dt : 0;
+}
+
+/** Updates a body's axial spin angle by `dt` when it has non-zero angular velocity. */
+function updateSpinAngle(prevSpin: number, angularVelocity: number, dt: number): number {
+  "worklet";
+  return angularVelocity !== 0 ? prevSpin + angularVelocity * dt : prevSpin;
+}
+
+/** Resolves a body's world-space XZ position relative to its parent body (or the origin). */
+function resolveWorldPosition(
+  angle: number,
+  radius: number,
+  parentIndex: number,
+  worldPositions: WorldPoint[],
+): WorldPoint {
+  "worklet";
+  const parentX = parentIndex >= 0 ? worldPositions[parentIndex].x : 0;
+  const parentZ = parentIndex >= 0 ? worldPositions[parentIndex].z : 0;
+
+  return {
+    x: parentX + radius * Math.cos(angle),
+    z: parentZ + radius * Math.sin(angle),
+  };
+}
+
 /**
  * Updates orbit and spin angles, resolves parent-relative world coordinates
  * (parents must precede their satellites in `SOLAR_SYSTEM_BODIES`), and projects
@@ -117,34 +146,5 @@ export function computeSimulationFrame(input: SimulationFrameInput): SimulationF
     nextWorldPositions,
     center,
     nextProjections,
-  };
-}
-
-/** Updates a body's orbital angle by `dt` (stays `0` for fixed central bodies). */
-function updateOrbitAngle(prevAngle: number, radius: number, velocity: number, dt: number): number {
-  "worklet";
-  return radius > 0 ? prevAngle + velocity * dt : 0;
-}
-
-/** Updates a body's axial spin angle by `dt` when it has non-zero angular velocity. */
-function updateSpinAngle(prevSpin: number, angularVelocity: number, dt: number): number {
-  "worklet";
-  return angularVelocity !== 0 ? prevSpin + angularVelocity * dt : prevSpin;
-}
-
-/** Resolves a body's world-space XZ position relative to its parent body (or the origin). */
-function resolveWorldPosition(
-  angle: number,
-  radius: number,
-  parentIndex: number,
-  worldPositions: WorldPoint[],
-): WorldPoint {
-  "worklet";
-  const parentX = parentIndex >= 0 ? worldPositions[parentIndex].x : 0;
-  const parentZ = parentIndex >= 0 ? worldPositions[parentIndex].z : 0;
-
-  return {
-    x: parentX + radius * Math.cos(angle),
-    z: parentZ + radius * Math.sin(angle),
   };
 }
