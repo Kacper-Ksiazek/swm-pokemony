@@ -16,8 +16,12 @@ import {
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-export function LineToCircle() {
-  const { cycle, animatedProps } = useLineToCircleAnimation();
+interface LineToCircleProps {
+  isActive?: boolean;
+}
+
+export function LineToCircle({ isActive = true }: LineToCircleProps) {
+  const { cycle, animatedProps } = useLineToCircleAnimation(isActive);
 
   return (
     <View style={styles.wrapper}>

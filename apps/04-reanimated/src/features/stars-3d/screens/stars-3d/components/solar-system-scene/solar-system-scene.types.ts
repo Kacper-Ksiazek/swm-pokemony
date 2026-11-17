@@ -6,5 +6,6 @@ export type FocusRequest = {
 export type SolarSystemSceneProps = {
   focusRequest: FocusRequest | null;
   drawerHeight: number;
+  isActive?: boolean;
   onSelectBody: (bodyIndex: number | null) => void;
 };

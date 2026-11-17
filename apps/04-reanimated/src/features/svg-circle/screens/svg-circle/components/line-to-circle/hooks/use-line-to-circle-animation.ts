@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import {
+  cancelAnimation,
   Easing,
   useAnimatedProps,
   useDerivedValue,
@@ -17,14 +18,24 @@ function easeInOutCubic(t: number) {
 }
 
 /** Drives the repeating line↔circle morph cycle and animated SVG path `d`. */
-export function useLineToCircleAnimation() {
+export function useLineToCircleAnimation(isActive = true) {
   const cycle = useSharedValue(0);
 
   useEffect(() => {
+    if (!isActive) {
+      cancelAnimation(cycle);
+      return;
+    }
+
+    cycle.set(0);
     cycle.set(
       withRepeat(withTiming(1, { duration: TOTAL_CYCLE_MS, easing: Easing.linear }), -1, false),
     );
-  }, [cycle]);
+
+    return () => {
+      cancelAnimation(cycle);
+    };
+  }, [cycle, isActive]);
 
   const progress = useDerivedValue(() => {
     const elapsed = cycle.get() * TOTAL_CYCLE_MS;

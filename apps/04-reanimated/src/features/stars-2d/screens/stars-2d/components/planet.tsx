@@ -1,9 +1,12 @@
-import { useCallback } from "react";
+import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
+  cancelAnimation,
+  Easing,
   useAnimatedStyle,
-  useFrameCallback,
   useSharedValue,
+  withRepeat,
+  withTiming,
 } from "react-native-reanimated";
 
 interface PlanetProps {
@@ -14,6 +17,13 @@ interface PlanetProps {
   angularVelocity: number;
   radius: number;
   includeOverlay?: boolean;
+  isActive?: boolean;
+}
+
+const FULL_ROTATION = 2 * Math.PI;
+
+function rotationDurationMs(angularSpeedRadPerSec: number): number {
+  return (FULL_ROTATION / Math.abs(angularSpeedRadPerSec)) * 1000;
 }
 
 export function Planet({
@@ -24,47 +34,66 @@ export function Planet({
   angularVelocity,
   radius,
   includeOverlay = true,
+  isActive = true,
 }: PlanetProps) {
   const orbitAngle = useSharedValue(0);
   const spinAngle = useSharedValue(0);
-  const position = useSharedValue<{ x: number; y: number }>({
-    x: radius,
-    y: 0,
-  });
 
-  useFrameCallback(
-    useCallback(
-      (frameInfo) => {
-        "worklet";
-        const dt = (frameInfo.timeSincePreviousFrame ?? 16) / 1000;
+  useEffect(() => {
+    if (!isActive) {
+      cancelAnimation(orbitAngle);
+      cancelAnimation(spinAngle);
 
-        if (radius > 0) {
-          orbitAngle.set(orbitAngle.get() + velocity * dt);
+      return;
+    }
 
-          const angle = orbitAngle.get();
+    orbitAngle.set(0);
 
-          position.set({
-            x: radius * Math.cos(angle),
-            y: radius * Math.sin(angle),
-          });
-        }
+    if (radius > 0 && velocity > 0) {
+      orbitAngle.set(
+        withRepeat(
+          withTiming(FULL_ROTATION, {
+            duration: rotationDurationMs(velocity),
+            easing: Easing.linear,
+          }),
+          -1,
+          false,
+        ),
+      );
+    }
 
-        if (angularVelocity !== 0) {
-          spinAngle.set(spinAngle.get() + angularVelocity * dt);
-        }
-      },
-      [angularVelocity, orbitAngle, position, radius, spinAngle, velocity],
-    ),
-  );
+    spinAngle.set(0);
+
+    if (angularVelocity !== 0) {
+      const signedRotation = angularVelocity > 0 ? FULL_ROTATION : -FULL_ROTATION;
+      spinAngle.set(
+        withRepeat(
+          withTiming(signedRotation, {
+            duration: rotationDurationMs(angularVelocity),
+            easing: Easing.linear,
+          }),
+          -1,
+          false,
+        ),
+      );
+    }
+
+    return () => {
+      cancelAnimation(orbitAngle);
+      cancelAnimation(spinAngle);
+    };
+  }, [angularVelocity, isActive, orbitAngle, radius, spinAngle, velocity]);
 
   const planetStyle = useAnimatedStyle(() => {
-    const { x, y } = position.get();
     const half = size / 2;
+    const orbitTransforms =
+      radius > 0 ? ([{ rotate: `${orbitAngle.get()}rad` }, { translateX: radius }] as const) : [];
 
     return {
       transform: [
-        { translateX: x - half },
-        { translateY: y - half },
+        { translateX: -half },
+        { translateY: -half },
+        ...orbitTransforms,
         { rotate: `${spinAngle.get()}rad` },
       ],
     };

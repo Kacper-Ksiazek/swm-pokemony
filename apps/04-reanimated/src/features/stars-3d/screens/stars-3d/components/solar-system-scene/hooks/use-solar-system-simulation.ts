@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useFrameCallback, useSharedValue } from "react-native-reanimated";
 
 import type { ProjectedBody } from "../../../projection";
@@ -16,11 +16,13 @@ import { useSceneCamera } from "./use-scene-camera";
 type UseSolarSystemSimulationParams = {
   focusRequest: FocusRequest | null;
   drawerHeight: number;
+  isActive?: boolean;
 };
 
 export function useSolarSystemSimulation({
   focusRequest,
   drawerHeight,
+  isActive = true,
 }: UseSolarSystemSimulationParams) {
   const {
     cameraDistance,
@@ -47,14 +49,15 @@ export function useSolarSystemSimulation({
     cameraDistance,
   });
 
-  useFrameCallback(
+  const frameCallback = useFrameCallback(
     useCallback(
       (frameInfo) => {
         "worklet";
         const { width, height } = viewport.get();
+        const rawDt = (frameInfo.timeSincePreviousFrame ?? 16) / 1000;
 
         const frame = computeSimulationFrame({
-          dt: (frameInfo.timeSincePreviousFrame ?? 16) / 1000,
+          dt: Math.min(rawDt, 0.05),
           prevOrbits: orbitAngles.get(),
           prevSpins: spinAngles.get(),
           focusedIndex: focusedIndex.get(),
@@ -97,7 +100,12 @@ export function useSolarSystemSimulation({
         yaw,
       ],
     ),
+    false,
   );
+
+  useEffect(() => {
+    frameCallback.setActive(isActive);
+  }, [frameCallback, isActive]);
 
   return {
     cameraDistance,

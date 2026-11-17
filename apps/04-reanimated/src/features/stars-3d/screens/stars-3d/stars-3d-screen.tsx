@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { router } from "expo-router";
+import { router, useIsFocused } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 import { IconSymbol } from "@/components/icon-symbol";
@@ -10,6 +10,7 @@ import { BodyInfoDrawer } from "./components/body-info-drawer";
 import { type FocusRequest, SolarSystemScene } from "./components/solar-system-scene";
 
 export function Stars3dScreen() {
+  const isFocused = useIsFocused();
   const insets = useSafeAreaInsets();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [focusRequest, setFocusRequest] = useState<FocusRequest | null>(null);
@@ -43,6 +44,7 @@ export function Stars3dScreen() {
       <SolarSystemScene
         focusRequest={focusRequest}
         drawerHeight={drawerHeight}
+        isActive={isFocused}
         onSelectBody={handleSelectBodyFromScene}
       />
 

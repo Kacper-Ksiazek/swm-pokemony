@@ -1,4 +1,5 @@
 import { StyleSheet, View } from "react-native";
+import { useIsFocused } from "expo-router";
 
 import { DemoScreen } from "@/components/demo-screen";
 import { Planet } from "./components/planet";
@@ -14,6 +15,8 @@ import {
 } from "./solar-system-bodies";
 
 export function Stars2dScreen() {
+  const isFocused = useIsFocused();
+
   return (
     <DemoScreen>
       <View style={styles.section}>
@@ -25,6 +28,7 @@ export function Stars2dScreen() {
             velocity={0}
             angularVelocity={bodySpinRate(SUN.spinPeriodDays)}
             radius={0}
+            isActive={isFocused}
           />
 
           {PLANETS.map((body) => {
@@ -40,6 +44,7 @@ export function Stars2dScreen() {
                 angularVelocity={bodySpinRate(body.spinPeriodDays)}
                 radius={radius}
                 includeOverlay={body.includeOverlay}
+                isActive={isFocused}
               />
             );
           })}

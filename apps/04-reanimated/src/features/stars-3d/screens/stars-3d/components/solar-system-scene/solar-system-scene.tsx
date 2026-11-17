@@ -17,6 +17,7 @@ import type { SolarSystemSceneProps } from "./solar-system-scene.types";
 export function SolarSystemScene({
   focusRequest,
   drawerHeight,
+  isActive = true,
   onSelectBody,
 }: SolarSystemSceneProps) {
   const insets = useSafeAreaInsets();
@@ -35,7 +36,7 @@ export function SolarSystemScene({
     setViewport,
     resetOrientation,
     resetZoom,
-  } = useSolarSystemSimulation({ focusRequest, drawerHeight });
+  } = useSolarSystemSimulation({ focusRequest, drawerHeight, isActive });
 
   const gesture = useSceneGestures({
     cameraDistance,
