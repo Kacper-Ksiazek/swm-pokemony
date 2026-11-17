@@ -32,6 +32,7 @@ module.exports = defineConfig([
             "./apps/02-rn-perf/tsconfig.json",
             "./apps/03-native-modules/tsconfig.json",
             "./apps/03-jsi/tsconfig.json",
+            "./apps/04-reanimated/tsconfig.json",
           ],
         },
       },
