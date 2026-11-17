@@ -5,7 +5,7 @@ import { theme } from "@/components/theme";
 
 export function ScrollOnboardingScreen() {
   return (
-    <DemoScreen badge="06-scroll-onboarding" title="Scroll onboarding">
+    <DemoScreen>
       <View style={styles.card}>
         <Text style={styles.eyebrow}>TO DO</Text>
         <Text style={styles.body}>Scroll-linked onboarding</Text>

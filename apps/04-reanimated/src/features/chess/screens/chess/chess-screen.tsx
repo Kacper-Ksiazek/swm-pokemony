@@ -5,7 +5,7 @@ import { theme } from "@/components/theme";
 
 export function ChessScreen() {
   return (
-    <DemoScreen badge="10-chess" title="Chess">
+    <DemoScreen>
       <View style={styles.card}>
         <Text style={styles.eyebrow}>TO DO</Text>
         <Text style={styles.body}>Interactive chessboard</Text>

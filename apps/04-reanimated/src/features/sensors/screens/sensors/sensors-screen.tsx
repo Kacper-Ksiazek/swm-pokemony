@@ -5,7 +5,7 @@ import { theme } from "@/components/theme";
 
 export function SensorsScreen() {
   return (
-    <DemoScreen badge="07-sensors" title="Sensors">
+    <DemoScreen>
       <View style={styles.card}>
         <Text style={styles.eyebrow}>TO DO</Text>
         <Text style={styles.body}>Accelerometer / gyroscope</Text>

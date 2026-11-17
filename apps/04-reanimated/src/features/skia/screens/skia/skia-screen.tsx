@@ -5,7 +5,7 @@ import { theme } from "@/components/theme";
 
 export function SkiaScreen() {
   return (
-    <DemoScreen badge="09-skia" title="Skia">
+    <DemoScreen>
       <View style={styles.card}>
         <Text style={styles.eyebrow}>TO DO</Text>
         <Text style={styles.body}>Skia + Reanimated</Text>

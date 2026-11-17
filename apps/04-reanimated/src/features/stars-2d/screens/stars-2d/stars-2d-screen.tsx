@@ -1,38 +1,66 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { DemoScreen } from "@/components/demo-screen";
-import { theme } from "@/components/theme";
+import { Planet } from "./components/planet";
+import { SolarSystemLegend } from "./components/solar-system-legend";
+import {
+  PLANETS,
+  SUN,
+  bodyDisplaySize,
+  bodySpinRate,
+  orbitRadiusPx,
+  orbitVelocity,
+  solarSystemLayoutSize,
+} from "./solar-system-bodies";
 
 export function Stars2dScreen() {
   return (
-    <DemoScreen badge="01-stars-2d" title="Stars 2D">
-      <View style={styles.card}>
-        <Text style={styles.eyebrow}>TO DO</Text>
-        <Text style={styles.body}>2D star field</Text>
+    <DemoScreen>
+      <View style={styles.section}>
+        <View style={styles.card}>
+          <Planet
+            id={SUN.id}
+            size={SUN.displaySize}
+            color={SUN.color}
+            velocity={0}
+            angularVelocity={bodySpinRate(SUN.spinPeriodDays)}
+            radius={0}
+          />
+
+          {PLANETS.map((body) => {
+            const radius = orbitRadiusPx(body.orbitalAu);
+
+            return (
+              <Planet
+                key={body.id}
+                id={body.id}
+                size={bodyDisplaySize(body.diameterRelativeToEarth)}
+                color={body.color}
+                velocity={orbitVelocity(radius)}
+                angularVelocity={bodySpinRate(body.spinPeriodDays)}
+                radius={radius}
+                includeOverlay={body.includeOverlay}
+              />
+            );
+          })}
+        </View>
+        <SolarSystemLegend />
       </View>
     </DemoScreen>
   );
 }
 
 const styles = StyleSheet.create({
+  section: {
+    width: "100%",
+    flex: 1,
+  },
   card: {
-    backgroundColor: theme.colors.card,
-    borderWidth: 1,
-    borderColor: theme.colors.cardBorder,
-    borderRadius: theme.radius.lg + 2,
-    padding: 16,
-    gap: 8,
-  },
-  eyebrow: {
-    fontSize: 12,
-    fontWeight: "700",
-    letterSpacing: 0.6,
-    textTransform: "uppercase",
-    color: theme.colors.textMuted,
-  },
-  body: {
-    fontSize: 14,
-    lineHeight: 20,
-    color: theme.colors.textSecondary,
+    width: "100%",
+    minWidth: solarSystemLayoutSize,
+    minHeight: solarSystemLayoutSize,
+    flex: 1,
+    alignSelf: "center",
+    backgroundColor: "#232323",
   },
 });

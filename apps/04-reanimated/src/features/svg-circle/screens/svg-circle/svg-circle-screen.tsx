@@ -5,7 +5,7 @@ import { theme } from "@/components/theme";
 
 export function SvgCircleScreen() {
   return (
-    <DemoScreen badge="02-svg-circle" title="SVG circle">
+    <DemoScreen>
       <View style={styles.card}>
         <Text style={styles.eyebrow}>TO DO</Text>
         <Text style={styles.body}>Animated SVG circle</Text>

@@ -5,7 +5,7 @@ import { theme } from "@/components/theme";
 
 export function Stars3dScreen() {
   return (
-    <DemoScreen badge="03-stars-3d" title="Stars 3D">
+    <DemoScreen>
       <View style={styles.card}>
         <Text style={styles.eyebrow}>TO DO</Text>
         <Text style={styles.body}>3D parallax star field</Text>

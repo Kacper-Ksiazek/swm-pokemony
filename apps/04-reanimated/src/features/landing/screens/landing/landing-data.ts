@@ -29,7 +29,7 @@ export const DEMO_SECTIONS: { title: string; items: DemoItem[] }[] = [
         subtitle: "01-stars-2d · 2D star field",
         href: "/stars-2d",
         icon: "star.fill",
-        status: "todo",
+        status: "done",
       },
       {
         title: "SVG circle",

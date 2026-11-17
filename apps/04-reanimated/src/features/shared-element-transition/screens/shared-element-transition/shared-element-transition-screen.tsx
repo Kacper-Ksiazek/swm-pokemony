@@ -5,7 +5,7 @@ import { theme } from "@/components/theme";
 
 export function SharedElementTransitionScreen() {
   return (
-    <DemoScreen badge="08-shared-element-transition" title="Shared transition">
+    <DemoScreen>
       <View style={styles.card}>
         <Text style={styles.eyebrow}>TO DO</Text>
         <Text style={styles.body}>Shared element transitions</Text>
