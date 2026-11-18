@@ -27,6 +27,7 @@ export function useBodyFocus({
   const focusBodyOnUI = useCallback(
     (targetIndex: number) => {
       "worklet";
+
       const { width, height } = viewport.get();
 
       if (width <= 0 || height <= 0) {

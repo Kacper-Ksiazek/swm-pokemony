@@ -13,6 +13,7 @@ export const peakLabelFont = matchFont({
 
 export function measureText(text: string, font: ReturnType<typeof matchFont> = labelFont): number {
   "worklet";
+
   return font.measureText(text).width;
 }
 
@@ -75,6 +76,7 @@ export const SERIES_CONFIG: Record<DataSeries, SeriesConfig> = {
 
 export function buildLinePath(data: number[], maxVal: number): string {
   "worklet";
+
   if (data.length === 0) return "";
   const stepX = PLOT_W / (data.length - 1);
   return data
@@ -88,6 +90,7 @@ export function buildLinePath(data: number[], maxVal: number): string {
 
 export function buildAreaPath(data: number[], maxVal: number): string {
   "worklet";
+
   const line = buildLinePath(data, maxVal);
   if (!line) return "";
   const stepX = PLOT_W / (data.length - 1);
@@ -98,6 +101,7 @@ export function buildAreaPath(data: number[], maxVal: number): string {
 
 export function starPath(cx: number, cy: number, outerR: number, innerR: number, pts = 5): string {
   "worklet";
+
   const step = Math.PI / pts;
   return (
     Array.from({ length: 2 * pts }, (_, i) => {
@@ -117,6 +121,7 @@ export function buildStarsPath(
   innerR: number,
 ): string {
   "worklet";
+
   const stepX = PLOT_W / (data.length - 1);
   return data
     .map((val, i) => {
@@ -131,6 +136,7 @@ export function buildStarsPath(
 
 export function lerpArrays(a: number[], b: number[], t: number): number[] {
   "worklet";
+
   const longer = a.length >= b.length ? a : b;
   return longer.map((_, i) => {
     const va = i < a.length ? a[i] : 0;
@@ -141,6 +147,7 @@ export function lerpArrays(a: number[], b: number[], t: number): number[] {
 
 export function getPointX(index: number, total: number): number {
   "worklet";
+
   const stepX = PLOT_W / (total - 1);
   return PADDING.left + index * stepX;
 }
@@ -148,6 +155,7 @@ export function getPointX(index: number, total: number): number {
 /** Interpolate Y value from data at a fractional X position */
 export function sampleDataAtX(data: number[], maxVal: number, x: number): number {
   "worklet";
+
   if (data.length === 0) return PADDING.top + PLOT_H;
   const stepX = PLOT_W / (data.length - 1);
   const fractionalIdx = (x - PADDING.left) / stepX;
@@ -160,16 +168,19 @@ export function sampleDataAtX(data: number[], maxVal: number, x: number): number
 
 export function findPeakIndex(data: number[]): number {
   "worklet";
+
   return data.reduce((bestIdx, val, i) => (val > data[bestIdx] ? i : bestIdx), 0);
 }
 
 export function findPeakValue(data: number[]): number {
   "worklet";
+
   return data.reduce((best, val) => (val > best ? val : best), 0);
 }
 
 export function formatLabel(val: number): string {
   "worklet";
+
   return val > 999 ? (val / 1000).toFixed(1) + "k" : Math.round(val).toString();
 }
 

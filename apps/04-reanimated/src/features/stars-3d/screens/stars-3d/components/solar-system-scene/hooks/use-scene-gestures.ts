@@ -47,6 +47,7 @@ export function useSceneGestures({
     () => ({
       onActivate: () => {
         "worklet";
+
         pinchStartDistance.set(cameraDistance.get());
       },
       onUpdate: (event: { scale: number }) => {
@@ -68,11 +69,13 @@ export function useSceneGestures({
       maxPointers: 1,
       onActivate: () => {
         "worklet";
+
         panStartYaw.set(yaw.get());
         panStartPitch.set(pitch.get());
       },
       onUpdate: (event: { translationX: number; translationY: number }) => {
         "worklet";
+
         yaw.set(panStartYaw.get() + event.translationX * ORBIT_DRAG_RADIANS_PER_POINT);
         pitch.set(
           clampCameraPitch(panStartPitch.get() - event.translationY * ORBIT_DRAG_RADIANS_PER_POINT),
@@ -88,6 +91,7 @@ export function useSceneGestures({
       maxDistance: TAP_MAX_DISTANCE_PX,
       onActivate: (event: { x: number; y: number }) => {
         "worklet";
+
         const { width, height } = viewport.get();
 
         if (width <= 0 || height <= 0) {

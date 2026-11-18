@@ -20,10 +20,12 @@ function useInterpolatedSeries(
 ): AnimatedSeriesData {
   const data = useDerivedValue(() => {
     "worklet";
+
     return lerpArrays(prev.value, target.value, progress.value);
   });
   const max = useDerivedValue(() => {
     "worklet";
+
     return prevMax.value + (targetMax.value - prevMax.value) * progress.value;
   });
   return { data, max };

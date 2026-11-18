@@ -53,6 +53,7 @@ export function useSolarSystemSimulation({
     useCallback(
       (frameInfo) => {
         "worklet";
+
         const { width, height } = viewport.get();
         const rawDt = (frameInfo.timeSincePreviousFrame ?? 16) / 1000;
 

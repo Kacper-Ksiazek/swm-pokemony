@@ -23,7 +23,10 @@ export default function RootLayout() {
           <Stack.Screen name="stars-2d" options={{ title: "Stars 2D" }} />
           <Stack.Screen name="svg-circle" options={{ title: "SVG circle" }} />
           <Stack.Screen name="stars-3d" options={{ headerShown: false }} />
-          <Stack.Screen name="physics-ball" options={{ title: "Physics ball" }} />
+          <Stack.Screen
+            name="physics-ball"
+            options={{ title: "Physics ball", gestureEnabled: false }}
+          />
           <Stack.Screen name="keyboard-handler" options={{ title: "Keyboard handler" }} />
           <Stack.Screen name="scroll-onboarding" options={{ title: "Scroll onboarding" }} />
           <Stack.Screen name="sensors" options={{ title: "Sensors" }} />

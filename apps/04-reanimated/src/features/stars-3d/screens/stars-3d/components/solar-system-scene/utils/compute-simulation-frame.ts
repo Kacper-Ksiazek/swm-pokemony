@@ -34,12 +34,14 @@ export type SimulationFrameOutput = {
 /** Updates a body's orbital angle by `dt` (stays `0` for fixed central bodies). */
 function updateOrbitAngle(prevAngle: number, radius: number, velocity: number, dt: number): number {
   "worklet";
+
   return radius > 0 ? prevAngle + velocity * dt : 0;
 }
 
 /** Updates a body's axial spin angle by `dt` when it has non-zero angular velocity. */
 function updateSpinAngle(prevSpin: number, angularVelocity: number, dt: number): number {
   "worklet";
+
   return angularVelocity !== 0 ? prevSpin + angularVelocity * dt : prevSpin;
 }
 
@@ -51,6 +53,7 @@ function resolveWorldPosition(
   worldPositions: WorldPoint[],
 ): WorldPoint {
   "worklet";
+
   const parentX = parentIndex >= 0 ? worldPositions[parentIndex].x : 0;
   const parentZ = parentIndex >= 0 ? worldPositions[parentIndex].z : 0;
 
