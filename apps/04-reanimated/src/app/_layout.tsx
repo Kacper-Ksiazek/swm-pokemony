@@ -28,7 +28,10 @@ export default function RootLayout() {
             options={{ title: "Physics ball", gestureEnabled: false }}
           />
           <Stack.Screen name="keyboard-handler" options={{ title: "Keyboard handler" }} />
-          <Stack.Screen name="scroll-onboarding" options={{ title: "Scroll onboarding" }} />
+          <Stack.Screen
+            name="scroll-onboarding"
+            options={{ headerShown: false, gestureEnabled: false }}
+          />
           <Stack.Screen name="sensors" options={{ title: "Sensors" }} />
           <Stack.Screen name="shared-element-transition" options={{ title: "Shared transition" }} />
           <Stack.Screen name="skia" options={{ title: "Skia" }} />
