@@ -1,202 +1,256 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { useIsFocused } from "expo-router";
-import { SensorType, useAnimatedSensor, type ValueRotation } from "react-native-reanimated";
+import { useCallback } from "react";
+import { Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { router, useFocusEffect, useIsFocused } from "expo-router";
+import * as ScreenOrientation from "expo-screen-orientation";
+import { StatusBar } from "expo-status-bar";
 
-import { DemoScreen, monoFont } from "@/components/demo-screen";
+import { monoFont } from "@/components/demo-screen";
+import { IconSymbol } from "@/components/icon-symbol";
 import { theme } from "@/components/theme";
 
-const POLL_INTERVAL_MS = 100;
-const RAD_TO_DEG = 180 / Math.PI;
+import { GameOverlay } from "./components/game-overlay";
+import { RoadTrack } from "./components/road-track";
+import { ScoreVisualizer } from "./components/score-visualizer";
+import { SpeedVisualizer } from "./components/speed-visualizer";
+import { useRacingGame } from "./hooks/use-racing-game";
 
-function formatSigned(value: number, decimals: number): string {
-  const threshold = 0.5 * Math.pow(10, -decimals);
-  const normalized = Math.abs(value) < threshold ? 0 : value;
-  const formatted = normalized.toFixed(decimals);
-  return normalized > 0 ? `+${formatted}` : formatted;
-}
+export function SensorsScreen() {
+  const isFocused = useIsFocused();
+  const insets = useSafeAreaInsets();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 
-function AngleCell({ label, radians }: { label: string; radians: number }) {
-  const degrees = radians * RAD_TO_DEG;
+  useFocusEffect(
+    useCallback(() => {
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
+
+      return () => {
+        ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP).catch(() => {});
+      };
+    }, []),
+  );
+
+  const {
+    phase,
+    stats,
+    speedHud,
+    playerX,
+    playerLeanDeg,
+    roadScrollY,
+    traffic,
+    hitFlash,
+    invulnerableSec,
+    liveSpeedKmh,
+    brakePressed,
+    gasPressed,
+    startGame,
+    togglePause,
+    setBrakePressed,
+    setGasPressed,
+  } = useRacingGame(isFocused);
+
+  const brakeAnimatedStyle = useAnimatedStyle(() => ({
+    backgroundColor: brakePressed.get() ? theme.colors.accent : "rgba(185, 28, 28, 0.22)",
+  }));
+
+  const gasAnimatedStyle = useAnimatedStyle(() => ({
+    backgroundColor: gasPressed.get() ? "#16A34A" : "rgba(21, 128, 61, 0.24)",
+  }));
+
+  const roadHeight = windowHeight;
+  const roadWidth = Math.min(540, Math.max(280, windowWidth * 0.6));
+  const leftEdgeSpace = (windowWidth - roadWidth) / 2 - Math.max(12, insets.left + 8) - 8;
+  const rightEdgeSpace = (windowWidth - roadWidth) / 2 - Math.max(12, insets.right + 8) - 8;
+  const leftPanelWidth = Math.max(135, leftEdgeSpace);
+  const rightPanelWidth = Math.max(120, rightEdgeSpace);
 
   return (
-    <View style={styles.cell}>
-      <Text style={styles.cellLabel}>{label}</Text>
-      <Text style={styles.cellValue}>{formatSigned(radians, 3)} rad</Text>
-      <Text style={styles.cellHint}>{formatSigned(degrees, 1)}°</Text>
+    <View style={styles.screen}>
+      <StatusBar style="light" hidden />
+
+      <View style={styles.trackStage}>
+        <RoadTrack
+          width={roadWidth}
+          height={roadHeight}
+          playerX={playerX}
+          playerLeanDeg={playerLeanDeg}
+          roadScrollY={roadScrollY}
+          traffic={traffic}
+          hitFlash={hitFlash}
+          invulnerableSec={invulnerableSec}
+          liveSpeedKmh={liveSpeedKmh}
+        />
+        <GameOverlay phase={phase} stats={stats} onStart={startGame} onResume={togglePause} />
+      </View>
+
+      <View
+        style={[
+          styles.leftOverlay,
+          {
+            top: insets.top + 8,
+            bottom: insets.bottom + 8,
+            left: Math.max(12, insets.left + 8),
+            width: leftPanelWidth,
+          },
+        ]}
+        pointerEvents="box-none"
+      >
+        <View style={styles.leftTopGroup} pointerEvents="box-none">
+          <View style={styles.topRow}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Wróć"
+              onPress={() => router.back()}
+              style={styles.backButton}
+            >
+              <IconSymbol name="chevron.left" size={18} color={theme.colors.textPrimary} />
+              <Text style={styles.backButtonText}>Wróć</Text>
+            </Pressable>
+
+            {(phase === "playing" || phase === "paused") && (
+              <Pressable accessibilityRole="button" onPress={togglePause} style={styles.pausePill}>
+                <Text style={styles.pausePillText}>{phase === "playing" ? "Pauza" : "Wznów"}</Text>
+              </Pressable>
+            )}
+          </View>
+
+          {phase !== "gameover" && (
+            <SpeedVisualizer
+              speedKmh={speedHud.liveSpeedKmh}
+              pedalState={speedHud.pedalState}
+              liveSpeedKmh={liveSpeedKmh}
+            />
+          )}
+        </View>
+
+        {phase !== "gameover" && (
+          <Animated.View
+            onTouchStart={() => setBrakePressed(true)}
+            onTouchEnd={() => setBrakePressed(false)}
+            onTouchCancel={() => setBrakePressed(false)}
+            style={[styles.pedalButton, styles.brakePedal, brakeAnimatedStyle]}
+          >
+            <Text style={styles.pedalLabel}>HAMULEC</Text>
+            <Text style={styles.pedalSub}>ZWOLNIJ</Text>
+          </Animated.View>
+        )}
+      </View>
+
+      {phase !== "gameover" && (
+        <View
+          style={[
+            styles.rightOverlay,
+            {
+              top: insets.top + 8,
+              bottom: insets.bottom + 8,
+              right: Math.max(12, insets.right + 8),
+              width: rightPanelWidth,
+            },
+          ]}
+          pointerEvents="box-none"
+        >
+          <ScoreVisualizer stats={stats} />
+
+          <Animated.View
+            onTouchStart={() => setGasPressed(true)}
+            onTouchEnd={() => setGasPressed(false)}
+            onTouchCancel={() => setGasPressed(false)}
+            style={[styles.pedalButton, styles.gasPedal, gasAnimatedStyle]}
+          >
+            <Text style={styles.pedalLabel}>GAZ</Text>
+            <Text style={styles.pedalSub}>PRZYSPIESZ</Text>
+          </Animated.View>
+        </View>
+      )}
     </View>
   );
 }
 
-export function SensorsScreen() {
-  const isFocused = useIsFocused();
-  const rotation = useAnimatedSensor(SensorType.ROTATION);
-  const [value, setValue] = useState<ValueRotation>(() => rotation.sensor.value);
-
-  useEffect(() => {
-    if (!isFocused) {
-      return;
-    }
-
-    const readSensor = () => {
-      setValue(rotation.sensor.value);
-    };
-
-    readSensor();
-    const intervalId = setInterval(readSensor, POLL_INTERVAL_MS);
-
-    return () => clearInterval(intervalId);
-  }, [isFocused, rotation.sensor]);
-
-  return (
-    <DemoScreen>
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <View style={styles.titleBlock}>
-            <Text style={styles.title}>ROTATION</Text>
-            <Text style={styles.subtitle}>Euler angles · roll, pitch, yaw</Text>
-          </View>
-
-          <View style={styles.badges}>
-            <View style={styles.orientationPill}>
-              <Text style={styles.orientationText}>{value.interfaceOrientation}°</Text>
-            </View>
-            <View
-              style={[
-                styles.statusPill,
-                rotation.isAvailable ? styles.availablePill : styles.unavailablePill,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.statusText,
-                  rotation.isAvailable ? styles.availableText : styles.unavailableText,
-                ]}
-              >
-                {rotation.isAvailable ? "AVAILABLE" : "UNAVAILABLE"}
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.grid}>
-          <AngleCell label="ROLL" radians={value.roll} />
-          <AngleCell label="PITCH" radians={value.pitch} />
-          <AngleCell label="YAW" radians={value.yaw} />
-        </View>
-      </View>
-    </DemoScreen>
-  );
-}
-
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: theme.colors.card,
-    borderWidth: 1,
-    borderColor: theme.colors.cardBorder,
-    borderRadius: theme.radius.lg + 2,
-    padding: 14,
-    gap: 12,
+  screen: {
+    flex: 1,
+    backgroundColor: "#111318",
   },
-  cardHeader: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+  trackStage: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  leftOverlay: {
+    position: "absolute",
     justifyContent: "space-between",
     gap: 8,
   },
-  titleBlock: {
-    flex: 1,
-    gap: 2,
+  leftTopGroup: {
+    gap: 8,
   },
-  title: {
-    fontSize: 13,
-    fontWeight: "700",
-    letterSpacing: 0.4,
-    color: theme.colors.textPrimary,
-    fontFamily: monoFont,
-  },
-  subtitle: {
-    fontSize: 12,
-    color: theme.colors.textSecondary,
-  },
-  badges: {
+  topRow: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     gap: 6,
   },
-  orientationPill: {
-    paddingHorizontal: 7,
-    paddingVertical: 3,
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
     borderRadius: 999,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.card,
     borderWidth: 1,
     borderColor: theme.colors.cardBorder,
   },
-  orientationText: {
-    fontSize: 10,
-    fontWeight: "700",
-    color: theme.colors.textSecondary,
-    fontFamily: monoFont,
+  backButtonText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: theme.colors.textPrimary,
   },
-  statusPill: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+  pausePill: {
+    paddingHorizontal: 12,
+    paddingVertical: 7,
     borderRadius: 999,
+    backgroundColor: theme.colors.pillBg,
     borderWidth: 1,
+    borderColor: theme.colors.badgeBorder,
   },
-  availablePill: {
-    backgroundColor: theme.colors.successBg,
-    borderColor: theme.colors.success,
-  },
-  unavailablePill: {
-    backgroundColor: theme.colors.dangerBg,
-    borderColor: theme.colors.dangerBorder,
-  },
-  statusText: {
-    fontSize: 10,
+  pausePillText: {
+    fontSize: 12,
     fontWeight: "700",
-    letterSpacing: 0.4,
-    fontFamily: monoFont,
+    color: theme.colors.pillText,
   },
-  availableText: {
-    color: theme.colors.success,
-  },
-  unavailableText: {
-    color: theme.colors.danger,
-  },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+  rightOverlay: {
+    position: "absolute",
+    justifyContent: "space-between",
     gap: 8,
   },
-  cell: {
-    minWidth: "30%",
-    flexGrow: 1,
-    backgroundColor: theme.colors.surface,
-    borderWidth: 1,
-    borderColor: theme.colors.surfaceBorder,
+  pedalButton: {
+    paddingVertical: 14,
+    paddingHorizontal: 12,
     borderRadius: theme.radius.md,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    borderWidth: 2,
+    alignItems: "center",
+    justifyContent: "center",
     gap: 2,
   },
-  cellLabel: {
-    fontSize: 10,
-    fontWeight: "700",
-    letterSpacing: 0.5,
-    color: theme.colors.textMuted,
+  brakePedal: {
+    borderColor: theme.colors.accent,
   },
-  cellValue: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: theme.colors.textPrimary,
-    fontFamily: monoFont,
-    fontVariant: ["tabular-nums"],
+  gasPedal: {
+    borderColor: "#22C55E",
   },
-  cellHint: {
-    fontSize: 11,
-    color: theme.colors.textSecondary,
+  pedalLabel: {
+    fontSize: 14,
+    fontWeight: "900",
+    letterSpacing: 0.8,
+    color: "#FFFFFF",
     fontFamily: monoFont,
-    fontVariant: ["tabular-nums"],
+  },
+  pedalSub: {
+    fontSize: 9,
+    fontWeight: "700",
+    color: "rgba(255, 255, 255, 0.78)",
+    fontFamily: monoFont,
   },
 });
