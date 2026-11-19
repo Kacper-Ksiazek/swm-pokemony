@@ -2,13 +2,19 @@ import { StyleSheet } from "react-native";
 
 import { theme } from "@/components/theme";
 
+import { VICE_COLORS } from "../../constants";
+
 export const styles = StyleSheet.create({
   road: {
-    backgroundColor: "#1D1F27",
+    backgroundColor: VICE_COLORS.roadBg,
     borderRadius: theme.radius.lg,
     overflow: "hidden",
     borderWidth: 2,
-    borderColor: "#2E3240",
+    borderColor: VICE_COLORS.roadBorder,
+    shadowColor: VICE_COLORS.pink,
+    shadowOpacity: 0.45,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 0 },
   },
   curbStripe: {
     position: "absolute",
@@ -25,114 +31,74 @@ export const styles = StyleSheet.create({
     position: "absolute",
     width: 4,
     borderRadius: 2,
-    backgroundColor: "rgba(255, 255, 255, 0.36)",
+    backgroundColor: VICE_COLORS.laneDash,
   },
   speedStreak: {
     position: "absolute",
-    width: 2,
-    height: 36,
-    borderRadius: 1,
-    backgroundColor: "#E2E8F0",
+    width: 2.5,
+    height: 42,
+    borderRadius: 2,
   },
   speedStreakLeft: {
     left: 16,
+    backgroundColor: VICE_COLORS.cyan,
   },
   speedStreakRight: {
     right: 16,
+    backgroundColor: VICE_COLORS.pink,
   },
 
-  carBody: {
+  spriteContainer: {
     position: "absolute",
     top: 0,
     left: 0,
-    borderWidth: 1.5,
-    borderColor: "rgba(0, 0, 0, 0.35)",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: 5,
-    paddingHorizontal: 4,
+    justifyContent: "center",
   },
-  playerCar: {
-    backgroundColor: theme.colors.accent,
-    borderColor: "#FFFFFF",
-    shadowColor: "#000000",
-    shadowOpacity: 0.45,
+  playerUnderglow: {
+    position: "absolute",
+    top: -4,
+    right: -4,
+    bottom: -4,
+    left: -4,
+    borderRadius: 18,
+    backgroundColor: "rgba(0, 240, 255, 0.24)",
+    shadowColor: VICE_COLORS.cyan,
+    shadowOpacity: 0.9,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 0 },
+  },
+  nitroFlamesRow: {
+    position: "absolute",
+    bottom: -14,
+    flexDirection: "row",
+    gap: 8,
+    alignItems: "flex-start",
+    justifyContent: "center",
+  },
+  nitroFlame: {
+    width: 6,
+    height: 16,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+    borderTopLeftRadius: 3,
+    borderTopRightRadius: 3,
+    backgroundColor: VICE_COLORS.cyan,
+    shadowColor: VICE_COLORS.pink,
+    shadowOpacity: 0.9,
     shadowRadius: 6,
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: { width: 0, height: 2 },
   },
-  racingStripe: {
+  vehicleImage: {
+    width: "100%",
+    height: "100%",
+  },
+  trafficLayer: {
     position: "absolute",
     top: 0,
+    right: 0,
     bottom: 0,
-    width: 4,
-    backgroundColor: "rgba(255, 255, 255, 0.85)",
-  },
-  headlights: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 2,
-  },
-  headlight: {
-    width: 5,
-    height: 3,
-    borderRadius: 2,
-    backgroundColor: "#FEF08A",
-  },
-  playerWindshield: {
-    width: "76%",
-    height: "24%",
-    borderRadius: 4,
-    backgroundColor: "#0F172A",
-    marginTop: 2,
-  },
-  playerRearWindow: {
-    width: "68%",
-    height: "15%",
-    borderRadius: 3,
-    backgroundColor: "#1E293B",
-  },
-
-  rivalWindshield: {
-    width: "74%",
-    height: "18%",
-    borderRadius: 3,
-    backgroundColor: "#0F172A",
-    marginTop: 2,
-  },
-  rivalRearWindow: {
-    width: "68%",
-    height: "14%",
-    borderRadius: 3,
-    backgroundColor: "#1E293B",
-  },
-  busRoofVent: {
-    width: "52%",
-    height: "24%",
-    borderRadius: 3,
-    backgroundColor: "rgba(255, 255, 255, 0.25)",
-  },
-  motoHelmet: {
-    position: "absolute",
-    top: "34%",
-    width: 9,
-    height: 9,
-    borderRadius: 5,
-    backgroundColor: "#F8FAFC",
-    borderWidth: 2,
-    borderColor: "#0F172A",
-  },
-  rivalTaillights: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 2,
-  },
-  taillight: {
-    width: 5,
-    height: 3,
-    borderRadius: 2,
-    backgroundColor: "#EF4444",
+    left: 0,
   },
 
   hitFlashOverlay: {
@@ -141,6 +107,6 @@ export const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    backgroundColor: "#EF4444",
+    backgroundColor: VICE_COLORS.pink,
   },
 });

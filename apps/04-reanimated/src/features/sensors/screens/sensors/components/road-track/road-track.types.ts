@@ -57,4 +57,5 @@ export type PlayerCarProps = {
   playerX: SharedValue<number>;
   playerLeanDeg: SharedValue<number>;
   invulnerableSec: SharedValue<number>;
+  liveSpeedKmh: SharedValue<number>;
 };

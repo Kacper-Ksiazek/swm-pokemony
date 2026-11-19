@@ -10,7 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 
-import { theme } from "@/components/theme";
+import { VICE_COLORS } from "../../../constants";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -37,7 +37,7 @@ export function AnimatedHeart({ active }: AnimatedHeartProps) {
   }, [active, progress, scale]);
 
   const animatedProps = useAnimatedProps(() => ({
-    fill: interpolateColor(progress.get(), [0, 1], ["#D4D4D8", theme.colors.accent]),
+    fill: interpolateColor(progress.get(), [0, 1], [VICE_COLORS.heartEmpty, VICE_COLORS.pink]),
   }));
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -47,7 +47,7 @@ export function AnimatedHeart({ active }: AnimatedHeartProps) {
   return (
     <Animated.View style={animatedStyle}>
       <Svg width={22} height={22} viewBox="0 0 24 24">
-        <AnimatedPath d={HEART_PATH} animatedProps={animatedProps} fill={theme.colors.accent} />
+        <AnimatedPath d={HEART_PATH} animatedProps={animatedProps} fill={VICE_COLORS.pink} />
       </Svg>
     </Animated.View>
   );

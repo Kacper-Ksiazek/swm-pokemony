@@ -14,11 +14,11 @@ export function SpeedStreak({
   const step = roadHeight / SPEED_STREAK_COUNT;
 
   const animatedStyle = useAnimatedStyle(() => {
-    const speedRatio = Math.max(0, Math.min(1, (liveSpeedKmh.get() - 130) / 110));
-    const offset = (roadScrollY.get() * roadHeight * 1.4 + index * step) % roadHeight;
+    const speedRatio = Math.max(0, Math.min(1, (liveSpeedKmh.get() - 120) / 110));
+    const offset = (roadScrollY.get() * roadHeight * 1.45 + index * step) % roadHeight;
     return {
-      opacity: speedRatio * 0.45,
-      transform: [{ translateY: offset - 40 }],
+      opacity: speedRatio * 0.72,
+      transform: [{ translateY: offset - 40 }, { scaleY: 0.7 + speedRatio * 0.8 }],
     };
   });
 

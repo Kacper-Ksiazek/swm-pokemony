@@ -32,11 +32,23 @@ export function RoadTrack({
   const playerH = height * PLAYER_CAR_HEIGHT_NORM;
 
   const flashStyle = useAnimatedStyle(() => ({
-    opacity: hitFlash.get() * 0.42,
+    opacity: hitFlash.get() * 0.45,
   }));
 
+  const roadShakeStyle = useAnimatedStyle(() => {
+    const flash = hitFlash.get();
+    if (flash <= 0.01) {
+      return { transform: [{ translateX: 0 }, { translateY: 0 }] };
+    }
+    const shakeX = Math.sin(flash * 42) * flash * 8;
+    const shakeY = Math.cos(flash * 34) * flash * 5;
+    return {
+      transform: [{ translateX: shakeX }, { translateY: shakeY }],
+    };
+  });
+
   return (
-    <View style={[styles.road, { width, height }]}>
+    <Animated.View style={[styles.road, { width, height }, roadShakeStyle]}>
       {Array.from({ length: CURB_STRIPE_COUNT }).map((_, i) => (
         <View key={`curb-${i}`} style={StyleSheet.absoluteFill} pointerEvents="none">
           <CurbStripe index={i} side="left" roadHeight={height} roadScrollY={roadScrollY} />
@@ -94,9 +106,10 @@ export function RoadTrack({
         playerX={playerX}
         playerLeanDeg={playerLeanDeg}
         invulnerableSec={invulnerableSec}
+        liveSpeedKmh={liveSpeedKmh}
       />
 
       <Animated.View style={[styles.hitFlashOverlay, flashStyle]} pointerEvents="none" />
-    </View>
+    </Animated.View>
   );
 }

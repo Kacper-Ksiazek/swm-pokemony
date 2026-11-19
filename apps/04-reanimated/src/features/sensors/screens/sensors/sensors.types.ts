@@ -17,7 +17,7 @@ export type GamePhase = "ready" | "playing" | "paused" | "gameover";
 
 export type PedalState = "brake" | "coast" | "gas";
 
-export type VehicleKind = "moto" | "car" | "bus";
+export type VehicleKind = "moto" | "car" | "supercar" | "taxi" | "police" | "truck" | "bus";
 
 export type TrafficCar = {
   id: number;

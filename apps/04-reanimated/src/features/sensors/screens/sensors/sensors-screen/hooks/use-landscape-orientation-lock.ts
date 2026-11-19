@@ -1,13 +1,18 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useFocusEffect } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 
-/** Locks landscape while the sensors route is focused; restores portrait on leave. */
-export function useLandscapeOrientationLock() {
+/** Locks landscape once `readyToRotate` becomes true while focused; restores portrait on leave. */
+export function useLandscapeOrientationLock(readyToRotate: boolean) {
+  useEffect(() => {
+    if (!readyToRotate) {
+      return;
+    }
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
+  }, [readyToRotate]);
+
   useFocusEffect(
     useCallback(() => {
-      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
-
       return () => {
         ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP).catch(() => {});
       };

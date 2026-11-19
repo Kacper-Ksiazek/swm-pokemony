@@ -1,0 +1,18 @@
+export const VICE_COLORS = {
+  bgDeep: "#090514",
+  roadBg: "#120B24",
+  roadBorder: "#FF2E93",
+  cardBg: "rgba(18, 10, 36, 0.90)",
+  cardBorderPink: "rgba(255, 46, 147, 0.55)",
+  cardBorderCyan: "rgba(0, 240, 255, 0.55)",
+  pink: "#FF2E93",
+  cyan: "#00F0FF",
+  gold: "#FFD600",
+  sunsetOrange: "#FF6B35",
+  purple: "#9D4EDD",
+  textPrimary: "#FFFFFF",
+  textMuted: "#C4B5FD",
+  heartEmpty: "#2D1E4F",
+  gaugeTrack: "#2A1B4E",
+  laneDash: "rgba(255, 214, 0, 0.45)",
+} as const;

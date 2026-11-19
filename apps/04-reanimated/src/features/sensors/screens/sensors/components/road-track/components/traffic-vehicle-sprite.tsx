@@ -1,8 +1,20 @@
-import { View } from "react-native";
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { useState } from "react";
+import { Image, type ImageSourcePropType } from "react-native";
+import Animated, { runOnJS, useAnimatedReaction, useAnimatedStyle } from "react-native-reanimated";
 
+import type { VehicleKind } from "../../../sensors.types";
 import { styles } from "../road-track.styles";
 import type { TrafficVehicleSpriteProps } from "../road-track.types";
+
+const VEHICLE_SPRITES: Record<VehicleKind, ImageSourcePropType> = {
+  car: require("../../../../../assets/traffic-car.png"),
+  moto: require("../../../../../assets/traffic-moto.png"),
+  bus: require("../../../../../assets/traffic-bus.png"),
+  police: require("../../../../../assets/traffic-police.png"),
+  supercar: require("../../../../../assets/traffic-supercar.png"),
+  truck: require("../../../../../assets/traffic-truck.png"),
+  taxi: require("../../../../../assets/traffic-taxi.png"),
+};
 
 export function TrafficVehicleSprite({
   index,
@@ -10,6 +22,17 @@ export function TrafficVehicleSprite({
   roadHeight,
   traffic,
 }: TrafficVehicleSpriteProps) {
+  const [kind, setKind] = useState<VehicleKind>("car");
+
+  useAnimatedReaction(
+    () => traffic.get()[index]?.kind ?? "car",
+    (next, prev) => {
+      if (next !== prev) {
+        runOnJS(setKind)(next);
+      }
+    },
+  );
+
   const containerStyle = useAnimatedStyle(() => {
     const car = traffic.get()[index];
     if (!car || !car.active) {
@@ -23,8 +46,6 @@ export function TrafficVehicleSprite({
       opacity: 1,
       width: carW,
       height: carH,
-      borderRadius: car.kind === "moto" ? carW * 0.45 : car.kind === "bus" ? 8 : carW * 0.24,
-      backgroundColor: car.color,
       transform: [
         { translateX: car.x * roadWidth - carW / 2 },
         { translateY: car.y * roadHeight - carH / 2 },
@@ -33,31 +54,13 @@ export function TrafficVehicleSprite({
     };
   });
 
-  const carWindowStyle = useAnimatedStyle(() => {
-    const car = traffic.get()[index];
-    return { opacity: car?.kind === "moto" ? 0 : 1 };
-  });
-
-  const motoDetailStyle = useAnimatedStyle(() => {
-    const car = traffic.get()[index];
-    return { opacity: car?.kind === "moto" ? 1 : 0 };
-  });
-
-  const busRoofStyle = useAnimatedStyle(() => {
-    const car = traffic.get()[index];
-    return { opacity: car?.kind === "bus" ? 1 : 0 };
-  });
-
   return (
-    <Animated.View style={[styles.carBody, containerStyle]}>
-      <Animated.View style={[styles.rivalWindshield, carWindowStyle]} />
-      <Animated.View style={[styles.busRoofVent, busRoofStyle]} />
-      <Animated.View style={[styles.motoHelmet, motoDetailStyle]} />
-      <Animated.View style={[styles.rivalRearWindow, carWindowStyle]} />
-      <View style={styles.rivalTaillights}>
-        <View style={styles.taillight} />
-        <View style={styles.taillight} />
-      </View>
+    <Animated.View style={[styles.spriteContainer, containerStyle]}>
+      <Image
+        source={VEHICLE_SPRITES[kind]}
+        style={[styles.trafficLayer, styles.vehicleImage]}
+        resizeMode="contain"
+      />
     </Animated.View>
   );
 }

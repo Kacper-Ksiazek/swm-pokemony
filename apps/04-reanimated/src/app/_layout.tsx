@@ -1,12 +1,18 @@
 import "react-native-reanimated";
 
+import { useEffect } from "react";
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 
 import { theme } from "@/components/theme";
+import { preloadSensorsAssets } from "@/features/sensors";
 
 export default function RootLayout() {
+  useEffect(() => {
+    void preloadSensorsAssets();
+  }, []);
+
   return (
     <GestureHandlerRootView>
       <KeyboardProvider>

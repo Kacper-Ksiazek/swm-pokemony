@@ -28,3 +28,4 @@ export {
   VEHICLE_KINDS,
   VEHICLE_SPECS,
 } from "./traffic.constants";
+export { VICE_COLORS } from "./vice-theme.constants";

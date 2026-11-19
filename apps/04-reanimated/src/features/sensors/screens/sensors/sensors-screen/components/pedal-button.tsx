@@ -1,8 +1,10 @@
 import { StyleSheet, Text } from "react-native";
-import Animated, { type SharedValue, useAnimatedStyle } from "react-native-reanimated";
+import Animated, { type SharedValue, useAnimatedStyle, withSpring } from "react-native-reanimated";
 
 import { monoFont } from "@/components/demo-screen";
 import { theme } from "@/components/theme";
+
+import { VICE_COLORS } from "../../constants";
 
 type PedalVariant = "brake" | "gas";
 
@@ -25,16 +27,27 @@ export function PedalButton({
 }: PedalButtonProps) {
   const fillAnimatedStyle = useAnimatedStyle(() => {
     const isPressed = pressed.get();
+    const scale = withSpring(isPressed ? 0.93 : 1, { damping: 15, stiffness: 300 });
 
     if (variant === "brake") {
       return {
-        backgroundColor: isPressed ? theme.colors.accent : "rgba(185, 28, 28, 0.22)",
+        transform: [{ scale }],
+        backgroundColor: isPressed ? VICE_COLORS.pink : "rgba(255, 46, 147, 0.16)",
       };
     }
 
     return {
-      backgroundColor: isPressed ? "#16A34A" : "rgba(21, 128, 61, 0.24)",
+      transform: [{ scale }],
+      backgroundColor: isPressed ? VICE_COLORS.cyan : "rgba(0, 240, 255, 0.16)",
     };
+  });
+
+  const labelAnimatedStyle = useAnimatedStyle(() => {
+    const isPressed = pressed.get();
+    if (variant === "gas" && isPressed) {
+      return { color: VICE_COLORS.bgDeep };
+    }
+    return { color: VICE_COLORS.textPrimary };
   });
 
   return (
@@ -48,7 +61,7 @@ export function PedalButton({
         fillAnimatedStyle,
       ]}
     >
-      <Text style={styles.pedalLabel}>{label}</Text>
+      <Animated.Text style={[styles.pedalLabel, labelAnimatedStyle]}>{label}</Animated.Text>
       <Text style={styles.pedalSub}>{sublabel}</Text>
     </Animated.View>
   );
@@ -65,22 +78,31 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   brakePedal: {
-    borderColor: theme.colors.accent,
+    borderColor: VICE_COLORS.pink,
+    shadowColor: VICE_COLORS.pink,
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 0 },
   },
   gasPedal: {
-    borderColor: "#22C55E",
+    borderColor: VICE_COLORS.cyan,
+    shadowColor: VICE_COLORS.cyan,
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 0 },
   },
   pedalLabel: {
     fontSize: 14,
     fontWeight: "900",
     letterSpacing: 0.8,
-    color: "#FFFFFF",
+    color: VICE_COLORS.textPrimary,
     fontFamily: monoFont,
   },
   pedalSub: {
     fontSize: 9,
-    fontWeight: "700",
-    color: "rgba(255, 255, 255, 0.78)",
+    fontWeight: "800",
+    letterSpacing: 0.5,
+    color: VICE_COLORS.gold,
     fontFamily: monoFont,
   },
 });

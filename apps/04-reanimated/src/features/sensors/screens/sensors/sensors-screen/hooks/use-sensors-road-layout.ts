@@ -14,6 +14,7 @@ export function useSensorsRoadLayout(insets: EdgeInsets) {
   const rightPanelWidth = Math.max(120, rightEdgeSpace);
 
   return {
+    isLandscape: windowWidth > windowHeight,
     roadWidth,
     roadHeight,
     leftPanelWidth,

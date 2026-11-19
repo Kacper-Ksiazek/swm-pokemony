@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import Animated, { interpolateColor, useAnimatedProps } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 
-import { MAX_SPEED_KMH, MIN_SPEED_KMH } from "../../constants";
+import { MAX_SPEED_KMH, MIN_SPEED_KMH, VICE_COLORS } from "../../constants";
 import {
   GAUGE_CX,
   GAUGE_CY,
@@ -28,7 +28,11 @@ export function SpeedVisualizer({ speedKmh, pedalState, liveSpeedKmh }: SpeedVis
       Math.min(1, (liveSpeedKmh.get() - MIN_SPEED_KMH) / (MAX_SPEED_KMH - MIN_SPEED_KMH)),
     );
     const endAngle = GAUGE_START_ANGLE_DEG + GAUGE_SWEEP_DEG * ratio;
-    const stroke = interpolateColor(ratio, [0, 0.5, 1], ["#16A34A", "#EA580C", "#E3350D"]);
+    const stroke = interpolateColor(
+      ratio,
+      [0, 0.5, 1],
+      [VICE_COLORS.cyan, VICE_COLORS.gold, VICE_COLORS.pink],
+    );
 
     return {
       d: describeArc(GAUGE_CX, GAUGE_CY, GAUGE_RADIUS, GAUGE_START_ANGLE_DEG, endAngle),
@@ -36,7 +40,7 @@ export function SpeedVisualizer({ speedKmh, pedalState, liveSpeedKmh }: SpeedVis
     };
   });
 
-  const modeLabel = pedalState === "gas" ? "GAZ" : pedalState === "brake" ? "HAMULEC" : "TEMPOMAT";
+  const modeLabel = pedalState === "gas" ? "NITRO" : pedalState === "brake" ? "HAMULEC" : "CRUISE";
 
   return (
     <View style={styles.card}>
@@ -45,7 +49,7 @@ export function SpeedVisualizer({ speedKmh, pedalState, liveSpeedKmh }: SpeedVis
           <Path
             d={GAUGE_TRACK_PATH}
             fill="none"
-            stroke="#E4E4E7"
+            stroke={VICE_COLORS.gaugeTrack}
             strokeWidth={GAUGE_STROKE_WIDTH}
             strokeLinecap="round"
           />
@@ -53,7 +57,7 @@ export function SpeedVisualizer({ speedKmh, pedalState, liveSpeedKmh }: SpeedVis
             d={GAUGE_INITIAL_ARC_PATH}
             animatedProps={animatedProps}
             fill="none"
-            stroke="#16A34A"
+            stroke={VICE_COLORS.cyan}
             strokeWidth={GAUGE_STROKE_WIDTH}
             strokeLinecap="round"
           />

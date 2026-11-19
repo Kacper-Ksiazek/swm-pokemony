@@ -25,7 +25,7 @@ export function SensorsRightOverlay({
   onGasPressIn,
   onGasPressOut,
 }: SensorsRightOverlayProps) {
-  if (phase === "gameover") {
+  if (phase === "ready" || phase === "gameover") {
     return null;
   }
 

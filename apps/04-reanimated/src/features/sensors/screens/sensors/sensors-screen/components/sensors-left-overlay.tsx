@@ -4,9 +4,9 @@ import type { EdgeInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 
 import { IconSymbol } from "@/components/icon-symbol";
-import { theme } from "@/components/theme";
 
 import { SpeedVisualizer } from "../../components/speed-visualizer";
+import { VICE_COLORS } from "../../constants";
 import type { GamePhase, PedalState } from "../../sensors.types";
 import { PedalButton } from "./pedal-button";
 
@@ -56,7 +56,7 @@ export function SensorsLeftOverlay({
             onPress={() => router.back()}
             style={styles.backButton}
           >
-            <IconSymbol name="chevron.left" size={18} color={theme.colors.textPrimary} />
+            <IconSymbol name="chevron.left" size={18} color={VICE_COLORS.cyan} />
             <Text style={styles.backButtonText}>Wróć</Text>
           </Pressable>
 
@@ -67,7 +67,7 @@ export function SensorsLeftOverlay({
           )}
         </View>
 
-        {phase !== "gameover" && (
+        {(phase === "playing" || phase === "paused") && (
           <SpeedVisualizer
             speedKmh={speedKmh}
             pedalState={pedalState}
@@ -76,7 +76,7 @@ export function SensorsLeftOverlay({
         )}
       </View>
 
-      {phase !== "gameover" && (
+      {(phase === "playing" || phase === "paused") && (
         <PedalButton
           variant="brake"
           pressed={brakePressed}
@@ -112,26 +112,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 7,
     borderRadius: 999,
-    backgroundColor: theme.colors.card,
+    backgroundColor: VICE_COLORS.cardBg,
     borderWidth: 1,
-    borderColor: theme.colors.cardBorder,
+    borderColor: VICE_COLORS.cardBorderCyan,
   },
   backButtonText: {
     fontSize: 12,
-    fontWeight: "600",
-    color: theme.colors.textPrimary,
+    fontWeight: "700",
+    color: VICE_COLORS.textPrimary,
   },
   pausePill: {
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 999,
-    backgroundColor: theme.colors.pillBg,
+    backgroundColor: "rgba(255, 46, 147, 0.2)",
     borderWidth: 1,
-    borderColor: theme.colors.badgeBorder,
+    borderColor: VICE_COLORS.pink,
   },
   pausePillText: {
     fontSize: 12,
-    fontWeight: "700",
-    color: theme.colors.pillText,
+    fontWeight: "800",
+    color: VICE_COLORS.pink,
   },
 });

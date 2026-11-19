@@ -20,8 +20,9 @@ export function respawnTrafficCar({
   const r1 = nextRand();
   const r2 = nextRand();
   const r3 = nextRand();
+  const rKind = nextRand();
 
-  const nextKind = VEHICLE_KINDS[Math.floor(r1 * VEHICLE_KINDS.length)];
+  const nextKind = VEHICLE_KINDS[Math.floor(rKind * VEHICLE_KINDS.length)];
   const spec = VEHICLE_SPECS[nextKind];
   const nextWidthNorm = spec.widthNorm;
   const nextHeightNorm = spec.heightNorm;
