@@ -1,1 +1,4 @@
-export { SharedElementTransitionScreen } from "./screens/shared-element-transition";
+export {
+  SharedElementTransitionDetailScreen,
+  SharedElementTransitionScreen,
+} from "./screens/shared-element-transition";

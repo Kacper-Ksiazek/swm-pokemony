@@ -43,7 +43,7 @@ export default function RootLayout() {
             name="sensors"
             options={{ headerShown: false, orientation: "landscape", gestureEnabled: false }}
           />
-          <Stack.Screen name="shared-element-transition" options={{ title: "Shared transition" }} />
+          <Stack.Screen name="shared-element-transition" options={{ headerShown: false }} />
           <Stack.Screen name="skia" options={{ title: "Skia" }} />
           <Stack.Screen name="chess" options={{ title: "Chess" }} />
         </Stack>

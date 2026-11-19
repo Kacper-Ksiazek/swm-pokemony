@@ -1,4 +1,5 @@
-import { Image, View } from "react-native";
+import { Image } from "expo-image";
+import { View } from "react-native";
 import Animated, { interpolateColor, useAnimatedStyle } from "react-native-reanimated";
 
 import { MAX_SPEED_KMH, MIN_SPEED_KMH, PLAYER_Y_NORM, VICE_COLORS } from "../../../constants";
@@ -79,7 +80,8 @@ export function PlayerCar({
       <Image
         source={PLAYER_CAR_SPRITE}
         style={{ width: playerW, height: playerH, zIndex: 2 }}
-        resizeMode="contain"
+        contentFit="contain"
+        transition={0}
       />
     </Animated.View>
   );

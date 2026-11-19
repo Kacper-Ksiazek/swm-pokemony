@@ -1,7 +1,7 @@
+import { Asset } from "expo-asset";
 import { useEffect, useState } from "react";
-import { Image, type ImageSourcePropType } from "react-native";
 
-export const SENSOR_ASSETS: ImageSourcePropType[] = [
+export const SENSOR_ASSETS = [
   require("./vice-poke-emblem.jpg"),
   require("./vice-backdrop.jpg"),
   require("./player-car.png"),
@@ -12,7 +12,7 @@ export const SENSOR_ASSETS: ImageSourcePropType[] = [
   require("./traffic-supercar.png"),
   require("./traffic-truck.png"),
   require("./traffic-taxi.png"),
-];
+] as const;
 
 let preloadPromise: Promise<void> | null = null;
 let isPreloaded = false;
@@ -23,13 +23,11 @@ export function preloadSensorsAssets(): Promise<void> {
   }
 
   if (!preloadPromise) {
-    const tasks = SENSOR_ASSETS.map((asset) => {
-      const resolved = Image.resolveAssetSource(asset);
-      if (!resolved?.uri) {
-        return Promise.resolve(false);
-      }
-      return Image.prefetch(resolved.uri).catch(() => false);
-    });
+    const tasks = SENSOR_ASSETS.map((asset) =>
+      Asset.fromModule(asset)
+        .downloadAsync()
+        .catch(() => false),
+    );
 
     preloadPromise = Promise.all(tasks).then(() => {
       isPreloaded = true;

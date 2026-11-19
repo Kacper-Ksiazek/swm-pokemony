@@ -1,15 +1,15 @@
-import type { ImageSourcePropType } from "react-native";
+import type { ImageSource } from "expo-image";
 
 export type OnboardingAssetId =
   "landingExtended" | "landing" | "turtle" | "lizard" | "ghost" | "puff";
 
 export type OnboardingAsset = {
   id: OnboardingAssetId;
-  source: ImageSourcePropType;
+  source: ImageSource;
 };
 
-export const ONBOARDING_BACKDROP: ImageSourcePropType = require("../../assets/07-backdrop.jpg");
-export const ONBOARDING_LANDING_EXTENDED: ImageSourcePropType = require("../../assets/08-landing-extended.jpg");
+export const ONBOARDING_BACKDROP: ImageSource = require("../../assets/07-backdrop.jpg");
+export const ONBOARDING_LANDING_EXTENDED: ImageSource = require("../../assets/08-landing-extended.jpg");
 
 export const ONBOARDING_ASSETS: Record<OnboardingAssetId, OnboardingAsset> = {
   landingExtended: {

@@ -1,10 +1,12 @@
 import { StyleSheet } from "react-native";
-import Animated, {
+import {
   Extrapolation,
   interpolate,
   type SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
+
+import { AnimatedExpoImage } from "@/components/animated-expo-image";
 
 import { ONBOARDING_BACKDROP } from "../../../scroll-onboarding-data";
 
@@ -37,16 +39,16 @@ export const CarouselBackdrop = ({ scrollProgress, slideCount }: CarouselBackdro
 
   return (
     <>
-      <Animated.Image
+      <AnimatedExpoImage
         source={ONBOARDING_BACKDROP}
         style={[styles.backdrop, backdropAnimatedStyle]}
-        resizeMode="cover"
+        contentFit="cover"
       />
-      <Animated.Image
+      <AnimatedExpoImage
         source={ONBOARDING_BACKDROP}
         blurRadius={28}
         style={[styles.backdrop, backdropAnimatedStyle, blurredBackdropAnimatedStyle]}
-        resizeMode="cover"
+        contentFit="cover"
       />
     </>
   );

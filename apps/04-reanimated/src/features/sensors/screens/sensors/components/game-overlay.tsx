@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image } from "expo-image";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -73,7 +74,7 @@ export function GameOverlay({ phase, stats, onStart, onResume }: GameOverlayProp
 
   return (
     <View style={styles.backdrop}>
-      <Image source={MENU_BACKGROUND} style={styles.menuImage} resizeMode="cover" />
+      <Image source={MENU_BACKGROUND} style={styles.menuImage} contentFit="cover" />
       <View style={[styles.scrim, phase !== "ready" && styles.scrimDarker]} pointerEvents="none" />
 
       <Pressable

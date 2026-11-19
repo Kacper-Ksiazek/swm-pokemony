@@ -1,13 +1,16 @@
-import { type ImageSourcePropType, StyleSheet } from "react-native";
-import Animated, {
+import type { ImageSource } from "expo-image";
+import { StyleSheet } from "react-native";
+import {
   Extrapolation,
   interpolate,
   type SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
 
+import { AnimatedExpoImage } from "@/components/animated-expo-image";
+
 type IntroSlideProps = {
-  source: ImageSourcePropType;
+  source: ImageSource;
   index: number;
   scrollProgress: SharedValue<number>;
 };
@@ -28,7 +31,11 @@ export const IntroSlide = ({ source, index, scrollProgress }: IntroSlideProps) =
   });
 
   return (
-    <Animated.Image source={source} style={[styles.introImage, animatedStyle]} resizeMode="cover" />
+    <AnimatedExpoImage
+      source={source}
+      style={[styles.introImage, animatedStyle]}
+      contentFit="cover"
+    />
   );
 };
 

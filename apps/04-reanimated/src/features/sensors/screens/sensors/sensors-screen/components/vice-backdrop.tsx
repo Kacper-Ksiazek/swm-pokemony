@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image } from "expo-image";
+import { StyleSheet, View } from "react-native";
 import Animated, {
   Easing,
   type SharedValue,
@@ -54,7 +55,7 @@ export function ViceBackdrop({ playerX, liveSpeedKmh }: ViceBackdropProps) {
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents="none">
       <Animated.View style={[styles.imageWrap, parallaxStyle]}>
-        <Image source={VICE_BACKDROP} style={styles.image} resizeMode="cover" fadeDuration={0} />
+        <Image source={VICE_BACKDROP} style={styles.image} contentFit="cover" transition={0} />
       </Animated.View>
 
       <Animated.View style={[styles.neonWash, pulseStyle]} />

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Image, type ImageSourcePropType } from "react-native";
+import { Image, type ImageSource } from "expo-image";
 import Animated, { runOnJS, useAnimatedReaction, useAnimatedStyle } from "react-native-reanimated";
 
 import type { VehicleKind } from "../../../sensors.types";
 import { styles } from "../road-track.styles";
 import type { TrafficVehicleSpriteProps } from "../road-track.types";
 
-const VEHICLE_SPRITES: Record<VehicleKind, ImageSourcePropType> = {
+const VEHICLE_SPRITES: Record<VehicleKind, ImageSource> = {
   car: require("../../../../../assets/traffic-car.png"),
   moto: require("../../../../../assets/traffic-moto.png"),
   bus: require("../../../../../assets/traffic-bus.png"),
@@ -59,7 +59,8 @@ export function TrafficVehicleSprite({
       <Image
         source={VEHICLE_SPRITES[kind]}
         style={[styles.trafficLayer, styles.vehicleImage]}
-        resizeMode="contain"
+        contentFit="contain"
+        transition={0}
       />
     </Animated.View>
   );

@@ -1,4 +1,5 @@
-import { StyleSheet, View, type ImageSourcePropType } from "react-native";
+import type { ImageSource } from "expo-image";
+import { StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolation,
   interpolate,
@@ -6,8 +7,10 @@ import Animated, {
   type SharedValue,
 } from "react-native-reanimated";
 
+import { AnimatedExpoImage } from "@/components/animated-expo-image";
+
 type PhoneFrameProps = {
-  source: ImageSourcePropType;
+  source: ImageSource;
   width: number;
   height: number;
   index: number;
@@ -58,10 +61,10 @@ export const PhoneFrame = ({ source, width, height, index, scrollProgress }: Pho
     <Animated.View style={[styles.shell, { width, height }, shellAnimatedStyle]}>
       <View style={[styles.bezel, { borderRadius: outerRadius }]}>
         <View style={[styles.screen, { borderRadius: screenRadius }]}>
-          <Animated.Image
+          <AnimatedExpoImage
             source={source}
             style={[styles.image, imageAnimatedStyle]}
-            resizeMode="cover"
+            contentFit="cover"
           />
           <View style={styles.island} />
           <View style={styles.homeIndicator} />
