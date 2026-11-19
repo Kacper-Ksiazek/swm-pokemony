@@ -3,12 +3,13 @@
     "name": "04 Reanimated",
     "slug": "04-reanimated",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "reanimated04",
     "userInterfaceStyle": "light",
     "ios": {
-      "bundleIdentifier": "com.anonymous.reanimated04"
+      "bundleIdentifier": "com.anonymous.reanimated04",
+      "requireFullScreen": true
     },
     "android": {
       "adaptiveIcon": {
@@ -30,6 +31,12 @@
         }
       ],
       "expo-router",
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
+        }
+      ],
       [
         "expo-splash-screen",
         {

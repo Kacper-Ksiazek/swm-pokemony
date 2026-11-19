@@ -4,7 +4,7 @@ import {
   STRAIGHT_DEADZONE_DEG,
   TURN_1_MAX_DEG,
   TURN_2_MAX_DEG,
-} from "../sensors.constants";
+} from "../constants";
 import type { SteeringZoneConfig, SteeringZoneId } from "../sensors.types";
 
 /**

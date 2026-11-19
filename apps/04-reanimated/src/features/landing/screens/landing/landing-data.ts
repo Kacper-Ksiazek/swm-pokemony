@@ -71,7 +71,7 @@ export const DEMO_SECTIONS: { title: string; items: DemoItem[] }[] = [
         subtitle: "07-sensors · Accelerometer / gyroscope",
         href: "/sensors",
         icon: "sensor.tag.radiowaves.forward.fill",
-        status: "todo",
+        status: "done",
       },
       {
         title: "Shared transition",

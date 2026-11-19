@@ -22,16 +22,21 @@ export type VehicleKind = "moto" | "car" | "bus";
 export type TrafficCar = {
   id: number;
   kind: VehicleKind;
+
   lane: number;
   targetLane: number;
+
   x: number;
   targetX: number;
   y: number;
+
   speed: number;
   color: string;
+
   widthNorm: number;
   heightNorm: number;
   leanDeg: number;
+
   laneChangeTimer: number;
   passed: boolean;
   active: boolean;

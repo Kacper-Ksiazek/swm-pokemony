@@ -12,6 +12,7 @@ export default function RootLayout() {
       <KeyboardProvider>
         <Stack
           screenOptions={{
+            orientation: "portrait",
             headerStyle: { backgroundColor: theme.colors.background },
             headerTintColor: theme.colors.accent,
             headerTitleStyle: { color: theme.colors.textPrimary },
@@ -32,7 +33,10 @@ export default function RootLayout() {
             name="scroll-onboarding"
             options={{ headerShown: false, gestureEnabled: false }}
           />
-          <Stack.Screen name="sensors" options={{ title: "Sensors" }} />
+          <Stack.Screen
+            name="sensors"
+            options={{ headerShown: false, orientation: "landscape", gestureEnabled: false }}
+          />
           <Stack.Screen name="shared-element-transition" options={{ title: "Shared transition" }} />
           <Stack.Screen name="skia" options={{ title: "Skia" }} />
           <Stack.Screen name="chess" options={{ title: "Chess" }} />

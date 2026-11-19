@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     textAlign: "center",
   },
+
   actions: {
     flexDirection: "row",
     gap: 8,
