@@ -15,27 +15,38 @@ export function DemoScreen({
   keyboardShouldPersistTaps = "handled",
   scroll = true,
   fullWidth = false,
+  immersive = false,
   children,
 }: {
   keyboardShouldPersistTaps?: "handled" | "always" | "never";
   scroll?: boolean;
   fullWidth?: boolean;
+  /** No header above: respect the top safe area and drop the bottom padding. */
+  immersive?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <SafeAreaView style={styles.screen} edges={["left", "right"]}>
+    <SafeAreaView style={styles.screen} edges={immersive ? ["top"] : ["left", "right"]}>
       <StatusBar style="dark" />
 
       {scroll ? (
         <ScrollView
-          contentContainerStyle={[styles.content, fullWidth && styles.fullWidth]}
+          contentContainerStyle={[
+            styles.content,
+            fullWidth && styles.fullWidth,
+            immersive && styles.immersive,
+          ]}
           keyboardShouldPersistTaps={keyboardShouldPersistTaps}
           showsVerticalScrollIndicator={false}
         >
           {children}
         </ScrollView>
       ) : (
-        <View style={[styles.content, fullWidth && styles.fullWidth]}>{children}</View>
+        <View
+          style={[styles.content, fullWidth && styles.fullWidth, immersive && styles.immersive]}
+        >
+          {children}
+        </View>
       )}
     </SafeAreaView>
   );
@@ -55,5 +66,8 @@ const styles = StyleSheet.create({
   },
   fullWidth: {
     paddingHorizontal: 0,
+  },
+  immersive: {
+    paddingBottom: 0,
   },
 });

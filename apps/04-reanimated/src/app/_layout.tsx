@@ -44,8 +44,8 @@ export default function RootLayout() {
             options={{ headerShown: false, orientation: "landscape", gestureEnabled: false }}
           />
           <Stack.Screen name="shared-element-transition" options={{ headerShown: false }} />
-          <Stack.Screen name="skia" options={{ title: "Skia" }} />
-          <Stack.Screen name="chess" options={{ title: "Chess" }} />
+          <Stack.Screen name="skia" options={{ headerShown: false, orientation: "all" }} />
+          <Stack.Screen name="chess" options={{ headerShown: false }} />
         </Stack>
       </KeyboardProvider>
     </GestureHandlerRootView>

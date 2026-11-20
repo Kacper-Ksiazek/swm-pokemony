@@ -78,14 +78,14 @@ export const DEMO_SECTIONS: { title: string; items: DemoItem[] }[] = [
         subtitle: "08-shared-element-transition · Shared element transitions",
         href: "/shared-element-transition",
         icon: "square.on.square",
-        status: "todo",
+        status: "done",
       },
       {
         title: "Skia",
         subtitle: "09-skia · Skia + Reanimated",
         href: "/skia",
         icon: "paintbrush.pointed.fill",
-        status: "todo",
+        status: "done",
       },
       {
         title: "Chess",

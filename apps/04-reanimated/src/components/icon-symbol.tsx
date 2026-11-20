@@ -12,6 +12,7 @@ const MAPPING = {
   "basketball.fill": "sports-basketball",
   "keyboard.fill": "keyboard",
   "arrow.up.arrow.down": "swap-vert",
+  "arrow.counterclockwise": "refresh",
   "sensor.tag.radiowaves.forward.fill": "sensors",
   "square.on.square": "layers",
   "paintbrush.pointed.fill": "brush",
@@ -19,9 +20,13 @@ const MAPPING = {
   magnifyingglass: "search",
   "chevron.down": "expand-more",
   "chevron.left": "chevron-left",
+  "chevron.right": "chevron-right",
   scope: "my-location",
   xmark: "close",
   checkmark: "check",
+  "house.fill": "home",
+  "iphone.portrait": "stay-current-portrait",
+  "iphone.landscape": "stay-current-landscape",
 } as const satisfies Record<string, ComponentProps<typeof MaterialIcons>["name"]>;
 
 export type ExerciseIconName = keyof typeof MAPPING;
