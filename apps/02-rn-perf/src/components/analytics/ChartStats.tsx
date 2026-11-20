@@ -6,6 +6,7 @@ import type { ChartColors } from "./chart-utils";
 
 const formatPercent = (n: number) => {
   "worklet";
+
   return n.toFixed(1);
 };
 

@@ -23,6 +23,7 @@ bun run start               # Expo for 01-rn-basics
 bun run start:02            # Expo for 02-rn-perf
 bun run start:03            # Expo for 03-native-modules
 bun run start:03-jsi        # Expo for 03-jsi
+bun run start:04            # Expo for 04-reanimated
 
 cd apps/01-rn-basics && bunx expo install <package>  # SDK-compatible versions
 cd apps/01-rn-basics && bunx expo-doctor
