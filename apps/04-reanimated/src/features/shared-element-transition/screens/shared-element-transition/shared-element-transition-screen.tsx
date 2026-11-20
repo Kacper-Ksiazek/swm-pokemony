@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import Animated, { SharedTransition, SharedTransitionBoundary } from "react-native-reanimated";
+import { SharedTransitionBoundary } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useIsFocused } from "expo-router";
 
@@ -7,6 +7,12 @@ import { DemoScreen } from "@/components/demo-screen";
 import { IconSymbol } from "@/components/icon-symbol";
 import { theme } from "@/components/theme";
 
+import {
+  LocationSharedImage,
+  LocationSharedRegionPill,
+  LocationSharedSubtitle,
+  LocationSharedTitle,
+} from "./components/shared-location-elements";
 import { POKEMON_LOCATIONS, type PokemonLocation } from "./data";
 
 export function SharedElementTransitionScreen() {
@@ -17,7 +23,7 @@ export function SharedElementTransitionScreen() {
     <SharedTransitionBoundary isActive={isFocused}>
       <DemoScreen>
         <View style={[styles.header, { paddingTop: Math.max(0, insets.top - 12) }]}>
-          <Pressable style={styles.backRow} onPress={() => router.back()}>
+          <Pressable style={styles.backRow} onPress={() => router.push("/")}>
             <IconSymbol name="chevron.left" size={16} color={theme.colors.accent} />
             <Text style={styles.backLabel}>Exercises</Text>
           </Pressable>
@@ -39,31 +45,21 @@ export function SharedElementTransitionScreen() {
   );
 }
 
-const transition = SharedTransition.duration(450);
-
 function LocationCard({ location }: { location: PokemonLocation }) {
   return (
     <Pressable
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
       onPress={() => router.push(`/shared-element-transition/${location.id}`)}
     >
-      <Animated.Image
-        sharedTransitionTag={location.id}
-        sharedTransitionStyle={transition}
-        source={location.image}
-        style={styles.image}
-        resizeMode="cover"
-      />
+      <LocationSharedImage location={location} variant="card" />
 
       <View style={styles.cardBody}>
         <View style={styles.metaRow}>
-          <View style={styles.regionPill}>
-            <Text style={styles.regionText}>{location.region}</Text>
-          </View>
+          <LocationSharedRegionPill location={location} />
         </View>
 
-        <Text style={styles.title}>{location.name}</Text>
-        <Text style={styles.subtitle}>{location.subtitle}</Text>
+        <LocationSharedTitle location={location} variant="card" />
+        <LocationSharedSubtitle location={location} variant="card" />
       </View>
     </Pressable>
   );
@@ -115,10 +111,6 @@ const styles = StyleSheet.create({
   cardPressed: {
     opacity: 0.9,
   },
-  image: {
-    width: "100%",
-    height: 200,
-  },
   cardBody: {
     padding: 14,
     gap: 6,
@@ -126,28 +118,5 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  regionPill: {
-    backgroundColor: theme.colors.pillBg,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: theme.radius.sm,
-  },
-  regionText: {
-    fontSize: 11,
-    fontWeight: "700",
-    letterSpacing: 0.4,
-    textTransform: "uppercase",
-    color: theme.colors.pillText,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: theme.colors.textPrimary,
-  },
-  subtitle: {
-    fontSize: 13,
-    lineHeight: 18,
-    color: theme.colors.textSecondary,
   },
 });

@@ -1,9 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import Animated, {
-  FadeIn,
-  SharedTransition,
-  SharedTransitionBoundary,
-} from "react-native-reanimated";
+import Animated, { FadeIn, SharedTransitionBoundary } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useIsFocused, useLocalSearchParams } from "expo-router";
 
@@ -11,9 +7,14 @@ import { DemoScreen } from "@/components/demo-screen";
 import { IconSymbol } from "@/components/icon-symbol";
 import { theme } from "@/components/theme";
 
+import { LocationSeeAlsoSection } from "./components/location-see-also-section";
+import {
+  LocationSharedImage,
+  LocationSharedRegionPill,
+  LocationSharedSubtitle,
+  LocationSharedTitle,
+} from "./components/shared-location-elements";
 import { getPokemonLocation } from "./data";
-
-const transition = SharedTransition.duration(450);
 
 export function SharedElementTransitionDetailScreen() {
   const isFocused = useIsFocused();
@@ -35,28 +36,24 @@ export function SharedElementTransitionDetailScreen() {
     <SharedTransitionBoundary isActive={isFocused}>
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.content} contentInsetAdjustmentBehavior="never">
-          <Animated.Image
-            sharedTransitionTag={location.id}
-            sharedTransitionStyle={transition}
-            source={location.image}
-            style={styles.hero}
-            resizeMode="cover"
-          />
+          <LocationSharedImage location={location} variant="hero" />
 
-          <Animated.View entering={FadeIn.delay(150).duration(350)} style={styles.body}>
-            <View style={styles.regionPill}>
-              <Text style={styles.regionText}>{location.region}</Text>
-            </View>
+          <View style={styles.body}>
+            <LocationSharedRegionPill location={location} />
+            <LocationSharedTitle location={location} variant="detail" />
+            <LocationSharedSubtitle location={location} variant="detail" />
 
-            <Text style={styles.title}>{location.name}</Text>
-            <Text style={styles.subtitle}>{location.subtitle}</Text>
-            <Text style={styles.description}>{location.description}</Text>
-          </Animated.View>
+            <Animated.Text entering={FadeIn.delay(150).duration(350)} style={styles.description}>
+              {location.description}
+            </Animated.Text>
+
+            <LocationSeeAlsoSection currentId={location.id} />
+          </View>
         </ScrollView>
 
         <Pressable
           style={[styles.backButton, { top: insets.top + 8 }]}
-          onPress={() => router.back()}
+          onPress={() => router.replace("/shared-element-transition")}
         >
           <IconSymbol name="chevron.left" size={20} color="#FFFFFF" />
         </Pressable>
@@ -73,10 +70,6 @@ const styles = StyleSheet.create({
   content: {
     paddingBottom: 24,
   },
-  hero: {
-    width: "100%",
-    height: 320,
-  },
   backButton: {
     position: "absolute",
     top: 56,
@@ -91,30 +84,6 @@ const styles = StyleSheet.create({
   body: {
     padding: 16,
     gap: 8,
-  },
-  regionPill: {
-    alignSelf: "flex-start",
-    backgroundColor: theme.colors.pillBg,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: theme.radius.sm,
-  },
-  regionText: {
-    fontSize: 11,
-    fontWeight: "700",
-    letterSpacing: 0.4,
-    textTransform: "uppercase",
-    color: theme.colors.pillText,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: "700",
-    color: theme.colors.textHeading,
-  },
-  subtitle: {
-    fontSize: 15,
-    lineHeight: 21,
-    color: theme.colors.textSecondary,
   },
   description: {
     fontSize: 15,

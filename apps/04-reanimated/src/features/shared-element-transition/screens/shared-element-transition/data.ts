@@ -1,4 +1,4 @@
-import type { ImageSourcePropType } from "react-native";
+import type { ImageSource } from "expo-image";
 
 export type PokemonLocation = {
   id: string;
@@ -7,11 +7,15 @@ export type PokemonLocation = {
   subtitle: string;
   description: string;
   highlights: string[];
-  image: ImageSourcePropType;
+  image: ImageSource;
 };
 
 export function getPokemonLocation(id: string): PokemonLocation | undefined {
   return POKEMON_LOCATIONS.find((location) => location.id === id);
+}
+
+export function getOtherPokemonLocations(currentId: string): PokemonLocation[] {
+  return POKEMON_LOCATIONS.filter((location) => location.id !== currentId);
 }
 
 export const POKEMON_LOCATIONS: PokemonLocation[] = [
