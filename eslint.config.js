@@ -34,6 +34,7 @@ module.exports = defineConfig([
             "./apps/03-native-modules/tsconfig.json",
             "./apps/03-jsi/tsconfig.json",
             "./apps/04-reanimated/tsconfig.json",
+            "./apps/05-typegpu/tsconfig.json",
           ],
         },
       },
