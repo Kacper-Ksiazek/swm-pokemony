@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from "react-native";
-import type { LayoutChangeEvent } from "react-native";
 import Animated from "react-native-reanimated";
 import type { EdgeInsets } from "react-native-safe-area-context";
 

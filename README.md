@@ -209,18 +209,18 @@ Ten finished labs in `apps/04-reanimated` (Expo SDK 58, Reanimated 4). A stack l
 
 <br />
 
-| Exercise | Route | What it practices |
-| --- | --- | --- |
-| Stars 2D | `/stars-2d` | Planet discs laid out on a 2D field |
-| SVG circle | `/svg-circle` | Line ↔ circle stroke on a 4100 ms timeline |
-| Stars 3D | `/stars-3d` | Solar system — drag, pinch, planet sheet |
-| Physics ball | `/physics-ball` | Throw and bounce: `withDecay` vs `useFrameCallback` |
-| Keyboard handler | `/keyboard-handler` | `useKeyboardHandler`, sticky view, `KeyboardAwareScrollView` + toolbar |
-| Scroll onboarding | `/scroll-onboarding` | Scroll-linked carousel inside a phone frame |
-| Sensors | `/sensors` | Rotation sensor drives a landscape racing game (`useFrameCallback`) |
-| Shared transition | `/shared-element-transition` | `sharedTransitionTag` list → detail (hero, title, region) |
-| Skia | `/skia` | Skia route over a map, pinch/pan, progress HUD |
-| Chess | `/chess` | Animated board, move trail, and engine (`js-chess-engine`) |
+| Exercise          | Route                        | What it practices                                                      |
+| ----------------- | ---------------------------- | ---------------------------------------------------------------------- |
+| Stars 2D          | `/stars-2d`                  | Planet discs laid out on a 2D field                                    |
+| SVG circle        | `/svg-circle`                | Line ↔ circle stroke on a 4100 ms timeline                             |
+| Stars 3D          | `/stars-3d`                  | Solar system — drag, pinch, planet sheet                               |
+| Physics ball      | `/physics-ball`              | Throw and bounce: `withDecay` vs `useFrameCallback`                    |
+| Keyboard handler  | `/keyboard-handler`          | `useKeyboardHandler`, sticky view, `KeyboardAwareScrollView` + toolbar |
+| Scroll onboarding | `/scroll-onboarding`         | Scroll-linked carousel inside a phone frame                            |
+| Sensors           | `/sensors`                   | Rotation sensor drives a landscape racing game (`useFrameCallback`)    |
+| Shared transition | `/shared-element-transition` | `sharedTransitionTag` list → detail (hero, title, region)              |
+| Skia              | `/skia`                      | Skia route over a map, pinch/pan, progress HUD                         |
+| Chess             | `/chess`                     | Animated board, move trail, and engine (`js-chess-engine`)             |
 
 **Stack highlights**
 
