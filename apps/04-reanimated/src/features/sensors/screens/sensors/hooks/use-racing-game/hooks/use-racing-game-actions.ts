@@ -70,18 +70,12 @@ export function useRacingGameActions({
   }, [baseSpeedKmh, setStats]);
 
   const handleCollision = useCallback(() => {
+    let nextLives = 0;
+
     setStats((prev) => {
-      const nextLives = Math.max(0, prev.lives - 1);
+      nextLives = Math.max(0, prev.lives - 1);
       const nextBaseSpeed = Math.max(BASE_SPEED_KMH, baseSpeedKmh.get() - 20);
       baseSpeedKmh.set(nextBaseSpeed);
-
-      if (nextLives === 0) {
-        void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
-        phaseValue.set("gameover");
-        setPhase("gameover");
-      } else {
-        void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).catch(() => {});
-      }
 
       return {
         ...prev,
@@ -89,6 +83,14 @@ export function useRacingGameActions({
         streak: 0,
       };
     });
+
+    if (nextLives === 0) {
+      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {});
+      phaseValue.set("gameover");
+      setPhase("gameover");
+    } else {
+      void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).catch(() => {});
+    }
   }, [baseSpeedKmh, phaseValue, setPhase, setStats]);
 
   const resetRace = useCallback(() => {

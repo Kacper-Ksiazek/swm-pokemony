@@ -7,6 +7,7 @@ export type UseRacingFrameParams = {
   state: RacingGameSharedState;
   rotation: AnimatedSensor<ValueRotation>;
   rnHandlers: RacingGameRnHandlers;
+  isActive: boolean;
 };
 
 export type PlayerFrameStepResult = {

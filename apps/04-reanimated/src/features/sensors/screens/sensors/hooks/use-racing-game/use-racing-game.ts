@@ -83,6 +83,7 @@ export function useRacingGame(isFocused: boolean) {
     state,
     rotation,
     rnHandlers: { handleOvertake, handleCollision },
+    isActive: isFocused,
   });
 
   useSpeedHudPoll({

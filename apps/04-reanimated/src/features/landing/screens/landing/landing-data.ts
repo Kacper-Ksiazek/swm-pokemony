@@ -92,7 +92,7 @@ export const DEMO_SECTIONS: { title: string; items: DemoItem[] }[] = [
         subtitle: "10-chess · Interactive chessboard",
         href: "/chess",
         icon: "square.grid.3x3.fill",
-        status: "todo",
+        status: "done",
       },
     ],
   },

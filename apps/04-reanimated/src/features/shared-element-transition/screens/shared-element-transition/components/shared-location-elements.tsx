@@ -19,6 +19,18 @@ const SUBTITLE_FONT_SIZE = 13;
 const SUBTITLE_LINE_HEIGHT = 18;
 const SUBTITLE_DETAIL_SCALE = 15 / SUBTITLE_FONT_SIZE;
 
+const titleTransition = {
+  transformOrigin: "left center",
+  transitionProperty: ["transform", "color"] as string[],
+  transitionDuration: SHARED_TRANSITION_MS,
+};
+
+const subtitleTransition = {
+  transformOrigin: "left center",
+  transitionProperty: ["transform", "color"] as string[],
+  transitionDuration: SHARED_TRANSITION_MS,
+};
+
 type LocationElementProps = {
   location: PokemonLocation;
 };
@@ -85,7 +97,7 @@ export function LocationSharedTitle({ location, variant }: LocationSharedTextPro
     <Animated.Text
       sharedTransitionTag={`${location.id}-title`}
       sharedTransitionStyle={LOCATION_TRANSITION}
-      style={[styles.titleText, isCard ? styles.titleCard : styles.titleDetail]}
+      style={[styles.titleText, isCard ? styles.titleCard : styles.titleDetail, titleTransition]}
     >
       {location.name}
     </Animated.Text>
@@ -99,7 +111,11 @@ export function LocationSharedSubtitle({ location, variant }: LocationSharedText
     <Animated.Text
       sharedTransitionTag={`${location.id}-subtitle`}
       sharedTransitionStyle={LOCATION_TRANSITION}
-      style={[styles.subtitleText, isCard ? styles.subtitleCard : styles.subtitleDetail]}
+      style={[
+        styles.subtitleText,
+        isCard ? styles.subtitleCard : styles.subtitleDetail,
+        subtitleTransition,
+      ]}
     >
       {location.subtitle}
     </Animated.Text>
@@ -111,9 +127,6 @@ const styles = StyleSheet.create({
     fontSize: TITLE_FONT_SIZE,
     fontWeight: "700",
     color: theme.colors.textHeading,
-    transformOrigin: "left center",
-    transitionProperty: ["transform", "color"],
-    transitionDuration: SHARED_TRANSITION_MS,
   },
   titleCard: {
     transform: [{ scale: 1 }],
@@ -125,9 +138,6 @@ const styles = StyleSheet.create({
     fontSize: SUBTITLE_FONT_SIZE,
     lineHeight: SUBTITLE_LINE_HEIGHT,
     color: theme.colors.textSecondary,
-    transformOrigin: "left center",
-    transitionProperty: ["transform", "color"],
-    transitionDuration: SHARED_TRANSITION_MS,
   },
   subtitleCard: {
     transform: [{ scale: 1 }],

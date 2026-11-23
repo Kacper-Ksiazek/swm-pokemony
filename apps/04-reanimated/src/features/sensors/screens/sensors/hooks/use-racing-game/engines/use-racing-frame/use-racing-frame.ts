@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useFrameCallback } from "react-native-reanimated";
 import { scheduleOnRN } from "react-native-worklets";
 
@@ -9,7 +10,7 @@ import { stepPlayerFrame } from "./utils/step-player-frame";
 import { stepTrafficPool } from "./utils/step-traffic-pool";
 
 /** Per-frame steering, speed, traffic simulation, overtakes, and collisions on the UI thread. */
-export function useRacingFrame({ state, rotation, rnHandlers }: UseRacingFrameParams) {
+export function useRacingFrame({ state, rotation, rnHandlers, isActive }: UseRacingFrameParams) {
   const {
     phaseValue,
 
@@ -33,7 +34,7 @@ export function useRacingFrame({ state, rotation, rnHandlers }: UseRacingFramePa
 
   const { handleOvertake, handleCollision } = rnHandlers;
 
-  useFrameCallback((frameInfo) => {
+  const frameCallback = useFrameCallback((frameInfo) => {
     const dt = Math.min((frameInfo.timeSincePreviousFrame ?? 16.6) / 1000, 0.05);
     const val = rotation.sensor.value;
 
@@ -87,5 +88,9 @@ export function useRacingFrame({ state, rotation, rnHandlers }: UseRacingFramePa
       hitFlash.set(1);
       scheduleOnRN(handleCollision);
     }
-  });
+  }, false);
+
+  useEffect(() => {
+    frameCallback.setActive(isActive);
+  }, [frameCallback, isActive]);
 }
