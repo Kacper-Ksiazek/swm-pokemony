@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   glowShell: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     borderRadius: 12,
     shadowOffset: { width: 0, height: 0 },
   },

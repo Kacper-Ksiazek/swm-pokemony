@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 
 import { theme } from "@/components/theme";
-import { getPokemonLocation } from "@/features/shared-element-transition/screens/shared-element-transition/data";
+import { getPokemonLocation } from "@/features/shared-element-transition";
 
 export const unstable_settings = {
   anchor: "index",

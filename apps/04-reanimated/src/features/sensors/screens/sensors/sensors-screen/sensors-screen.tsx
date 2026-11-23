@@ -14,6 +14,7 @@ import { GameOverlay } from "../components/game-overlay";
 import { RoadTrack } from "../components/road-track";
 import { VICE_COLORS } from "../constants";
 import { useRacingGame } from "../hooks/use-racing-game";
+import { SensorsPortraitGate } from "./components/sensors-portrait-gate";
 import { SensorsLeftOverlay } from "./components/sensors-left-overlay";
 import { SensorsRightOverlay } from "./components/sensors-right-overlay";
 import { ViceBackdrop } from "./components/vice-backdrop";
@@ -70,6 +71,8 @@ export function SensorsScreen() {
   return (
     <View style={[styles.screen, !showGame && styles.gateScreen]}>
       <StatusBar style="light" hidden />
+
+      {!showGame && <SensorsPortraitGate />}
 
       {showGame && (
         <Animated.View style={[styles.gameStage, gameFadeStyle]}>

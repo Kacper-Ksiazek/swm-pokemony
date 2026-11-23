@@ -1,7 +1,23 @@
-import { SymbolView, type SymbolWeight } from "expo-symbols";
+import { SymbolView, type SymbolViewProps, type SymbolWeight } from "expo-symbols";
 import type { StyleProp, ViewStyle } from "react-native";
 
 import type { ExerciseIconName } from "./icon-symbol";
+
+type SfSymbolName = Extract<SymbolViewProps["name"], string>;
+
+const SF_SYMBOL_OVERRIDES = {
+  "iphone.portrait": "iphone",
+  "iphone.landscape": "iphone.landscape",
+} as const satisfies Record<"iphone.portrait" | "iphone.landscape", SfSymbolName>;
+
+function resolveSfSymbol(name: ExerciseIconName): SymbolViewProps["name"] {
+  const override = SF_SYMBOL_OVERRIDES[name as keyof typeof SF_SYMBOL_OVERRIDES];
+  if (override) {
+    return override;
+  }
+
+  return name as SfSymbolName;
+}
 
 export function IconSymbol({
   name,
@@ -21,7 +37,7 @@ export function IconSymbol({
       weight={weight}
       tintColor={color}
       resizeMode="scaleAspectFit"
-      name={name}
+      name={resolveSfSymbol(name)}
       style={[
         {
           width: size,

@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   checkmateWash: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     borderRadius: 10,
   },
   gridOverlay: {
