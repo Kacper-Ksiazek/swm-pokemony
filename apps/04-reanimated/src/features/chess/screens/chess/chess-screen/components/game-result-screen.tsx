@@ -16,9 +16,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IconSymbol } from "@/components/icon-symbol";
 
-import { CHESS_PIECE_IMAGES } from "../../../assets/chess-assets";
-import { VICE_CHESS_COLORS } from "../constants/vice-chess.constants";
-import type { GameOutcome } from "../utils/chess-engine";
+import { CHESS_PIECE_IMAGES } from "@/features/chess/assets/chess-assets";
+
+import { VICE_CHESS_COLORS } from "../../constants/vice-chess.constants";
+import type { GameOutcome } from "../../utils/chess-engine";
 
 /** How long the game view takes to fade out before this screen starts fading in. */
 export const RESULT_GAME_FADE_OUT_MS = 450;

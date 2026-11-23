@@ -3,7 +3,7 @@ import Animated from "react-native-reanimated";
 
 import { IconSymbol } from "@/components/icon-symbol";
 
-import { VICE_CHESS_COLORS } from "../constants/vice-chess.constants";
+import { VICE_CHESS_COLORS } from "../../constants/vice-chess.constants";
 import { useViceNeonPulse } from "../hooks/use-vice-neon-pulse";
 
 type AutopilotToolButtonProps = {

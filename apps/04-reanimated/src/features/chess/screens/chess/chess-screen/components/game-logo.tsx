@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { StyleSheet, View } from "react-native";
 
-import { CHESS_LOGO_IMAGE } from "../../../assets/chess-assets";
+import { CHESS_LOGO_IMAGE } from "@/features/chess/assets/chess-assets";
 
 export function GameLogo() {
   return (

@@ -3,8 +3,9 @@ import { Image } from "expo-image";
 import { StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 
-import { CHESS_PIECE_IMAGES } from "../../../assets/chess-assets";
-import type { ChessPiece as ChessPieceModel } from "../utils/chess-engine";
+import { CHESS_PIECE_IMAGES } from "@/features/chess/assets/chess-assets";
+
+import type { ChessPiece as ChessPieceModel } from "../../../../utils/chess-engine";
 
 type ChessPieceProps = {
   piece: ChessPieceModel;

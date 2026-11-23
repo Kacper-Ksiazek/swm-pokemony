@@ -8,7 +8,7 @@ import {
   withTiming,
 } from "react-native-reanimated";
 
-import type { GameOutcome } from "../utils/chess-engine";
+import type { GameOutcome } from "../../../../utils/chess-engine";
 
 const WASH_IN_MS = 900;
 

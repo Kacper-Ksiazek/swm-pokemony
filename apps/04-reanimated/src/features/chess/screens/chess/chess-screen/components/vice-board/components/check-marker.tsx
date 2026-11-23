@@ -11,7 +11,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { VICE_CHESS_COLORS } from "../constants/vice-chess.constants";
+import { VICE_CHESS_COLORS } from "../../../../constants/vice-chess.constants";
 
 const DANGER = VICE_CHESS_COLORS.danger;
 

@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
-import type { PieceColor } from "../../../assets/chess-assets";
-import { VICE_CHESS_COLORS } from "../constants/vice-chess.constants";
-import type { SquarePos } from "../utils/chess-engine";
+import type { PieceColor } from "@/features/chess/assets/chess-assets";
+
+import { VICE_CHESS_COLORS } from "../../../../constants/vice-chess.constants";
+import type { SquarePos } from "../../../../utils/chess-engine";
 
 type MoveTrailProps = {
   from: SquarePos;

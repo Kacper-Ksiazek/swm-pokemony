@@ -2,20 +2,21 @@ import { Image } from "expo-image";
 import { Pressable, StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 
-import { CHESS_BOARD_IMAGE } from "../../../assets/chess-assets";
-import { BOARD_SIZE, VICE_CHESS_COLORS } from "../constants/vice-chess.constants";
-import { useCheckmateBoardWash } from "../hooks/use-checkmate-board-wash";
-import { useViceNeonPulse } from "../hooks/use-vice-neon-pulse";
+import { CHESS_BOARD_IMAGE } from "@/features/chess/assets/chess-assets";
+
+import { BOARD_SIZE, VICE_CHESS_COLORS } from "../../../constants/vice-chess.constants";
+import { useViceNeonPulse } from "../../hooks/use-vice-neon-pulse";
 import type {
   BoardState,
   ChessPiece as ChessPieceModel,
   GameOutcome,
   SquarePos,
-} from "../utils/chess-engine";
-import { ChessPiece } from "./chess-piece";
-import { CheckMarker } from "./check-marker";
-import { LastMoveMarker } from "./last-move-marker";
-import { MoveTrail } from "./move-trail";
+} from "../../../utils/chess-engine";
+import { CheckMarker } from "./components/check-marker";
+import { ChessPiece } from "./components/chess-piece";
+import { LastMoveMarker } from "./components/last-move-marker";
+import { MoveTrail } from "./components/move-trail";
+import { useCheckmateBoardWash } from "./hooks/use-checkmate-board-wash";
 
 type ViceBoardProps = {
   board: BoardState;

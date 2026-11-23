@@ -1,8 +1,9 @@
 import { StyleSheet } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
-import type { PieceColor } from "../../../assets/chess-assets";
-import { VICE_CHESS_COLORS } from "../constants/vice-chess.constants";
+import type { PieceColor } from "@/features/chess/assets/chess-assets";
+
+import { VICE_CHESS_COLORS } from "../../../../constants/vice-chess.constants";
 
 type LastMoveMarkerProps = {
   /** Colour of the side that just moved, so the marker reads as "their" move. */

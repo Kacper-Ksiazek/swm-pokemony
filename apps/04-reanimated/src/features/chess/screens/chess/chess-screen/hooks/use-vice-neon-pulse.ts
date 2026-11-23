@@ -10,7 +10,7 @@ import {
   withTiming,
 } from "react-native-reanimated";
 
-import { VICE_CHESS_COLORS } from "../constants/vice-chess.constants";
+import { VICE_CHESS_COLORS } from "../../constants/vice-chess.constants";
 
 const NEON_CYCLE = [
   VICE_CHESS_COLORS.cyan,

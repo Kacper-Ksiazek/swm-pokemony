@@ -9,8 +9,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { CHESS_PIECE_IMAGES, type PieceColor } from "../../../assets/chess-assets";
-import { VICE_CHESS_COLORS } from "../constants/vice-chess.constants";
+import { CHESS_PIECE_IMAGES, type PieceColor } from "@/features/chess/assets/chess-assets";
+
+import { VICE_CHESS_COLORS } from "../../constants/vice-chess.constants";
 
 type GameHudProps = {
   turn: PieceColor;
