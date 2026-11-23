@@ -28,17 +28,20 @@ interface SkiaSeriesLineProps {
 export function SkiaSeriesLine({ series, config, bgColor }: SkiaSeriesLineProps) {
   const areaPath = useDerivedValue(() => {
     "worklet";
+
     return buildAreaPath(series.data.value, series.max.value);
   });
 
   const linePath = useDerivedValue(() => {
     "worklet";
+
     return buildLinePath(series.data.value, series.max.value);
   });
 
   // All stars merged into a single path string
   const starsPath = useDerivedValue(() => {
     "worklet";
+
     return buildStarsPath(series.data.value, series.max.value, config.starOuter, config.starInner);
   });
 

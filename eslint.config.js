@@ -2,6 +2,7 @@ const { defineConfig, globalIgnores } = require("eslint/config");
 const expoConfig = require("eslint-config-expo/flat");
 const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended");
 const reactNative = require("eslint-plugin-react-native");
+const workletBlankLineAfter = require("./eslint-rules/worklet-blank-line-after.cjs");
 
 module.exports = defineConfig([
   globalIgnores([
@@ -32,6 +33,7 @@ module.exports = defineConfig([
             "./apps/02-rn-perf/tsconfig.json",
             "./apps/03-native-modules/tsconfig.json",
             "./apps/03-jsi/tsconfig.json",
+            "./apps/04-reanimated/tsconfig.json",
           ],
         },
       },
@@ -55,6 +57,19 @@ module.exports = defineConfig([
           skip: ["NativeTabs.Trigger.Label", "Stack.Title", "ThemedText"],
         },
       ],
+    },
+  },
+  {
+    files: ["apps/**/*.{js,jsx,ts,tsx}"],
+    plugins: {
+      local: {
+        rules: {
+          "worklet-blank-line-after": workletBlankLineAfter,
+        },
+      },
+    },
+    rules: {
+      "local/worklet-blank-line-after": "error",
     },
   },
 ]);

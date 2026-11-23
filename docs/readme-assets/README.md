@@ -24,6 +24,23 @@ Add PNGs under `01-rn-basics/screenshots/`:
 | `map.png` | Map pin sheet |
 | `camera.jpg` | Camera sticker compose |
 
+## `04_reanimated`
+
+Add screenshots under `04-reanimated/screenshots/`:
+
+| File | Screen |
+|------|--------|
+| `stars-2d.png` | Stars 2D |
+| `svg-circle.png` | SVG circle |
+| `stars-3d.png` | Stars 3D solar system |
+| `physics-ball.png` | Physics ball |
+| `keyboard-handler.png` | Keyboard handler |
+| `scroll-onboarding.jpg` | Scroll onboarding |
+| `sensors.jpg` | Sensors — landscape racing game |
+| `shared-element.jpg` | Shared element transition |
+| `skia.jpg` | Skia route map |
+| `chess.jpg` | Poke Chess |
+
 Keep width around 1290px (iPhone logical width × 3) or export from the simulator as-is; the README scales them to ~200px wide in a row.
 
 Videos stay on YouTube; link only in the root README.

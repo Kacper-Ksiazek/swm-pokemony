@@ -24,14 +24,17 @@
     "start:02": "bun run --filter 02-rn-perf start",
     "start:03": "bun run --filter 03-native-modules start",
     "start:03-jsi": "bun run --filter 03-jsi start",
+    "start:04": "bun run --filter 04-reanimated start",
     "ios": "bun run --filter 01-rn-basics ios",
     "ios:02": "bun run --filter 02-rn-perf ios",
     "ios:03": "bun run --filter 03-native-modules ios",
     "ios:03-jsi": "bun run --filter 03-jsi ios",
+    "ios:04": "bun run --filter 04-reanimated ios",
     "android": "bun run --filter 01-rn-basics android",
     "android:02": "bun run --filter 02-rn-perf android",
     "android:03": "bun run --filter 03-native-modules android",
-    "android:03-jsi": "bun run --filter 03-jsi android"
+    "android:03-jsi": "bun run --filter 03-jsi android",
+    "android:04": "bun run --filter 04-reanimated android"
   },
   "trustedDependencies": [
     "@shopify/react-native-skia"

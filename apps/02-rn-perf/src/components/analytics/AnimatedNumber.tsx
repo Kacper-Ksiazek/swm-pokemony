@@ -17,6 +17,7 @@ interface AnimatedNumberProps {
 
 const defaultFormat = (n: number) => {
   "worklet";
+
   return Math.round(n).toLocaleString();
 };
 

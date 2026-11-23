@@ -170,4 +170,67 @@ A hands-on **JavaScript Interface (JSI)** lab (`apps/03-jsi`) where a local Turb
 - [Turbo Native Modules](https://reactnative.dev/docs/the-new-architecture/pillars-turbomodules) — `NativeKksiazekJsi` Codegen spec (`TurboModuleRegistry.getEnforcing`) installing C++ globals on iOS & Android
 - [Expo Router](https://docs.expo.dev/router/introduction/) — landing index and per-assignment interactive screens under `src/features/`
 
+---
+
+## `04_reanimated` — Reanimated workshop
+
+Ten finished labs in `apps/04-reanimated` (Expo SDK 58, Reanimated 4). A stack landing lists every exercise; each screen drives motion on the UI thread — shared values, gestures, sensors, SVG, Skia, and shared-element transitions.
+
+<br />
+
+<div align="center">
+  <p>
+    <img src="https://img.shields.io/badge/YouTube-Watch_the_demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo on YouTube" />
+  </p>
+  <p>
+    <strong><a href="https://youtube.com/shorts/Nn4dvSo9Yl0">▶ youtube.com/shorts/Nn4dvSo9Yl0</a></strong>
+  </p>
+</div>
+
+<br />
+
+<table>
+  <tr>
+    <td><img src="docs/readme-assets/04-reanimated/screenshots/stars-2d.png" width="200" alt="Stars 2D" /></td>
+    <td><img src="docs/readme-assets/04-reanimated/screenshots/svg-circle.png" width="200" alt="SVG circle" /></td>
+    <td><img src="docs/readme-assets/04-reanimated/screenshots/stars-3d.png" width="200" alt="Stars 3D solar system" /></td>
+  </tr>
+  <tr>
+    <td><img src="docs/readme-assets/04-reanimated/screenshots/physics-ball.png" width="200" alt="Physics ball" /></td>
+    <td><img src="docs/readme-assets/04-reanimated/screenshots/keyboard-handler.png" width="200" alt="Keyboard handler" /></td>
+    <td><img src="docs/readme-assets/04-reanimated/screenshots/scroll-onboarding.jpg" width="200" alt="Scroll onboarding" /></td>
+  </tr>
+  <tr>
+    <td><img src="docs/readme-assets/04-reanimated/screenshots/shared-element.jpg" width="200" alt="Shared element transition" /></td>
+    <td><img src="docs/readme-assets/04-reanimated/screenshots/skia.jpg" width="200" alt="Skia route map" /></td>
+    <td><img src="docs/readme-assets/04-reanimated/screenshots/chess.jpg" width="200" alt="Poke Chess" /></td>
+  </tr>
+</table>
+
+<br />
+
+| Exercise          | Route                        | What it practices                                                      |
+| ----------------- | ---------------------------- | ---------------------------------------------------------------------- |
+| Stars 2D          | `/stars-2d`                  | Planet discs laid out on a 2D field                                    |
+| SVG circle        | `/svg-circle`                | Line ↔ circle stroke on a 4100 ms timeline                             |
+| Stars 3D          | `/stars-3d`                  | Solar system — drag, pinch, planet sheet                               |
+| Physics ball      | `/physics-ball`              | Throw and bounce: `withDecay` vs `useFrameCallback`                    |
+| Keyboard handler  | `/keyboard-handler`          | `useKeyboardHandler`, sticky view, `KeyboardAwareScrollView` + toolbar |
+| Scroll onboarding | `/scroll-onboarding`         | Scroll-linked carousel inside a phone frame                            |
+| Sensors           | `/sensors`                   | Rotation sensor drives a landscape racing game (`useFrameCallback`)    |
+| Shared transition | `/shared-element-transition` | `sharedTransitionTag` list → detail (hero, title, region)              |
+| Skia              | `/skia`                      | Skia route over a map, pinch/pan, progress HUD                         |
+| Chess             | `/chess`                     | Animated board, move trail, and engine (`js-chess-engine`)             |
+
+**Stack highlights**
+
+- [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/) 4 — shared values (`.get()` / `.set()`), `withDecay`, `useFrameCallback`, `useAnimatedSensor`, shared element transitions (`ENABLE_SHARED_ELEMENT_TRANSITIONS`)
+- [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/) — pan, pinch, and throw gestures on the UI thread
+- [react-native-worklets](https://docs.swmansion.com/react-native-worklets/) — worklets runtime paired with Reanimated 4
+- [react-native-svg](https://github.com/software-mansion/react-native-svg) — animated stroke (line to circle)
+- [react-native-keyboard-controller](https://kirillzyusko.github.io/react-native-keyboard-controller/) — keyboard-aware scroll, sticky view, and toolbar
+- [@shopify/react-native-skia](https://shopify.github.io/react-native-skia/) — route path drawn on a `Canvas`, driven by a Reanimated progress value
+- [js-chess-engine](https://github.com/josefjadrny/js-chess-engine) — move generation behind the animated board
+- [Expo Router](https://docs.expo.dev/router/introduction/) — landing list and one stack screen per lab under `src/features/`
+
 <!-- Future apps: copy a showcase block above (heading, short intro, optional YouTube badge, screenshots or profiler captures, stack list). -->
