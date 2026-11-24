@@ -1,0 +1,7 @@
+import typegpu from "unplugin-typegpu/vite";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [typegpu()],
+  resolve: { alias: { "@": new URL("./src", import.meta.url).pathname } },
+});
