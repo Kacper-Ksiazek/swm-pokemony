@@ -27,6 +27,8 @@
     "start:04": "bun run --filter 04-reanimated start",
     "start:05": "bun run --filter 05-typegpu start",
     "start:06": "bun run --filter 06-conway-game-of-life start",
+    "start:07": "bun run --filter 07-flood start",
+    "start:08": "bun run --filter 08-typegpu-angry-birds start",
     "ios": "bun run --filter 01-rn-basics ios",
     "ios:02": "bun run --filter 02-rn-perf ios",
     "ios:03": "bun run --filter 03-native-modules ios",

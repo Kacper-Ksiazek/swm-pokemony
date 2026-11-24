@@ -36,6 +36,8 @@ module.exports = defineConfig([
             "./apps/04-reanimated/tsconfig.json",
             "./apps/05-typegpu/tsconfig.json",
             "./apps/06-conway-game-of-life/tsconfig.json",
+            "./apps/07-flood/tsconfig.json",
+            "./apps/08-typegpu-angry-birds/tsconfig.json",
           ],
         },
       },
