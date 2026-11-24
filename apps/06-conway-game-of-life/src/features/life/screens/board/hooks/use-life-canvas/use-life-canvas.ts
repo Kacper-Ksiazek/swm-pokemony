@@ -12,7 +12,11 @@ import { useGpuSession } from "./hooks/use-gpu-session/use-gpu-session";
  * shader samples the texels behind each screen pixel through `cameraRef`, so a pinch
  * or a drag shows up on the next frame without rebuilding the pipelines.
  */
-export function useLifeCanvas(cameraRef: RefObject<BoardCamera>, viewportRef: RefObject<Viewport>) {
+export function useLifeCanvas(
+  cameraRef: RefObject<BoardCamera>,
+  viewportRef: RefObject<Viewport>,
+  active: boolean,
+) {
   const [error, setError] = useState<string | null>(null);
   const [living, setLiving] = useState(0);
   const [epoch, setEpoch] = useState(0);
@@ -35,6 +39,7 @@ export function useLifeCanvas(cameraRef: RefObject<BoardCamera>, viewportRef: Re
   }, [startedAt]);
 
   const canvasRef = useGpuSession({
+    active,
     cameraRef,
     viewportRef,
     runId,

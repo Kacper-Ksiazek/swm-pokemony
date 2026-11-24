@@ -1,13 +1,17 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from "react-native";
 
 import { CELL_COUNT } from "../../../simulation/grid";
 import { LivingChart } from "./living-chart";
+
+type LifeEngine = "gpu" | "cpu";
 
 type StatsPanelProps = {
   living: number;
   epoch: number;
   elapsedMs: number;
   history: readonly number[];
+  engine: LifeEngine;
+  onEngineChange: (engine: LifeEngine) => void;
   onReset: () => void;
 };
 
@@ -17,7 +21,15 @@ function formatCount(value: number): string {
     .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
-export function StatsPanel({ living, epoch, elapsedMs, history, onReset }: StatsPanelProps) {
+export function StatsPanel({
+  living,
+  epoch,
+  elapsedMs,
+  history,
+  engine,
+  onEngineChange,
+  onReset,
+}: StatsPanelProps) {
   const dead = CELL_COUNT - living;
 
   return (
@@ -43,6 +55,17 @@ export function StatsPanel({ living, epoch, elapsedMs, history, onReset }: Stats
         <Text style={styles.value}>{formatElapsed(elapsedMs)}</Text>
       </View>
       <LivingChart samples={history} />
+      <View style={styles.engine}>
+        <Text style={[styles.engineLabel, engine === "gpu" && styles.engineLabelOn]}>GPU</Text>
+        <Switch
+          accessibilityLabel="Silnik CPU"
+          value={engine === "cpu"}
+          onValueChange={(cpu) => onEngineChange(cpu ? "cpu" : "gpu")}
+          trackColor={{ false: "#3F3F46", true: "#3F3F46" }}
+          thumbColor={engine === "cpu" ? "#9EED73" : "#F4F4F5"}
+        />
+        <Text style={[styles.engineLabel, engine === "cpu" && styles.engineLabelOn]}>CPU</Text>
+      </View>
       <Pressable
         accessibilityRole="button"
         onPress={onReset}
@@ -95,6 +118,20 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "700",
     fontVariant: ["tabular-nums"],
+    color: "#F4F4F5",
+  },
+  engine: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  engineLabel: {
+    fontSize: 13,
+    fontWeight: "700",
+    letterSpacing: 1.1,
+    color: "#8B8B93",
+  },
+  engineLabelOn: {
     color: "#F4F4F5",
   },
   reset: {

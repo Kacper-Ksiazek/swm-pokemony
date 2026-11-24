@@ -1,20 +1,25 @@
+import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { GestureDetector } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Canvas } from "react-native-webgpu";
 import { StatusBar } from "expo-status-bar";
 
+import { CpuBoard } from "./components/cpu-board";
 import { StatsPanel } from "./components/stats-panel";
 import { useBoardCamera } from "./hooks/use-board-camera";
+import { useCpuLife } from "./hooks/use-cpu-life";
 import { useLifeCanvas } from "./hooks/use-life-canvas";
+
+type LifeEngine = "gpu" | "cpu";
 
 export function BoardScreen() {
   const insets = useSafeAreaInsets();
+  const [engine, setEngine] = useState<LifeEngine>("gpu");
   const { gesture, cameraRef, viewportRef } = useBoardCamera();
-  const { canvasRef, error, living, epoch, elapsedMs, history, reset } = useLifeCanvas(
-    cameraRef,
-    viewportRef,
-  );
+  const gpu = useLifeCanvas(cameraRef, viewportRef, engine === "gpu");
+  const cpu = useCpuLife(cameraRef, viewportRef, engine === "cpu");
+  const active = engine === "gpu" ? gpu : cpu;
 
   return (
     <View style={[styles.screen, { paddingLeft: insets.left }]}>
@@ -22,7 +27,11 @@ export function BoardScreen() {
 
       <GestureDetector gesture={gesture}>
         <View style={styles.board}>
-          <Canvas ref={canvasRef} style={StyleSheet.absoluteFill} />
+          {engine === "gpu" ? (
+            <Canvas ref={gpu.canvasRef} style={StyleSheet.absoluteFill} />
+          ) : (
+            <CpuBoard cameraRef={cameraRef} viewportRef={viewportRef} field={cpu.field} />
+          )}
         </View>
       </GestureDetector>
 
@@ -37,13 +46,15 @@ export function BoardScreen() {
         ]}
       >
         <StatsPanel
-          living={living}
-          epoch={epoch}
-          elapsedMs={elapsedMs}
-          history={history}
-          onReset={reset}
+          living={active.living}
+          epoch={active.epoch}
+          elapsedMs={active.elapsedMs}
+          history={active.history}
+          engine={engine}
+          onEngineChange={setEngine}
+          onReset={active.reset}
         />
-        {error ? <Text style={styles.error}>{error}</Text> : null}
+        {engine === "gpu" && gpu.error ? <Text style={styles.error}>{gpu.error}</Text> : null}
       </View>
     </View>
   );

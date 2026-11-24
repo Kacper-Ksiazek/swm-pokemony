@@ -11,6 +11,7 @@ import { createGpuResources } from "./create-gpu-resources/create-gpu-resources"
 import { runGpuLoop } from "./run-gpu-loop";
 
 type GpuSessionArgs = {
+  active: boolean;
   cameraRef: RefObject<BoardCamera>;
   viewportRef: RefObject<Viewport>;
   runId: number;
@@ -24,6 +25,7 @@ type GpuSessionArgs = {
 
 /** One WebGPU session. A new `runId` destroys the device root and seeds a fresh grid. */
 export function useGpuSession({
+  active,
   cameraRef,
   viewportRef,
   runId,
@@ -38,7 +40,7 @@ export function useGpuSession({
   const { device } = useDevice();
 
   useEffect(() => {
-    if (!device) {
+    if (!active || !device) {
       return;
     }
 
@@ -91,6 +93,7 @@ export function useGpuSession({
       setEpoch(0);
     };
   }, [
+    active,
     cameraRef,
     device,
     runId,
