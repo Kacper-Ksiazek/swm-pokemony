@@ -36,5 +36,5 @@
   "[cpp]": {
     "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
   },
-  "cSpell.words": ["DEADZONE"]
+  "cSpell.words": ["DEADZONE", "tgpu", "typegpu"]
 }

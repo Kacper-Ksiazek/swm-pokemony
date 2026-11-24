@@ -24,6 +24,8 @@ bun run start:02            # Expo for 02-rn-perf
 bun run start:03            # Expo for 03-native-modules
 bun run start:03-jsi        # Expo for 03-jsi
 bun run start:04            # Expo for 04-reanimated
+bun run start:05            # Expo for 05-typegpu
+bun run start:06            # Expo for 06-conway-game-of-life
 
 cd apps/01-rn-basics && bunx expo install <package>  # SDK-compatible versions
 cd apps/01-rn-basics && bunx expo-doctor

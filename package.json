@@ -26,18 +26,21 @@
     "start:03-jsi": "bun run --filter 03-jsi start",
     "start:04": "bun run --filter 04-reanimated start",
     "start:05": "bun run --filter 05-typegpu start",
+    "start:06": "bun run --filter 06-conway-game-of-life start",
     "ios": "bun run --filter 01-rn-basics ios",
     "ios:02": "bun run --filter 02-rn-perf ios",
     "ios:03": "bun run --filter 03-native-modules ios",
     "ios:03-jsi": "bun run --filter 03-jsi ios",
     "ios:04": "bun run --filter 04-reanimated ios",
     "ios:05": "bun run --filter 05-typegpu ios",
+    "ios:06": "bun run --filter 06-conway-game-of-life ios",
     "android": "bun run --filter 01-rn-basics android",
     "android:02": "bun run --filter 02-rn-perf android",
     "android:03": "bun run --filter 03-native-modules android",
     "android:03-jsi": "bun run --filter 03-jsi android",
     "android:04": "bun run --filter 04-reanimated android",
-    "android:05": "bun run --filter 05-typegpu android"
+    "android:05": "bun run --filter 05-typegpu android",
+    "android:06": "bun run --filter 06-conway-game-of-life android"
   },
   "trustedDependencies": [
     "@shopify/react-native-skia"
