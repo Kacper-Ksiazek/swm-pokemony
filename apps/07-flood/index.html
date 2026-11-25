@@ -69,6 +69,7 @@
         color: white;
       }
       #reset,
+      .toggle,
       .tools button,
       #clear-walls {
         background: #3a434b;
@@ -87,10 +88,12 @@
         font-size: 12px;
         cursor: pointer;
       }
-      .tools button[aria-pressed="true"] {
+      .tools button[aria-pressed="true"],
+      .toggle[aria-pressed="true"] {
         background: #e8ecef;
         color: #101418;
       }
+      .toggle,
       #clear-walls {
         padding: 6px 10px;
         border: 0;
@@ -124,11 +127,22 @@
         <output id="crest-value"></output>
         <input id="crest" type="range" min="2" max="12" step="0.5" value="7" />
       </label>
+      <label>
+        Pora dnia
+        <output id="hour-value"></output>
+        <input id="hour" type="range" min="5" max="23.5" step="0.25" value="19" />
+      </label>
       <div class="buttons">
         <button id="release" disabled>Uwolnij falę</button>
         <button id="reset" disabled>Reset</button>
       </div>
       <p id="status">Ładowanie…</p>
+      <div class="tools" role="group" aria-label="Kamera">
+        <button data-cinema="free" aria-pressed="true">Swobodna</button>
+        <button data-cinema="wave" aria-pressed="false">Za falą</button>
+        <button data-cinema="plane" aria-pressed="false">Samolot</button>
+      </div>
+      <button id="storm" class="toggle" aria-pressed="false">Burza</button>
       <h2>Mury przeciwpowodziowe</h2>
       <div class="tools" role="group" aria-label="Narzędzie">
         <button data-tool="camera" aria-pressed="true">Kamera</button>

@@ -37,6 +37,8 @@ export function createDebris(
   options: { step: number },
 ) {
   const { waterAt, currentAt, floorAt } = water;
+  /** How much daylight there is to light the dust, from 1 at noon to near 0 at night. */
+  const daylight = root.createUniform(d.f32, 1);
 
   /** Floats a chunk on the water and carries it along, or lets it lie on the ground. */
   const drift = (chunk: Particle) => {
@@ -86,7 +88,7 @@ export function createDebris(
     const alpha = fall * fall * dust.color.w * (1 - age) * std.saturate(age * 8);
     // Dust scatters light every way, so one sunlit colour suits the whole puff: shading each
     // pixel of these large, overlapping quads would cost more than the rest of the debris
-    return d.vec4f(DUST_LIT * alpha, alpha);
+    return d.vec4f(DUST_LIT * (alpha * daylight.$), alpha);
   };
 
   /** Dust grows as it spreads. */
@@ -134,11 +136,21 @@ export function createDebris(
 
   return {
     drawings: [chunks.drawing, dust.drawing],
+
+    /** Sets how much daylight lights the dust, from 1 at noon to near 0 at night. */
+    setDaylight(amount: number) {
+      daylight.write(amount);
+    },
     shatter,
     initAsync: () => Promise.all([chunks.initAsync(), dust.initAsync()]),
 
     /** Throws rubble and dust from a building that starts to fall, toward where it falls. */
-    collapse(building: Building, toward: readonly [number, number]) {
+    collapse(
+      building: Pick<Building, "x" | "z" | "base" | "width" | "depth" | "height" | "color">,
+      toward: readonly [number, number],
+      /** Falling masonry raises dust; timber breaking over water does not. */
+      options: { readonly dust?: boolean } = {},
+    ) {
       const volume = building.width * building.depth * building.height;
       const footprint = building.width * building.depth;
       const middle = building.base + building.height * 0.5;
@@ -153,6 +165,7 @@ export function createDebris(
         life: 18,
         variance: 0.5,
       });
+      if (options.dust === false) return;
       dust.burst({
         count: Math.min(Math.round(footprint * PUFFS_PER_SQUARE_METRE), 120),
         position: [building.x, building.base + 2, building.z],

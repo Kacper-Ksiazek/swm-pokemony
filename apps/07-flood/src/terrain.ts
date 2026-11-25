@@ -5,13 +5,15 @@ import { perlin2d } from "@typegpu/noise";
 import { d, std, type StorageFlag, type TgpuBuffer, type TgpuRoot } from "typegpu";
 
 import { EDGE_VERTICES, edgeVertexOf, placeOf } from "@/edges";
-import { BLOCK, CELL, CELLS, ROAD, SHORE, SPAN, TOWN } from "@/world/layout";
+import { BLOCK, CELL, CELLS, ISLET, PROMENADE, ROAD, SPAN, TOWN } from "@/world/layout";
 
 const SAND = srgbToLinear(d.vec3f(0.86, 0.78, 0.6));
 const GRASS = srgbToLinear(d.vec3f(0.42, 0.52, 0.3));
 const MEADOW = srgbToLinear(d.vec3f(0.55, 0.58, 0.34));
 const ASPHALT = srgbToLinear(d.vec3f(0.16, 0.16, 0.17));
 const KERB = srgbToLinear(d.vec3f(0.5, 0.5, 0.48));
+const ROCK = srgbToLinear(d.vec3f(0.46, 0.43, 0.4));
+const STONE = srgbToLinear(d.vec3f(0.85, 0.8, 0.72));
 const SEABED = srgbToLinear(d.vec3f(0.42, 0.4, 0.33));
 const TOPSOIL = srgbToLinear(d.vec3f(0.3, 0.22, 0.15));
 const CLAY = srgbToLinear(d.vec3f(0.52, 0.4, 0.28));
@@ -41,9 +43,25 @@ const Ground = instances.define("Ground", {
     const at = pixel.point.position.xz;
     const patches = perlin2d.sample(at * 0.08) * 0.5 + 0.5;
     let color = std.mix(GRASS, MEADOW, patches);
-    const beach = std.smoothstep(SHORE + 6, SHORE - 2, at.y);
+    // Sand up to the promenade, then pale stone slabs along it
+    const beach = std.smoothstep(PROMENADE.near + 1, PROMENADE.near - 1, at.y);
     color = std.mix(color, SAND, beach);
+    const promenade =
+      std.step(PROMENADE.near, at.y) *
+      std.step(at.y, PROMENADE.far) *
+      std.step(std.abs(at.x), TOWN.maxX);
+    const slab = std.fract(at * d.vec2f(0.5, 0.5));
+    const joint = std.max(std.step(0.95, slab.x), std.step(0.95, slab.y));
+    color = std.mix(color, std.mix(STONE, KERB, joint * 0.6), promenade);
     color = std.mix(color, SEABED, std.smoothstep(0.2, -1.5, pixel.point.position.y));
+    // The islet is bare rock, darker where the sea wets it
+    const islet = std.smoothstep(
+      ISLET.radius * 1.3,
+      ISLET.radius * 0.9,
+      std.distance(at, d.vec2f(ISLET.x, ISLET.z)),
+    );
+    const rock = std.mix(ROCK, SEABED, std.smoothstep(0.6, -0.4, pixel.point.position.y));
+    color = std.mix(color, rock * (0.85 + patches * 0.3), islet);
     const road = roadAt(at);
     color = std.mix(color, ASPHALT, road.x);
     color = std.mix(color, KERB, road.x * road.y);

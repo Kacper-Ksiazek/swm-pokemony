@@ -7,7 +7,7 @@ import { d, std, tgpu, type TgpuComputePass, type TgpuRoot } from "typegpu";
 import { BLOCK, ROADS_ACROSS, ROADS_ALONG, SPAN } from "@/world/layout";
 
 /** Cars the town holds at once. */
-const CARS = 240;
+const CARS = 320;
 const WORKGROUP = 64;
 
 /** What a car slot holds. */

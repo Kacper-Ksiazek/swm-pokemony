@@ -40,13 +40,20 @@ const PUSH_UNITS = 64;
 const DENSITY = 1;
 /** How many times a second the CPU learns the push on every building. */
 const PUSH_RATE = 8;
+/** Points where the CPU can read the water, such as under each pier span and at each palm. */
+const SENSORS = 64;
 
 /** Flood water carries silt: light brown where it is thin, darker where it is deep. */
 const SILT = srgbToLinear(d.vec3f(0.56, 0.47, 0.33));
 const MURK = srgbToLinear(d.vec3f(0.3, 0.27, 0.19));
+/** The clear sea: turquoise over the sand, deep blue farther out. */
+const LAGOON = srgbToLinear(d.vec3f(0.2, 0.68, 0.66));
+const OCEAN = srgbToLinear(d.vec3f(0.04, 0.26, 0.38));
 const FOAM = srgbToLinear(d.vec3f(0.78, 0.76, 0.7));
 /** How much one metre of water hides: 0.5 m of water hides about two thirds of the ground. */
 const TURBIDITY = 2.2;
+/** The clear sea hides the sand far less: about a metre and a half of it hides two thirds. */
+const CLARITY = 0.7;
 /**
  * Small waves the wind raises: direction along x and z, then wavelength and height in metres.
  * Summed analytically with their exact slopes, which costs a fraction of sampling noise.
@@ -510,6 +517,67 @@ export function createWater(
     return floorOf(cellAt(place));
   };
 
+  /**
+   * How hard the flood strikes something at a cell: the point on the surface there, and in w the
+   * speed at which the water runs into a neighbour that stands about as high as its surface, such
+   * as a wall, a building, rubble or a steep shore. Zero where it strikes nothing.
+   */
+  const impactAt = (column: number, row: number) => {
+    "use gpu";
+    const index = indexOf(column, row);
+    const water = depthIn.$[index];
+    if (water < 0.2) {
+      return d.vec4f(0);
+    }
+    const level = floorOf(index) + water;
+    const flow = velocityIn.$[index];
+    let hardest = d.f32(0);
+    for (const offset of tgpu.unroll([
+      d.vec2i(-1, 0),
+      d.vec2i(1, 0),
+      d.vec2i(0, -1),
+      d.vec2i(0, 1),
+    ])) {
+      const next = d.vec2i(column, row) + offset;
+      if (inside(next.x, next.y)) {
+        if (floorOf(indexOf(next.x, next.y)) > level - 0.3) {
+          hardest = std.max(hardest, std.dot(flow, d.vec2f(offset)));
+        }
+      }
+    }
+    return d.vec4f(d.f32(column) * CELL - SPAN / 2, level, d.f32(row) * CELL - SPAN / 2, hardest);
+  };
+
+  // ---- Sensors -----------------------------------------------------------------------------
+
+  /** Points the CPU asks about: the water's level, depth and current at each, read back. */
+  const sensorPoints = root.createBuffer(d.arrayOf(d.vec2f, SENSORS)).$usage("storage");
+  const sensorValues = root.createBuffer(d.arrayOf(d.vec4f, SENSORS)).$usage("storage");
+  const pointsIn = sensorPoints.as("readonly");
+  const valuesOut = sensorValues.as("mutable");
+  const sensed = new Float32Array(SENSORS * 4);
+  const sensorProbe = readback.create(root, sensorValues, {
+    bytes: true,
+    hz: PUSH_RATE,
+    decode: (bytes) => {
+      sensed.set(new Float32Array(bytes));
+      return sensed;
+    },
+  });
+
+  const sense = tgpu.computeFn({
+    workgroupSize: [SENSORS],
+    in: { id: d.builtin.globalInvocationId },
+  })(({ id }) => {
+    "use gpu";
+    if (id.x >= SENSORS) {
+      return;
+    }
+    const place = pointsIn.$[id.x];
+    valuesOut.$[id.x] = d.vec4f(waterAt(place), currentAt(place));
+  });
+  const sensing = root.createComputePipeline({ compute: sense });
+
   // ---- Drawing -----------------------------------------------------------------------------
 
   const Corner = d.struct({ position: d.vec4f, world: d.vec3f, uv: d.vec2f });
@@ -596,11 +664,14 @@ export function createWater(
       const footprint = std.length(std.fwidth(corner.world.xz));
       const here = sampleAt(corner.uv);
       const water = here.y;
-      const body = 1 - std.exp(-water * TURBIDITY);
+      const speed = here.z;
+      // Calm water over the seabed is the clear sea; over land or rushing, it is muddy flood
+      const bed = here.x - water;
+      const clear = std.smoothstep(0.6, -0.8, bed) * (1 - std.smoothstep(1.2, 3.5, speed));
+      const body = 1 - std.exp(-water * std.mix(TURBIDITY, CLARITY, clear));
       if (body < 0.004) {
         std.discard();
       }
-      const speed = here.z;
 
       // The surface's slope from the smoothed picture, then ripples on top, choppier when fast
       const across = d.vec2f(TEXEL, 0);
@@ -626,7 +697,8 @@ export function createWater(
       const foam = std.smoothstep(0.35, 0.8, here.w + breakup * 0.5) * 0.85;
 
       const silt = std.mix(SILT, MURK, std.smoothstep(0.3, 5, water));
-      const tint = std.mix(silt, FOAM, foam);
+      const sea = std.mix(LAGOON, OCEAN, std.smoothstep(0.5, 4, water));
+      const tint = std.mix(std.mix(silt, sea, clear), FOAM, foam);
       const surface = materials.glossy(tint, std.mix(0.06, 0.55, foam));
       const point = shading.pointAt(corner.world, normal);
       // Water mirrors the sky at grazing angles: Fresnel with water's 2% reflectance head-on
@@ -704,6 +776,7 @@ export function createWater(
         churning,
         painting,
         pressing,
+        sensing,
       ]),
 
     /** Records one simulation step into an open compute pass. */
@@ -726,11 +799,30 @@ export function createWater(
       push.write(nothing);
       pass.setPipeline(pressing);
       pass.dispatchWorkgroups(groups, groups);
+      pass.setPipeline(sensing);
+      pass.dispatchWorkgroups(1);
+    },
+
+    /** Sets the points the sensors read, up to 64, as x and z. */
+    watch(points: readonly (readonly [number, number])[]) {
+      if (points.length > SENSORS)
+        throw new RangeError(`At most ${SENSORS} sensors, got ${points.length}`);
+      const padded = Array.from({ length: SENSORS }, (_, i) => d.vec2f(...(points[i] ?? [0, 0])));
+      sensorPoints.write(padded);
+    },
+
+    /**
+     * The water at every watched point, once it arrives: surface level, depth, then the current
+     * along x and z, four numbers per point.
+     */
+    get sensed() {
+      return sensorProbe.latest;
     },
 
     /** Copies the push on every building toward the CPU, after the pass that painted ends. */
     capture(frame: Frame) {
       pushProbe.capture(frame);
+      sensorProbe.capture(frame);
     },
 
     /** The latest push on every building in kilonewtons, as x and z pairs, once it arrives. */
@@ -748,6 +840,7 @@ export function createWater(
       solid.write(Array.from(values));
     },
 
+    impactAt,
     waterAt,
     currentAt,
     floorAt,
@@ -762,6 +855,9 @@ export function createWater(
 
     destroy() {
       for (const made of [
+        sensorProbe,
+        sensorPoints,
+        sensorValues,
         pushProbe,
         push,
         owner,

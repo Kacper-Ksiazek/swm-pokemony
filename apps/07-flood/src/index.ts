@@ -3,7 +3,7 @@ import * as web from "@typegpu/kit/web";
 import { tgpu } from "typegpu";
 
 import { createEditor } from "@/editor";
-import { createScene } from "@/scene";
+import { createScene, type Cinema } from "@/scene";
 
 const canvas = document.querySelector<HTMLCanvasElement>("#view")!;
 const status = document.querySelector<HTMLElement>("#status")!;
@@ -11,6 +11,8 @@ const release = document.querySelector<HTMLButtonElement>("#release")!;
 const reset = document.querySelector<HTMLButtonElement>("#reset")!;
 const crest = document.querySelector<HTMLInputElement>("#crest")!;
 const crestValue = document.querySelector<HTMLOutputElement>("#crest-value")!;
+const hour = document.querySelector<HTMLInputElement>("#hour")!;
+const hourValue = document.querySelector<HTMLOutputElement>("#hour-value")!;
 
 async function start() {
   if (!navigator.gpu) {
@@ -27,6 +29,13 @@ async function start() {
   const loop = frames.create(root, (frame) => scene.frame(frame));
   const animation = frames.animate(loop, { surface });
 
+  const showHour = () => {
+    const minutes = Math.round(Number(hour.value) * 60);
+    hourValue.textContent = `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, "0")}`;
+    scene.setHour(Number(hour.value));
+  };
+  showHour();
+  hour.addEventListener("input", showHour);
   const showCrest = () => (crestValue.textContent = `${crest.value} m`);
   showCrest();
   crest.addEventListener("input", showCrest);
@@ -37,6 +46,19 @@ async function start() {
   reset.addEventListener("click", () => {
     scene.reset();
     status.textContent = "Spokojne morze.";
+  });
+  const cinemas = [...document.querySelectorAll<HTMLButtonElement>("[data-cinema]")];
+  for (const button of cinemas) {
+    button.addEventListener("click", () => {
+      scene.setCinema(button.dataset.cinema as Cinema);
+      for (const other of cinemas) other.setAttribute("aria-pressed", String(other === button));
+    });
+  }
+  const storm = document.querySelector<HTMLButtonElement>("#storm")!;
+  storm.addEventListener("click", () => {
+    const on = storm.getAttribute("aria-pressed") !== "true";
+    storm.setAttribute("aria-pressed", String(on));
+    scene.setStorm(on);
   });
   status.textContent = "Spokojne morze.";
   release.disabled = false;
