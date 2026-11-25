@@ -1,0 +1,1 @@
+export { createBeachView } from "./beach";
