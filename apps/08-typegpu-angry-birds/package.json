@@ -1,0 +1,26 @@
+{
+  "name": "08-typegpu-angry-birds",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . && prettier --check . --ignore-path ../../.prettierignore",
+    "lint:fix": "eslint . --fix && prettier --write . --ignore-path ../../.prettierignore",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@typegpu/color": "^0.12.2",
+    "@typegpu/kit": "^0.1.0",
+    "@typegpu/noise": "^0.12.1",
+    "typegpu": "^0.12.11"
+  },
+  "devDependencies": {
+    "@webgpu/types": "^0.1.74",
+    "typescript": "npm:tsover@6.0.2",
+    "unplugin-typegpu": "^0.12.9",
+    "vite": "^8.3.8"
+  }
+}

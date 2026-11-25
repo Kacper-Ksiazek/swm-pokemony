@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Angry Birds · TypeGPU Kit</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: system-ui, sans-serif;
+      }
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: #0a0c10;
+      }
+      #view {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+        touch-action: none;
+      }
+      .badge {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 13px;
+        line-height: 1.45;
+        color: #e8ecef;
+        background: rgb(16 20 24 / 0.78);
+        backdrop-filter: blur(6px);
+        pointer-events: none;
+        max-width: min(320px, calc(100vw - 32px));
+      }
+      .badge strong {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 15px;
+      }
+      .badge span {
+        color: #9aa8b4;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="view"></canvas>
+    <div class="badge" aria-live="polite">
+      <strong>Etap 2 — bloki</strong>
+      <span id="status">Ładowanie WebGPU…</span>
+    </div>
+    <script type="module" src="/src/index.ts"></script>
+  </body>
+</html>

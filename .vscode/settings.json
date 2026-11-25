@@ -36,5 +36,7 @@
   "[cpp]": {
     "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
   },
-  "cSpell.words": ["DEADZONE"]
+  "cSpell.words": ["DEADZONE", "tgpu", "typegpu"],
+  "js/ts.tsdk.path": "apps/07-flood/node_modules/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }
